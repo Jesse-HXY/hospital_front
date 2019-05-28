@@ -101,7 +101,7 @@
 
 <script>
     export default {
-      name: "arragementRegulation",
+      name: "arrangementRegulation",
       data(){
         /**排班规则所属科室*/
         let departmentName = '';

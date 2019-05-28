@@ -64,7 +64,7 @@
 
 <script>
     export default {
-        name: "arragement",
+        name: "arrangement",
       data(){
         /** 科室名称 */
         let departmentName = ''

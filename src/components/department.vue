@@ -1,14 +1,14 @@
 <script src="../../src/js/pinyin.js"></script>
 <template>
 
-  <el-container style="height: 500px; border: 1px solid #eee">
+  <el-container style="height: 100%; border: 1px solid #eee">
 
 
     <el-container>
       <el-header style="text-align: left; font-size: 12px">
         <template>
           科室编号：
-          <div style="width: 200px;display: inline-block">
+          <div style="width: 150px;display: inline-block">
             <el-input
               v-model="searchdId"
               size="mini"
@@ -16,7 +16,7 @@
             />
           </div>
           &nbsp&nbsp&nbsp&nbsp科室名称：
-          <div style="width: 200px;display: inline-block">
+          <div style="width: 150px;display: inline-block">
             <el-input
               v-model="searchdName"
               size="mini"
@@ -24,7 +24,7 @@
             />
           </div>
           &nbsp&nbsp&nbsp&nbsp科室分类：
-          <div style="width: 200px;display: inline-block">
+          <div style="width: 150px;display: inline-block">
             <el-input
               v-model="searchdType"
               size="mini"
@@ -32,7 +32,7 @@
             />
           </div>
           &nbsp&nbsp&nbsp&nbsp科室类型：
-          <div style="width: 200px;display: inline-block">
+          <div style="width: 150px;display: inline-block">
             <el-input
               v-model="searchdCategory"
               size="mini"

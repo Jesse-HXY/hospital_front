@@ -10,6 +10,7 @@
             size="mini"
             placeholder="输入别号编号"
           />
+          <!---->
         </div>
         &nbsp&nbsp&nbsp&nbsp号别名称：
         <div style="width: 200px;display: inline-block">

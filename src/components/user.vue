@@ -63,7 +63,7 @@
         <el-radio disabled v-model="radioArrange" label="3">是</el-radio>
         <el-radio disabled v-model="radioArrange" label="4">否</el-radio>
       </el-form-item>
-
+<!---->
       <el-form-item label="用户类别" :label-width="formLabelWidth" >
         <span v-if="radio==2">
         <el-select v-model="dCategory"   placeholder="请选择活动区域">

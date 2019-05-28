@@ -2,10 +2,11 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
 import department from '@/components/department'
-import arragementRegulation from '@/components/arragementRegulation'
-import arragement from '@/components/arragement'
+import arrangementRegulation from '@/components/arrangementRegulation'
+import arrangement from '@/components/arrangement'
 import user from '@/components/user'
 import registrationLevel from '@/components/registrationLevel'
+import nonMedicine from '@/components/nonMedicine'
 import axios from 'axios'
 Vue.prototype.axios = axios
 Vue.use(Router)
@@ -23,14 +24,14 @@ export default new Router({
       component: HelloWorld
     },
     {
-      path:"/arragementRegulation",
-      name:'arragementRegulation',
-      component:arragementRegulation
+      path:"/arrangementRegulation",
+      name:'arrangementRegulation',
+      component:arrangementRegulation
     },
     {
-      path:'/arragement',
-      name:'arragement',
-      component:arragement
+      path:'/arrangement',
+      name:'arrangement',
+      component:arrangement
     },
     {
       path:'/user',
@@ -42,6 +43,11 @@ export default new Router({
       name:'registrationLevel',
       component:registrationLevel
     },
+    {
+      path:'/nonMedicine',
+      name:'nonMedicine',
+      component:nonMedicine
+    }
   ]
 })
 //

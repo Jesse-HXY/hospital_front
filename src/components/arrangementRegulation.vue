@@ -7,10 +7,11 @@
       <template>
         科室名称：
         <div style="width: 10%;display: inline-block">
-          <el-select v-model="departmentNamel" placeholder="选择挂号等级">
-            <el-option label="专家号" value="专家号"></el-option>
-            <el-option label="普通号" value="普通号"></el-option>
-            <el-option label="急诊号" value="急诊号"></el-option>
+          <el-select v-model="departmentName" filterable placeholder="选择科室名称">
+            <el-option
+              v-for="item in departmentList"
+              :key="item.dId" :value="item.dId" :label="item.dName">
+            </el-option>
           </el-select>
         </div>
         &nbsp&nbsp&nbsp&nbsp挂号等级：
@@ -38,7 +39,9 @@
         <el-table-column
           width = 100px
           label="星期一上午">
-          <el-checkbox></el-checkbox>
+          <template slot-scope="scope">
+          <el-checkbox v-model="checkList[scope.$index].check1"></el-checkbox>
+          </template>
         </el-table-column>
         <el-table-column
           width = 100px
@@ -93,7 +96,7 @@
     </el-footer>
     <el-footer>
       <el-button width="100">取消</el-button>
-      <el-button width="100">保存</el-button>
+      <el-button width="100" @click="onTapSave">保存</el-button>
     </el-footer>
 
   </el-container>
@@ -114,9 +117,23 @@
           aRName:aRName,
           registrationLevel:registrationLevel,
           departmentName:departmentName,
-          userList:userList
+          userList:userList,
+          departmentList:[],
+          checkList:[{check1:false},{check1:false},{check1:false}]
         }
-      },
+      },created:function () {
+        let that = this
+        this.$axios({
+          url:"department/getAllDepartments",
+          method:"post",
+        }).then(response=>{
+          that.departmentList = response.data
+        })
+      },methods:{
+        onTapSave:function () {
+          console.log(this.checkList)
+        }
+      }
 
     }
 </script>

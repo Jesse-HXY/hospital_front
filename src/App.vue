@@ -6,14 +6,15 @@
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-setting"></i>基础信息维护</template>
             <el-menu-item index="1-1">常数类别管理</el-menu-item>
-            <el-menu-item index="1-2">科室管理</el-menu-item>
-            <el-menu-item index="1-3">挂号级别管理</el-menu-item>
-            <el-menu-item index="1-4">诊断目录管理</el-menu-item>
-            <el-menu-item index="1-5">非药品收费项目管理</el-menu-item>
+            <router-link to="/department"><el-menu-item index="1-2">科室管理</el-menu-item></router-link>
+            <router-link to="/user"><el-menu-item index="1-3">用户管理</el-menu-item></router-link>
+            <router-link to="/registrationLevel"><el-menu-item index="1-4">挂号级别管理</el-menu-item></router-link>
+            <el-menu-item index="1-5">诊断目录管理</el-menu-item>
+            <router-link to="/nonMedicine"><el-menu-item index="1-6">非药品收费项目管理</el-menu-item></router-link>
             <el-menu-item-group>
               <template slot="title">医生排班管理</template>
-              <el-menu-item index="1-6">生成排班规则</el-menu-item>
-              <el-menu-item index="1-7">生成排班计划</el-menu-item>
+              <router-link to="/arrangementRegulation"><el-menu-item index="1-7">生成排班规则</el-menu-item></router-link>
+              <router-link to="/arrangement"><el-menu-item index="1-8">生成排班计划</el-menu-item></router-link>
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="2">

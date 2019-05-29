@@ -56,8 +56,8 @@
             </el-form-item>
             <el-form-item label="科室类型" :label-width="formLabelWidth" >
               <el-select v-model="dCategory"   placeholder="请选择活动区域">
-                <el-option label="医技科室" value="医技科室"></el-option>
-                <el-option label="临床科室" value="临床科室"></el-option>
+                <el-option label="医技" value="医技"></el-option>
+                <el-option label="临床" value="临床"></el-option>
               </el-select>
             </el-form-item>
 
@@ -68,10 +68,15 @@
           </div>
         </el-dialog>
         <el-table
-          :data="departmentList.slice((currentPage-1)*pagesize,currentPage*pagesize)"
+          :data="departmentList"
           stripe
           style="width: 100%">
-
+          <!--<el-table-column-->
+          <!--align="right">-->
+          <!--<template slot="header" slot-scope="scope">-->
+          <!--<el-button width="100" @click="onTapSearch">查询</el-button>-->
+          <!--</template>-->
+          <!--</el-table-column>-->
 
           <el-table-column
             label="科室编号"
@@ -131,20 +136,21 @@
                 size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)" v-else>删除</el-button>
-
             </template>
           </el-table-column>
-
         </el-table>
-        <el-pagination
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page="currentPage"
-          :page-sizes="[5, 10, 20, 40]"
-        :page-size="pagesize"
-        layout="total, sizes, prev, pager, next, jumper"
-        :total="departmentList.length">
-        </el-pagination>
+        <div class="block">
+          <span class="demonstration">调整每页显示条数</span>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-sizes="[10, 20, 30, 50]"
+            :page-size="pageSize"
+            layout="sizes, prev, pager, next"
+            :total="pageCount">
+          </el-pagination>
+        </div>
       </el-main>
     </el-container>
   </el-container>
@@ -163,9 +169,7 @@
       let dCategory='';
       let dType = '';
       let departmentList=[];
-      let editList=[];
       let editIndex = -1;
-
 
 
       return {
@@ -182,18 +186,19 @@
         searchdCategory :'',
         formLabelWidth: '120px',
         dialogFormVisible:false,
-        currentPage:1, //初始页
-        pagesize:10,    //    每页的数据
-        departmentListPage: []
-
+        /**当前页面数*/
+        currentPage:1,
+        /**页面总数*/
+        pageCount:1,
+        /**页面大小*/
+        pageSize:10
       }
 
     },
     created:function(){
-       this.getAllDepartments();
-     // this.handleDepartmentList()
+      this.getDepartmentsByPage(1)
+      this.getPageCount()
     },
-
     methods:{
       handleAdd(index, row){
         let that = this
@@ -237,7 +242,6 @@
         this.editIndex = index;
 
         let data={
-
           dType: that.dType,
           dCategory: that.dCategory,
         }
@@ -245,7 +249,7 @@
       },
       handleDelete(index,row) {
         let dId = this.departmentList[index].dId;
-
+        let that = this
         this.departmentList.splice(index,1)
         this.$axios({
           url:'department/deleteDepartment',
@@ -253,6 +257,7 @@
           data: {dId:dId},
 
         }).then(function (response) {
+          that.getPageCount()
           console.log(response.data);
 
         }).catch(function (error) {
@@ -261,6 +266,9 @@
         console.log(index,row);
       },
 
+      /**
+       * 搜索
+       */
       onTapSearch:function(){
         let that = this;
         this.$axios({
@@ -271,28 +279,46 @@
             dName:that.searchdName,
             dType:that.searchdType,
             dCategory:that.searchdCategory,
-
           }
 
         }).then(response => {
           that.departmentList = response.data;
-          console.log(JSON.stringify(response.data))
         }).catch(err=>{
           console.log(err)
         })
       },
 
-      getAllDepartments:function () {
-        let that = this;
-        console.log(123)
+      /**
+       * 得到页数
+       * */
+      getPageCount:function(){
+        let that = this
         this.$axios({
-          url: "department/getAllDepartments",
+          url:"department/getPageCount",
+          method:"post"
+        }).then(response=>{
+          console.log(response.data)
+          that.pageCount = response.data
+        }).catch(err=>{
+          console.log(err)
+        })
+      },
+      /**
+       * 分页得到departments
+       * */
+      getDepartmentsByPage:function (pageNum) {
+        let that = this;
+        pageNum = pageNum - 1
+        pageNum = pageNum * that.pageSize
+        this.$axios({
+          url: 'department/getDepartmentByPage',
           method:"post",
-
+          data:{
+            pageNum:pageNum,
+            pageSize:that.pageSize
+          }
         }).then(response => {
-
           that.departmentList = response.data
-          console.log(JSON.stringify(response.data))
         }).catch(err=>{
           console.log(err)
         })
@@ -322,8 +348,9 @@
             dType:that.dType,
             dCategory:that.dCategory,
           };
-          console.log(response.data);
-          this.departmentList.push(department);
+          console.log(response.data)
+          that.getDepartmentsByPage(that.currentPage)
+          that.getPageCount()
           that.reSet()
         }).catch(err=>{
           console.log(err)
@@ -338,28 +365,18 @@
         this.dType = ""
         this.dCategory = ""
       },
-      handleSizeChange: function (size) {
-        this.pagesize = size;
-        console.log(this.pagesize)  //每页下拉显示数据
-      },
-      handleCurrentChange: function(currentPage){
-        this.currentPage = currentPage;
-        console.log(this.currentPage)  //点击第几页
-      },
-      handleDepartmentList() {
-        let that = this
-        this.$axios({
-          url:'department/getAllDepartments',
-          method:'post'
+      /**
+       * 分页
+       */
+      handleSizeChange:function () {
 
-        }).then(res => {  //这是从本地请求的数据接口，
-
-          that.departmentListPage = res.data
-        })
+      },
+      /**
+       * 分页
+       */
+      handleCurrentChange:function () {
+        this.getDepartmentsByPage(this.currentPage)
       }
-
-
-
     }
   }
 

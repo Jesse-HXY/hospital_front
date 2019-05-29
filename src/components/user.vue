@@ -2,43 +2,17 @@
   <el-container>
     <el-header style="text-align: left; font-size: 12px">
       <template>
-        用户编号：
+        所属科室：
         <div style="width: 150px;display: inline-block">
-          <el-input
-            v-model="searchuId"
-            size="mini"
-            placeholder="输入用户编号"
-          />
-        </div>
-        &nbsp&nbsp&nbsp&nbsp登录名：
-        <div style="width: 150px;display: inline-block">
-          <el-input
-            v-model="searchuNickName"
-            size="mini"
-            placeholder="输入登录名"
-          />
-        </div>
-        &nbsp&nbsp&nbsp&nbsp真实姓名：
-        <div style="width: 150px;display: inline-block">
-          <el-input
-            v-model="searchuName"
-            size="mini"
-            placeholder="输入真实姓名"
-          />
-        </div>
-        &nbsp&nbsp&nbsp&nbsp用户类别：
-        <div style="width: 150px;display: inline-block">
-          <el-input
-            v-model="searchuCategory"
-            size="mini"
-            placeholder="输入用户类别"
-          />
-        </div>
+          <el-select v-model="searchdId" clearable filterable placeholder="请选择">
+            <div v-for="item in departmentList">
+              <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
+            </div>
+          </el-select>
+        </div>&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+        <el-button width="100" @click="onTapSearch">查询</el-button>
+        <el-button width="100" @click="onTapRequestAdd">增加</el-button>
       </template>
-      &nbsp&nbsp&nbsp&nbsp
-      <el-button width="100" @click="onTapSearch">查询</el-button>
-      <el-button width="100" @click="onTapRequestAdd">增加</el-button>
-
     </el-header>
     <el-main>
       <el-dialog title="添加用户" :visible.sync="dialogFormVisible" width="350px">
@@ -57,8 +31,21 @@
             <el-radio v-model="radio" label="2">否</el-radio>
           </el-form-item>
           <el-form-item label="职称信息" :label-width="formLabelWidth">
-            <el-input v-if="radio==1" v-model="dVacation" autocomplete="off"></el-input>
-            <el-input v-else disabled v-model="dVacation" autocomplete="off"></el-input>
+              <el-select v-if="radio==1" v-model="dVacation" clearable placeholder="选择职称信息">
+                <el-option label="主任医师" value="主任医师"></el-option><br>
+                <el-option label="副主任医师" value="副主任医师"></el-option><br>
+                <el-option label="主治医师" value="主治医师"></el-option><br>
+                <el-option label="住院医师" value="住院医师"></el-option><br>
+            </el-select>
+            <e-input v-if="radio!=1" disabled></e-input>
+          </el-form-item>
+          <el-form-item label="挂号等级" :label-width="formLabelWidth">
+            <el-select v-if="radio==1" v-model="rLName" clearable placeholder="选择挂号等级">
+              <el-option label="专家号" value="专家号"></el-option><br>
+              <el-option label="普通号" value="普通号"></el-option><br>
+              <el-option label="急诊号" value="急诊号"></el-option><br>
+            </el-select>
+            <e-input v-if="radio!=1" disabled></e-input>
           </el-form-item>
           <el-form-item label="是否排班" :label-width="formLabelWidth">
             <el-radio v-if="radio==1" v-model="radioArrange" label="3">是</el-radio>
@@ -69,7 +56,7 @@
           <!---->
           <el-form-item label="用户类别" :label-width="formLabelWidth">
         <span v-if="radio==2">
-        <el-select v-model="uCategory" placeholder="请选择活动区域">
+        <el-select v-model="uCategory" placeholder="请选择用户类型">
           <el-option label="挂号收费员" value="挂号收费员"></el-option>
           <el-option label="药房操作员" value="药房操作员"></el-option>
           <el-option label="财务管理员" value="财务管理员"></el-option>
@@ -77,7 +64,7 @@
         </el-select>
           </span>
             <span v-else-if="radio==1">
-           <el-select v-model="uCategory" placeholder="请选择活动区域">
+           <el-select v-model="uCategory" placeholder="请选择用户类型">
            <el-option label="门诊医生" value="门诊医生"></el-option>
           <el-option label="医技医生" value="医技医生"></el-option>
            </el-select>
@@ -156,12 +143,12 @@
           <template slot-scope="scope">
         <span v-if="scope.$index == editIndex" style="margin-left: 10px"><el-select v-model="uCategory"
                                                                                     placeholder="请选择活动区域">
-              <el-option label="挂号收费员" value="挂号收费员"></el-option>
-              <el-option label="门诊医生" value="门诊医生"></el-option>
-          <el-option label="医技医生" value="医技医生"></el-option>
-          <el-option label="药房操作员" value="药房操作员"></el-option>
-          <el-option label="财务管理员" value="财务管理员"></el-option>
-          <el-option label="医院管理员" value="医院管理员"></el-option>
+          <el-option v-if="isDoctor==='false'" label="挂号收费员" value="挂号收费员"></el-option>
+          <el-option v-if="isDoctor==='true'" label="门诊医生" value="门诊医生"></el-option>
+          <el-option v-if="isDoctor==='true'" label="医技医生" value="医技医生"></el-option>
+          <el-option v-if="isDoctor==='false'" label="药房操作员" value="药房操作员"></el-option>
+          <el-option v-if="isDoctor==='false'" label="财务管理员" value="财务管理员"></el-option>
+          <el-option v-if="isDoctor==='false'" label="医院管理员" value="医院管理员"></el-option>
             </el-select></span>
             <span v-else style="margin-left: 10px">{{scope.row.uCategory}}</span>
           </template>
@@ -170,7 +157,14 @@
           label="所属科室"
           width="300">
           <template slot-scope="scope">
-          <div v-for="department in scope.row.departments" style="display: inline-block">
+            <div v-if="scope.$index == editIndex">
+              <el-select v-model="chosenDepartmentList" multiple filterable placeholder="请选择">
+                <div v-for="item in departmentList">
+                  <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
+                </div>
+              </el-select>
+            </div>
+          <div v-else v-for="department in scope.row.departments" style="display: inline-block">
             <el-tag type="danger">{{department.dName}}</el-tag>&nbsp&nbsp
           </div>
           </template>
@@ -180,7 +174,7 @@
           <template slot-scope="scope">
             <el-button
               size="mini"
-              @click="onTapUpdate(scope.$index)">编辑
+              @click="onTapUpdate(scope.$index,scope.row)">编辑
             </el-button>
             <el-button
               size="mini"
@@ -227,10 +221,15 @@
         dialogFormVisible: false,
         radio: '',
         radioArrange: '',
-        searchuId: '',
-        searchuNickName: '',
-        searchuCategory: '',
-        searchuName: '',
+
+        /** 筛选所用数据 */
+        // searchuId: 0,
+        // searchuNickName: '',
+        // searchuCategory: '',
+        // searchuName: '',
+        searchdId:'',
+
+        /** 更新添加所用数据 **/
         uNickName: '',
         uPassword: '',
         uCategory: '',
@@ -238,6 +237,9 @@
         dVacation: '',
         // userList: [{uName:'a',uNickName:'a',uPassword:'a',uCategory:'a',departmentList:[{dName:'妇产科'},{dName:'艾滋病科'}]}],
         userList:[],
+        isDoctor:'',
+        rLName:'',
+
         /**当前页面数*/
         currentPage: 1,
         /**页面总数*/
@@ -246,7 +248,7 @@
         pageSize: 10,
         editIndex: -1,
         departmentList: [],
-        chosenDepartmentList: []
+        chosenDepartmentList: [],
       }
     },created:function(){
       let that = this
@@ -293,7 +295,8 @@
             isDoctor: isDoctor,
             dVacation: that.dVacation,
             isDue: isDue,
-            dIdList:dIdList
+            dIdList:dIdList,
+            rLName: that.rLName
           }
         }).then(respones => {
           that.pageCount = that.pageCount + 1
@@ -318,24 +321,43 @@
       /***
        * 点击编辑
        */
-      onTapUpdate: function (index) {
-        this.resetUser()
+      onTapUpdate: function (index,row) {
         this.editIndex = index
+        this.resetUser()
       },
       /**
        * 点击确认
        * */
       onTapConfirm: function (index, row) {
+        let that = this
         let uId = row.uId
         this.editIndex = -1
-        this.$axios({
+        let dIdList = this.chosenDepartmentList
+        let data={uId:uId,
           uNickName: that.uNickName,
           uPassword: that.uPassword,
           uCategory: that.uCategory,
           uName: that.uName,
-          isDoctor: isDoctor,
+          isDoctor: that.isDoctor,
           dVacation: that.dVacation,
-          isDue: isDue
+          dIdList:dIdList
+        }
+        console.log(data)
+        this.$axios({
+          url:'user/updateUser',
+          method:"post",
+          data:{uId:uId,
+            uNickName: that.uNickName,
+            uPassword: that.uPassword,
+            uCategory: that.uCategory,
+            uName: that.uName,
+            isDoctor: that.isDoctor,
+            dVacation: that.dVacation,
+            dIdList:dIdList
+        }}).then(response=>{
+          this.getUserByPage(that.currentPage)
+        }).catch(err=>{
+          console.log(err)
         })
       },
 
@@ -347,6 +369,17 @@
       },
       /*****************************************************查询**************************************************************/
       onTapSearch: function () {
+        let that = this
+        this.$axios({
+          url:'user/getUerByDepartment',
+          method:'post',
+          data:{
+            dId:that.searchdId}
+          }).then(response=>{
+            that.userList = response.data
+          }).catch(err=>{
+            console.log(err)
+          })
 
       },
       /*****************************************************分页**************************************************************/

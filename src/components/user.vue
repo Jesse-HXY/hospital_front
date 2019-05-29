@@ -116,7 +116,7 @@
           <template slot-scope="scope">
             <span v-if="scope.$index == editIndex" style="margin-left: 10px"><el-input
               v-model="uNickName"></el-input></span>
-            <span style="margin-left: 10px">{{scope.row.uNickName}}</span>
+            <span v-else style="margin-left: 10px">{{scope.row.uNickName}}</span>
           </template>
         </el-table-column>
         <el-table-column
@@ -197,7 +197,7 @@
             <el-button
               size="mini"
               type="danger"
-              @click="handleDelete(scope.$index, scope.row)" v-else>删除
+              @click="onTapDelete(scope.$index, scope.row)" v-else>删除
             </el-button>
 
           </template>
@@ -312,6 +312,7 @@
         this.dVacation = ''
         this.radio = ''
         this.radioArrange = ''
+        this.chosenDepartmentList = []
       },
       /*****************************************************更新**************************************************************/
       /***
@@ -336,6 +337,13 @@
           dVacation: that.dVacation,
           isDue: isDue
         })
+      },
+
+      /**
+       * 点击放弃
+       * */
+      onTapGiveUp:function(){
+        this.editIndex = -1
       },
       /*****************************************************查询**************************************************************/
       onTapSearch: function () {
@@ -387,6 +395,27 @@
           method:'post',
         }).then(response=>{
           that.pageCount = response.data
+        }).catch(err=>{
+          console.log(err)
+        })
+      },
+      /*****************************************************删除**************************************************************/
+      /**点击删除按钮*/
+      onTapDelete:function (index,row){
+        console.log(row)
+        let uId = row.uId
+        let that = this
+        this.$axios({
+          url:'user/deleteUser',
+          method:'post',
+          data:{
+            uId:uId
+          }
+        }).then(response=>{
+          that.pageCount = that.pageCount - 1
+          that.getUserByPage(that.currentPage)
+        }).catch(err=>{
+          console.log(err)
         })
       }
     }

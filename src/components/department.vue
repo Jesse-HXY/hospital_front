@@ -294,7 +294,7 @@
       getPageCount:function(){
         let that = this
         this.$axios({
-          url:"department/getPageCount",
+          url:"department/getDepartmentCount",
           method:"post"
         }).then(response=>{
           console.log(response.data)
@@ -342,12 +342,6 @@
             dCategory:that.dCategory,
           }
         }).then(response=>{
-          let department={
-            dId: that.dId,
-            dName:that.dName,
-            dType:that.dType,
-            dCategory:that.dCategory,
-          };
           console.log(response.data)
           that.getDepartmentsByPage(that.currentPage)
           that.getPageCount()
@@ -369,7 +363,7 @@
        * 分页
        */
       handleSizeChange:function () {
-
+        this.getDepartmentsByPage(this.currentPage)
       },
       /**
        * 分页

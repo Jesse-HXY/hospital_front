@@ -1,7 +1,7 @@
 <template>
   <div id="app">
-    <el-container style="height: 750px; border: 1px solid #eee">
-      <el-aside style="width:15%">
+    <el-container style="height: 800px; border: 1px solid #eee">
+      <el-aside style="width:15%;height: 100%">
         <el-menu>
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-setting"></i>基础信息维护</template>

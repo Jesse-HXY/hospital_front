@@ -190,11 +190,13 @@
           for(let i = 0; i< this.checkList.length; i++){
             let resultPlan = this.calculatePlan(this.checkList[i])
             let uId = that.userList[i].uId
-            let result = {
-              uId:uId,
-              aRPlan:resultPlan
+            if(resultPlan != 0){
+              let result = {
+                uId:uId,
+                aRPlan:resultPlan
+              }
+              resultList.push(result)
             }
-            resultList.push(result)
           }
           console.log(that.dId)
           console.log(that.rLName)

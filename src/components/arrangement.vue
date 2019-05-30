@@ -4,14 +4,15 @@
       <el-header>
         科室选择:
         <div style="width: 10%;display: inline-block">
-          <el-select v-model="departmentName" placeholder="选择挂号等级">
-            <el-option label="专家号" value="专家号"></el-option>
-            <el-option label="普通号" value="普通号"></el-option>
-            <el-option label="急诊号" value="急诊号"></el-option>
+          <el-select v-model="tempDId" filterable placeholder="选择科室名称">
+            <el-option
+              v-for="item in departmentList"
+              :key="item.dId" :value="item.dId" :label="item.dName">
+            </el-option>
           </el-select>
         </div>
         &nbsp&nbsp&nbsp&nbsp
-        <el-button width="100">查询</el-button>
+        <el-button width="100" @click="onTapSearch">查询</el-button>
         <el-button width="100">清空</el-button>
       </el-header>
       <el-table
@@ -20,45 +21,36 @@
         style="width: 100%"
       >
         <el-table-column>
-          <el-checkbox></el-checkbox>
+          <template slot-scope="scope"><el-checkbox v-model="checkList[scope.$index]"></el-checkbox></template>
         </el-table-column>
         <el-table-column
         label="规则名称"
         prop="arName"
         ></el-table-column>
         <el-table-column
-          label="科室名称"
-          prop="dName"
+          label="挂号等级"
+          prop="rLName"
         ></el-table-column>
         <el-table-column
           label="医生姓名"
-          prop="docName"
+          prop="uName"
         ></el-table-column>
         <el-table-column
           label="时间"
-          prop="arPlan"
-        ></el-table-column>
+        ><template slot-scope="scope"><div v-for="day in scope.row.workingList" style="display: inline-block">
+          <el-tag type="danger">{{day}}</el-tag>&nbsp&nbsp
+        </div></template></el-table-column>
       </el-table>
       <el-footer>
-        <div style="display: inline-block">
-        <div class="block">
-        <span class="demonstration">开始</span>
         <el-date-picker
-          v-model="beginDate"
-          type="date"
-          placeholder="选择开始日期">
+          v-model="dateRange"
+          type="daterange"
+          range-separator="至"
+          start-placeholder="开始日期"
+          end-placeholder="结束日期">
         </el-date-picker>
-          <span class="demonstration">结束</span>
-          <el-date-picker
-            v-model="endDate"
-            type="date"
-            placeholder="选择结束日期">
-          </el-date-picker>
-          <el-button width="100">生成</el-button>
-        </div>
-        </div>
       </el-footer>
-      <el-footer><el-button width="100">结束</el-button></el-footer>
+      <el-footer><el-button @click="onTapAdd" width="100">生成</el-button></el-footer>
     </el-container>
 </template>
 
@@ -67,15 +59,155 @@
         name: "arrangement",
       data(){
         /** 科室名称 */
-        let departmentName = ''
-        let doctorList = [{arName:"q1",dName:"心脑血管科", docName:"扁鹊", arPlan:"00011110001111"},{arName:"q2",dName:"心脑血管科", docName:"扁鹊", arPlan:"00011110001111"},{arName:"q3",dName:"心脑血管科", docName:"扁鹊", arPlan:"00011110001111"},{arName:"q4",dName:"心脑血管科", docName:"扁鹊", arPlan:"00011110001111"}];
+        let departmentName = '';
+        let doctorList = [];
         let beginDate = '';
         let endDate = '';
+        let week=["星期一上午","星期一下午","星期二上午","星期二下午","星期三上午","星期三下午","星期四上午","星期四下午","星期五上午","星期五下午","星期六上午","星期六下午","星期日上午","星期日下午"]
         return{
           departmentName:departmentName,
           doctorList:doctorList,
           beginDate:beginDate,
-          endDate:endDate
+          endDate:endDate,
+          departmentList:[],
+          tempDId: '',
+          dId:'',
+          dateRange:'',
+          week:week,
+          checkList: []
+        }
+      },created:function () {
+        let that = this
+        this.$axios({
+          url:"department/getDepartments",
+          method:"post",
+          data:{
+            dCategory:"临床"
+          }
+        }).then(response=>{
+          that.departmentList = response.data
+        })
+      },methods:{
+        /**搜索
+         *
+         */
+        onTapSearch:function () {
+          let that = this
+          this.dId = this.tempDId
+          this.$axios({
+            url: 'arrangementRegulation/getArrangementList',
+            method: 'post',
+            data:{
+              dId:that.dId
+            }
+          }).then(response=>{
+            for(let i = 0; i < response.data.length; i++){
+              let workingList = that.covertToWorkingList(response.data[i].arPlanList)
+              let doctor = {
+                uId:response.data[i].uId,
+                arName:response.data[i].arName,
+                rLName:response.data[i].rLName,
+                uName:response.data[i].uName,
+                arPlanList:response.data[i].arPlanList,
+                workingList:workingList
+              }
+              that.doctorList.push(doctor)
+              that.checkList.push(false)
+            }
+            console.log(response.data)
+          }).catch(err=>{console.log(err)})
+        },
+        /** 根据arPlan转换成workingList */
+        covertToWorkingList:function(arPlanList){
+          let workingList = []
+          for(let i = 0; i < this.week.length; i++){
+            if(arPlanList[i] == 1){
+              workingList.push(this.week[i])
+            }
+          }
+          return workingList
+        },
+        /**转换date*/
+        covertDate:function(date){
+          let year = date.getFullYear()
+          let month = date.getMonth()+1
+          let day = date.getDate()
+          let result =year+'-'+month+'-'+day
+          return result
+        },
+        /**
+         * 点击生成
+         */
+        onTapAdd:function () {
+          let that = this
+          let beginDate = this.covertDate(this.dateRange[0])
+          let endDate = this.covertDate(this.dateRange[1])
+          this.$axios({
+            url:'arrangement/insertArrangement',
+            method:'post',
+            data:{
+              dId:that.dId,
+              plan:that.generateList(),
+              beginDate:beginDate,
+              endDate:endDate
+            }
+          })
+        },
+        /**
+         * 生成uId与plan的列表
+         */
+        generateList:function () {
+          let that = this
+          let userList = []
+          let planList = []
+          let resultList = []
+          for(let i = 0; i < that.checkList.length; i++){
+            //判断是否选择
+            if(that.checkList[i]){
+              /** user的序号 */
+              let index = userList.indexOf(that.doctorList[i].uId)
+              //判断是否已经存储了这个user
+              if(index == -1){
+                userList.push(that.doctorList[i].uId)
+                let plan = that.doctorList[i].arPlanList
+                planList.push(plan)
+              }else{
+                planList[index] = this.combinePlanList(that.doctorList[i].arPlanList, planList[index])
+              }
+            }
+          }
+          for(let i = 0; i < userList.length; i++){
+            let result = {
+              uId: userList[i],
+              plan:this.calculatePlan(planList[i])
+            }
+            resultList.push(result)
+          }
+          return resultList
+        },
+        /**
+         * 两个arPlanList合成一个
+         */
+        combinePlanList:function (planList1,planList2) {
+          /** 最后返回的list */
+          let finalPlanList = []
+          for(let i = 0; i < 14; i++){
+            let final = planList1[i] + planList2[i]
+            finalPlanList.push(final)
+          }
+          return finalPlanList
+        },
+        /**
+         * 计算排班plan的值
+         * */
+        calculatePlan:function (planList) {
+          let result = 0
+          for(let i = 0; i < planList.length; i++){
+            if(planList[i] != 0){
+              result = result + Math.pow(2,13-i)
+            }
+          }
+          return result
         }
       }
     }

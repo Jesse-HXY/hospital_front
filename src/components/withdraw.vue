@@ -124,7 +124,7 @@
             label="操作">
 
               <template slot-scope="scope">
-
+<!---->
                 <el-button
                   v-if="scope.row.rState=='未诊断'"
                   size="mini"

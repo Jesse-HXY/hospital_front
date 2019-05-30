@@ -2,7 +2,7 @@
   <div id="app">
     <el-container style="height: 750px; border: 1px solid #eee">
       <el-aside style="width:15%">
-        <el-menu :default-openeds="['1', '6']">
+        <el-menu>
           <el-submenu index="1">
             <template slot="title"><i class="el-icon-setting"></i>基础信息维护</template>
             <el-menu-item index="1-1">常数类别管理</el-menu-item>
@@ -19,7 +19,7 @@
           </el-submenu>
           <el-submenu index="2">
             <template slot="title"><i class="el-icon-setting"></i>门诊挂号收费</template>
-            <el-menu-item index="2-1">现场挂号</el-menu-item>
+            <router-link to="/registration"><el-menu-item index="2-1">现场挂号</el-menu-item></router-link>
             <el-menu-item index="2-2">退号</el-menu-item>
             <el-menu-item index="2-3">收费</el-menu-item>
             <el-menu-item index="2-4">退费</el-menu-item>

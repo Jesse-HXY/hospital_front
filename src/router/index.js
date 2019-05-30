@@ -7,6 +7,7 @@ import arrangement from '@/components/arrangement'
 import user from '@/components/user'
 import registrationLevel from '@/components/registrationLevel'
 import nonMedicine from '@/components/nonMedicine'
+import regisitration from '@/components/registration'
 import axios from 'axios'
 Vue.prototype.axios = axios
 Vue.use(Router)
@@ -47,6 +48,11 @@ export default new Router({
       path:'/nonMedicine',
       name:'nonMedicine',
       component:nonMedicine
+    },
+    {
+      path:'/registration',
+      name:'registration',
+      component:regisitration
     }
   ]
 })

@@ -146,9 +146,7 @@
           departmentName:departmentName,
           userList:userList,
           departmentList:[],
-          checkList:[{check1:false,check2:false,check3:false,check4:false,check5:false,check6:false,check7:false,check8:false,check9:false,check10:false,check11:false,check12:false,check13:false,check14:false},
-            {check1:false,check2:false,check3:false,check4:false,check5:false,check6:false,check7:false,check8:false,check9:false,check10:false,check11:false,check12:false,check13:false,check14:false},
-            {check1:false,check2:false,check3:false,check4:false,check5:false,check6:false,check7:false,check8:false,check9:false,check10:false,check11:false,check12:false,check13:false,check14:false}]
+          checkList:[]
         }
       },created:function () {
         let that = this
@@ -178,7 +176,7 @@
             }
           }).then(response=>{
             that.userList = response.data
-            for(let i = 0; i < that.userList; i++){
+            for(let i = 0; i < that.userList.length; i++){
               that.checkList.push({check1:false,check2:false,check3:false,check4:false,check5:false,check6:false,check7:false,check8:false,check9:false,check10:false,check11:false,check12:false,check13:false,check14:false})
             }
           })

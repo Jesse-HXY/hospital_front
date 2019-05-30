@@ -6,7 +6,7 @@
         别号编号：
         <div style="width: 200px;display: inline-block">
           <el-input
-            v-model="searchdId"
+            v-model="searchrLId"
             size="mini"
             placeholder="输入别号编号"
           />
@@ -15,7 +15,7 @@
         &nbsp&nbsp&nbsp&nbsp号别名称：
         <div style="width: 200px;display: inline-block">
           <el-input
-            v-model="searchdName"
+            v-model="searchrLName"
             size="mini"
             placeholder="输入别号名称"
           />
@@ -32,14 +32,14 @@
       <el-form>
 
         <el-form-item label="别号名称" :label-width="formLabelWidth">
-          <el-input v-model="dType" autocomplete="off"></el-input>
+          <el-input v-model="rLName" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="挂号限额" :label-width="formLabelWidth">
-          <el-input v-model="dType" autocomplete="off"></el-input>
+          <el-input v-model="rLLimitation" autocomplete="off"></el-input>
         </el-form-item>
 
         <el-form-item label="挂号费" :label-width="formLabelWidth" >
-          <el-input v-model="dType" autocomplete="off"></el-input>
+          <el-input v-model="rLFee" autocomplete="off"></el-input>
         </el-form-item>
 
 
@@ -49,31 +49,28 @@
         <el-button type="primary" @click="onTapAdd" >确 定</el-button>
       </div>
     </el-dialog>
+
+
     <el-table
-      :data="departmentList"
+      :data="registrationLevelList"
       stripe
       style="width: 100%">
-      <!--<el-table-column-->
-      <!--align="right">-->
-      <!--<template slot="header" slot-scope="scope">-->
-      <!--<el-button width="100" @click="onTapSearch">查询</el-button>-->
-      <!--</template>-->
-      <!--</el-table-column>-->
 
       <el-table-column
         label="别号编码"
         width="350">
         <template slot-scope="scope">
           <!--<span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input v-model="dId"></el-input></span>-->
-          <span style="margin-left: 10px">{{scope.row.uId}}</span>
+          <span style="margin-left: 10px">{{scope.row.rLId}}</span>
+
         </template>
       </el-table-column>
       <el-table-column
         label="别号名称"
         width="350">
         <template slot-scope="scope">
-          <!--<span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input v-model="dName"></el-input></span>-->
-          <span  style="margin-left: 10px">{{scope.row.dName}}</span>
+          <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input v-model="rLName"></el-input></span>
+          <span  v-else style="margin-left: 10px">{{scope.row.rLName}}</span>
         </template>
       </el-table-column>
 
@@ -81,15 +78,16 @@
         label="挂号限额"
         width="350">
         <template slot-scope="scope">
-
+          <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input v-model="rLLimitation"></el-input></span>
+          <span  v-else style="margin-left: 10px">{{scope.row.rLLimitation}}</span>
         </template>
       </el-table-column>
       <el-table-column
         label="挂号费"
         width="350">
         <template slot-scope="scope">
-          <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="dType"></el-input></span>
-          <span v-else style="margin-left: 10px">{{scope.row.dType}}</span>
+          <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="rLFee"></el-input></span>
+          <span v-else style="margin-left: 10px">{{scope.row.rLFee}}</span>
         </template>
       </el-table-column>
 
@@ -136,21 +134,179 @@
 <script>
   export default {
     data() {
+        let rLId=0;
+        let rLName='';
+        let rLLimitation=0;
+        let rLFee=0;
+        let registrationLevelList=[];
+        let editIndex = -1;
 
 
       return {
+        rLId:rLId,
+        rLName:rLName,
+        rLLimitation:rLLimitation,
+        rLFee:rLFee,
+        registrationLevelList:registrationLevelList,
         dialogFormVisible:false,
         radio:'',
         radioArrange:'',
+        searchrLId:'',
+        searchrLName:'',
+        formLabelWidth: '120px',
+        editIndex:editIndex
+
       }
-    }
-    ,methods:{
+    },
+    created:function(){
+      this.getAllRegistrationLevels();
+    },
+
+  methods:{
+    handleAdd(index, row){
+      let that = this;
+      let rLId= this.registrationLevelList[index].rLId;
+      let registrationLevel={
+        rLId:rLId,
+        rLName:this.rLName,
+        rLLimitation:this.rLLimitation,
+        rLFee:this.rLFee,
+        editIndex :-1
+      };
+      this.registrationLevelList[index] = registrationLevel;
+      this.$axios({
+        url:'registrationLevel/updateRegistrationLevel',
+        method:'post',
+        data:{
+          rLId:rLId,
+          rLName:this.rLName,
+          rLLimitation:this.rLLimitation,
+          rLFee:this.rLFee,
+        }
+      }).then(response => {
+        that.reSet();
+        console.log((response.data));
+        console.log(registrationLevel)
+
+      }).catch(err=>{
+        console.log(err)
+      });
+
+
+      this.editIndex = -1
+    },
 
       onTapAdd:function(){
         this.dialogFormVisible = false
 
       },
+    handleEdit(index, row){
+      let that=this;
+      let rLId = this.registrationLevelList[index].rLId;
+      let rLName = this.registrationLevelList[index].rLName;
+      let rLLimitation = this.registrationLevelList[index].rLLimitation;
+      let rLFee = this.registrationLevelList[index].rLFee;
+      this.editIndex = index;
+
+      let data={
+
+        rLName : that.rLName,
+        rLLimitation : that.rLLimitation,
+        rLFee : that.rLFee
+      }
+
+    },
+    handleDelete(index,row) {
+      let rLId = this.registrationLevelList[index].rLId;
+
+      this.registrationLevelList.splice(index,1);
+
+      this.$axios({
+        url:'registrationLevel/deleteRegistrationLevel',
+        method:'post',
+        data: {rLId:rLId},
+
+      }).then(function (response) {
+        console.log(response.data);
+
+      }).catch(function (error) {
+        console.log(error)
+      })
+      console.log(index,row);
+    },
+    onTapSearch:function(){
+      let that = this;
+      this.$axios({
+        url: "registrationLevel/getRegistrationLevel",
+        method:"post",
+        data:{
+          rLId:that.searchrLId,
+          rLName:that.searchrLName,
+        }
+      }).then(response => {
+        that.registrationLevelList = response.data;
+        console.log(JSON.stringify(response.data))
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+
+      getAllRegistrationLevels:function () {
+        let that = this;
+        this.$axios({
+          url:'registrationLevel/getAllRegistrationLevel',
+          method:'post'
+
+        }).then(response => {
+          that.registrationLevelList = response.data;
+          console.log((response.data))
+        }).catch(err=>{
+          console.log(err)
+        })
+      },
+     onTapGiveUp:function () {
+      this.editIndex = -1
+    },
+
+    onTapAdd:function(){
+      this.dialogFormVisible = false;
+      let that= this;
+      this.getAllRegistrationLevels();
+      console.log()
+      this.$axios({
+        url:"registrationLevel/insertRegistrationLevel",
+        method:"post",
+        data:{
+          rLId: that.rLId,
+          rLName:that.rLName,
+          rLLimitation:that.rLLimitation,
+          rLFee:that.rLFee,
+        }
+      }).then(response=>{
+        let registraton={
+          rLId: that.rLId,
+          rLName:that.rLName,
+          rLLimitation:that.rLLimitation,
+          rLFee:that.rLFee,
+        };
+        console.log(response.data);
+        this.registrationLevelList.push(registraton);
+        that.reSet()
+      }).catch(err=>{
+        console.log(err)
+      })
+    },
+
+    reSet:function () {
+      this.rLId = ""
+      this.rLName = ""
+      this.rLLimitation = ""
+      this.rLFee = ""
+    },
+    handleCurrentChange:function () {
+      this.getDepartmentsByPage(this.currentPage)
     }
+    },
   }
 </script>
 

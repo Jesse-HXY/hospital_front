@@ -16,6 +16,7 @@
           href="https://forum.vuejs.org"
           target="_blank"
         >
+          <-->
           Forum
         </a>
       </li>

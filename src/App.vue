@@ -9,8 +9,8 @@
             <router-link to="/management/department"><el-menu-item index="1-2">科室管理</el-menu-item></router-link>
             <router-link to="/management/user"><el-menu-item index="1-3">用户管理</el-menu-item></router-link>
             <router-link to="/management/registrationLevel"><el-menu-item index="1-4">挂号级别管理</el-menu-item></router-link>
-            <el-menu-item index="1-5">诊断目录管理</el-menu-item>
-            <router-link to="/management/nonMedicine"><el-menu-item index="1-6">非药品收费项目管理</el-menu-item></router-link>
+            <router-link to="/management/disease"><el-menu-item index="1-5">诊断目录管理</el-menu-item></router-link>
+            <router-link to="/management/examnationItem"><el-menu-item index="1-6">非药品收费项目管理</el-menu-item></router-link>
             <el-menu-item-group>
               <template slot="title">医生排班管理</template>
               <router-link to="/management/arrangementRegulation"><el-menu-item index="1-7">生成排班规则</el-menu-item></router-link>

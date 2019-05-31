@@ -56,12 +56,15 @@
         </el-select>
       </el-form-item>
       <el-form-item label="是否要病历本：" :label-width="formLabelWidth">
-        <el-radio v-model="hasMedicineRecord" label="0">要</el-radio>
-        <el-radio v-model="hasMedicineRecord" label="1">不要</el-radio>
+        <el-radio-group v-model="hasMedicineRecord" @change="changeRecord">
+          <el-radio v-model="hasMedicineRecord" label="true">要</el-radio>
+          <el-radio v-model="hasMedicineRecord" label="false">不要</el-radio>
+        </el-radio-group>
       </el-form-item>
       <el-form-item label="应收金额：" :label-width="formLabelWidth" style="text-align:left">
+        {{rFee}}元
       </el-form-item>
-      <el-button  width="100" type="primary">保存<i class="el-icon-success el-icon--right"></i></el-button>
+      <el-button  width="100" type="primary" @click="onTapSave">保存<i class="el-icon-success el-icon--right"></i></el-button>
     </el-form>
 
 <!----------------------------------------------------------添加病人------------------------------------------------------>
@@ -110,7 +113,7 @@
       data(){
           return{
             pId:'',
-            hasMedicineRecord:'',
+            hasMedicineRecord:false,
             formLabelWidth: '120px',
             dialogFormVisible:false,
             pName:'',
@@ -123,7 +126,8 @@
             rLName:'',
             departmentList:'',
             userList:'',
-            rLCost:0
+            rFee:0,
+            rLFee: 0
           }
       },
       created:function () {
@@ -136,49 +140,50 @@
         })
       }
       ,
-      methods:{
-          /**添加病人*/
-        onTapAdd:function () {
-          this.reSetPatient()
+      methods: {
+        /**添加病人*/
+        onTapAdd: function () {
           let that = this
           this.$axios({
-            url:'registration/insertPatient',
+            url: 'registration/insertPatient',
             method: 'post',
-            data:{
-              pId:that.pId,
+            data: {
+              pId: that.pId,
               pName: that.pName,
               pSex: that.pSex,
               pBirth: that.covertDate(that.pBirth),
               pAddress: that.pAddress
             }
-          }).then(response=>{
-            this.dialogFormVisible=false
+          }).then(response => {
+            console.log(response.data)
+            this.dialogFormVisible = false
             this.reSetPatient()
-          }).catch(err=>{
+          }).catch(err => {
             console.log(err)
-            this.reSetPatient()})
+            this.reSetPatient()
+          })
         },
         /**重置病人*/
-        reSetPatient:function () {
+        reSetPatient: function () {
           this.pId = ''
           this.pName = ''
           this.pSex = ''
-          this.pBirth =''
-          this.pAddress=''
+          this.pBirth = ''
+          this.pAddress = ''
         },
         /***
          * 得到病人
          */
-        getPatient:function (e) {
+        getPatient: function (e) {
           let that = this
           this.$axios({
-            url:'registration/getPatientById',
-            method:'post',
-            data:{
-              pId:that.pId
+            url: 'registration/getPatientById',
+            method: 'post',
+            data: {
+              pId: that.pId
             }
-          }).then(responese=>{
-            if(responese.data.length == 0){
+          }).then(responese => {
+            if (responese.data.length == 0) {
               alert("无此患者")
             }
             that.pSex = responese.data.pSex
@@ -190,41 +195,88 @@
           console.log(e.target.value)
         },
         /**转换date*/
-        covertDate:function(date){
+        covertDate: function (date) {
           let year = date.getFullYear()
-          let month = date.getMonth()+1
+          let month = date.getMonth() + 1
           let day = date.getDate()
-          let result =year+'-'+month+'-'+day
+          let result = year + '-' + month + '-' + day
           return result
         },
         /** 得到满足条件的医生 */
-        getUser:function (e) {
+        getUser: function (e) {
           let that = this
           let date = new Date();
-          let seperator1 = "-";
-          let year = date.getFullYear();
-          let month = date.getMonth() + 1;
-          let strDate = date.getDate();
-          let currentDate = year + seperator1 + month + seperator1 + strDate
+          let currentDate = this.covertDate(date)
           console.log(this.dId)
           this.$axios({
-            url:'user/getAvailableDoctor',
-            method:'post',
-            data:{
-              currentDate:currentDate,
-              dId:this.dId,
+            url: 'user/getAvailableDoctor',
+            method: 'post',
+            data: {
+              currentDate: currentDate,
+              dId: this.dId,
               rLName: this.rLName
             }
-          }).then(response=>{
+          }).then(response => {
             that.userList = response.data
             console.log(response.data)
           })
         },
         /** 得到挂号等级 */
-        getRLName:function (value) {
+        getRLName: function (value) {
           let that = this
           this.$axios({
-            url:'registrationLevel/'
+            url: 'registrationLevel/getRegistrationLevel',
+            method: 'post',
+            data: {
+              rLId: '',
+              rLName: that.rLName,
+              rLFee: ''
+            }
+          }).then(response => {
+            console.log(response.data)
+            that.rLFee = response.data[0].rLFee
+            if (that.hasMedicineRecord) {
+              that.rFee = response.data[0].rLFee + 1
+            } else {
+              that.rFee = response.data[0].rLFee
+            }
+          }).catch(err => {
+            console.log(err)
+          })
+        },
+        /** 是否要病历本改变 */
+        changeRecord: function (value) {
+          if (this.hasMedicineRecord == 'true') {
+            console.log(this.hasMedicineRecord)
+            this.rFee = this.rLFee + 1
+          } else {
+            this.rFee = this.rLFee
+          }
+        },
+        /***
+         * 完成挂号
+         */
+        onTapSave: function () {
+          let that = this
+          let date = new Date();
+          let currentDate = this.covertDate(date)
+          this.$axios({
+            url:'registration/insertRegistration',
+            method:'post',
+            data:{
+              pId:that.pId,
+              payType:that.payType,
+              rLName:that.rLName,
+              dId:dId,
+              uId: uId,
+              hasMedicineRecord: that.hasMedicineRecord,
+              rFee:that.rFee,
+              rDate:currentDate
+            }
+          }).then(response=>{
+
+          }).catch(err=>{
+            console.log(err)
           })
         }
       }

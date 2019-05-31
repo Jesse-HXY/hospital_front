@@ -5,7 +5,7 @@
     </el-header>
     <el-form style="margin:0 auto;width:600px;">
       <el-form-item label="身份证号：" :label-width="formLabelWidth" style="text-align:left">
-        <el-input v-model="pId" style="width: 250px;margin-left:0" autocomplete="off"></el-input>
+        <el-input v-model="pId" style="width: 250px;margin-left:0" autocomplete="off" @blur="getPatient($event)"></el-input>
         <el-button @click="dialogFormVisible = true">添加</el-button>
       </el-form-item>
       <el-form-item label="姓名：" :label-width="formLabelWidth" style="text-align:left">
@@ -65,8 +65,8 @@
           <el-input v-model="pName" style="width: 250px;margin-left:0" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="性别：" :label-width="formLabelWidth">
-          <el-radio v-model="pSex" label="1">男</el-radio>
-          <el-radio v-model="pSex" label="2">女</el-radio>
+          <el-radio v-model="pSex" label="0">男</el-radio>
+          <el-radio v-model="pSex" label="1">女</el-radio>
         </el-form-item>
         <el-form-item label="出生日期：" :label-width="formLabelWidth" style="text-align:left">
           <div class="block">
@@ -127,8 +127,38 @@
       }
       ,
       methods:{
+          /**添加病人*/
         onTapAdd:function () {
-          this.dialogFormVisible=false
+          let that = this
+          this.$axios({
+            url:'patient/insertPatient',
+            method: 'post',
+            data:{
+              pId: that.pId,
+              pName: that.pName,
+              pSex: that.pSex,
+              pBirthday: that.pBirthday,
+              pAddress: that.pAddress
+            }
+          }).then(response=>{
+            this.dialogFormVisible=false
+            this.reSetPatient()
+          }).catch(err=>{console.log(err)})
+        },
+        /**重置病人*/
+        reSetPatient:function () {
+          this.pId = ''
+          this.pName = ''
+          this.pSex = ''
+          this.pSex =''
+          this.pAddress=''
+        },
+        /***
+         * 得到病人
+         */
+        getPatient:function (e) {
+          console.log("aaa")
+          console.log(e)
         }
       }
     }

@@ -1,4 +1,4 @@
-<script src="../../src/js/pinyin.js"></script>
+<script src="../../js/pinyin.js"></script>
 <template>
 
   <el-container style="height: 100%; border: 1px solid #eee;">

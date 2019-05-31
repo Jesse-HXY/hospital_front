@@ -257,9 +257,13 @@
          * 完成挂号
          */
         onTapSave: function () {
+          let hasMedicineRecord = 0
+          if(this.hasMedicineRecord == 'true'){
+            hasMedicineRecord = 1
+          }
           let that = this
-          let date = new Date();
-          let currentDate = this.covertDate(date)
+          let currentDate = new Date();
+          // let currentDate = this.covertDate(date)
           this.$axios({
             url:'registration/insertRegistration',
             method:'post',
@@ -267,9 +271,9 @@
               pId:that.pId,
               payType:that.payType,
               rLName:that.rLName,
-              dId:dId,
-              uId: uId,
-              hasMedicineRecord: that.hasMedicineRecord,
+              dId:that.dId,
+              uId: that.uId,
+              hasMedicalHistory: hasMedicineRecord,
               rFee:that.rFee,
               rDate:currentDate
             }

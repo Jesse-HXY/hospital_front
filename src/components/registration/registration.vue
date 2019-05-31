@@ -85,7 +85,8 @@
             <el-date-picker
               v-model="pBirth"
               type="date"
-              placeholder="选择日期">
+              placeholder="选择日期"
+            @blur="checkTime($event)">
             </el-date-picker>
           </div>
         </el-form-item>
@@ -262,8 +263,7 @@
             hasMedicineRecord = 1
           }
           let that = this
-          let currentDate = new Date();
-          // let currentDate = this.covertDate(date)
+          let currentDate = new Date().getTime();
           this.$axios({
             url:'registration/insertRegistration',
             method:'post',
@@ -282,6 +282,16 @@
           }).catch(err=>{
             console.log(err)
           })
+        },
+        /**
+         * 检查时间是否符合规范
+         */
+        checkTime:function(e){
+          let currentDate = new Date()
+          if(currentDate.getTime() < this.pBirth.getTime()){
+            alert("兄弟你在逗我吗")
+            this.pBirth = ''
+          }
         }
       }
     }

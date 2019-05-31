@@ -49,7 +49,8 @@
           type="daterange"
           range-separator="至"
           start-placeholder="开始日期"
-          end-placeholder="结束日期">
+          end-placeholder="结束日期"
+        @blur="checkTime($event)">
         </el-date-picker>
       </el-footer>
       <el-footer><el-button @click="onTapAdd" width="100">生成</el-button></el-footer>
@@ -210,6 +211,16 @@
             }
           }
           return result
+        },
+        /**
+         * 检查时间是否符合规范
+         */
+        checkTime:function (e) {
+          let currentDate = new Date()
+          if(currentDate.getTime()>this.dateRange[0].getTime()){
+            alert("开始时间不能早于当前时间,重新选择")
+            this.dateRange = ''
+          }
         }
       }
     }

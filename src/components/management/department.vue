@@ -1,4 +1,4 @@
-<script src="../../src/js/pinyin.js"></script>
+<script src="../../js/pinyin.js"></script>
 <template>
 
   <el-container style="height: 100%; border: 1px solid #eee">
@@ -159,7 +159,7 @@
 </template>
 
 <script>
-  import{getPinYinFirstCharacter} from '../js/pinyin'
+  import{getPinYinFirstCharacter} from '../../js/pinyin'
   export default {
 
     name: 'department',

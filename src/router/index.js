@@ -1,14 +1,15 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import HelloWorld from '@/components/HelloWorld'
-import department from '@/components/department'
-import arrangementRegulation from '@/components/arrangementRegulation'
-import arrangement from '@/components/arrangement'
-import user from '@/components/user'
-import registrationLevel from '@/components/registrationLevel'
-import examnationItem from '@/components/examnationItem'
-import regisitration from '@/components/registration'
-import withdraw from '@/components/withdraw'
+import department from '@/components/management/department'
+import arrangementRegulation from '@/components/management/arrangementRegulation'
+import arrangement from '@/components/management/arrangement'
+import user from '@/components/management/user'
+import registrationLevel from '@/components/management/registrationLevel'
+import examnationItem from '@/components/management/examnationItem'
+import regisitration from '@/components/registration/registration'
+import withdraw from '@/components/registration/withdraw'
+import disease from '@/components/management/disease'
 import axios from 'axios'
 Vue.prototype.axios = axios
 Vue.use(Router)
@@ -16,7 +17,7 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path:'/department',
+      path:'/management/department',
       name:'department',
       component: department
     },
@@ -26,37 +27,42 @@ export default new Router({
       component: HelloWorld
     },
     {
-      path:"/arrangementRegulation",
+      path:"/management/arrangementRegulation",
       name:'arrangementRegulation',
       component:arrangementRegulation
     },
     {
-      path:'/arrangement',
+      path:'/management/arrangement',
       name:'arrangement',
       component:arrangement
     },
     {
-      path:'/user',
+      path:'/management/user',
       name:'user',
       component:user
     },
     {
-      path:'/registrationLevel',
+      path:'/management/disease',
+      name:'/disease',
+      component:disease
+    },
+    {
+      path:'/management/registrationLevel',
       name:'registrationLevel',
       component:registrationLevel
     },
     {
-      path:'/examnationItem',
+      path:'/management/examnationItem',
       name:'examnationItem',
       component:examnationItem
     },
     {
-      path:'/registration',
+      path:'/registration/registration',
       name:'registration',
       component:regisitration
     },
     {
-      path:'/withdraw',
+      path:'/registration/withdraw',
       name:'/withdraw',
       component:withdraw
     }

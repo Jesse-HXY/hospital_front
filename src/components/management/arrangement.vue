@@ -1,6 +1,7 @@
 <template>
     <el-container>
       <el-header>排班规则列表</el-header>
+      <el-main>
       <el-header>
         科室选择:
         <div style="width: 10%;display: inline-block">
@@ -41,6 +42,7 @@
           <el-tag type="danger">{{day}}</el-tag>&nbsp&nbsp
         </div></template></el-table-column>
       </el-table>
+      </el-main>
       <el-footer>
         <el-date-picker
           v-model="dateRange"

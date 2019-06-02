@@ -76,7 +76,7 @@
       <el-main>
         <el-tabs>
           <el-tab-pane label="病历首页"><registrationMain></registrationMain></el-tab-pane>
-          <el-tab-pane label="配置管理">配置管理</el-tab-pane>
+          <el-tab-pane label="检查申请"><applyExamination></applyExamination></el-tab-pane>
           <el-tab-pane label="角色管理">角色管理</el-tab-pane>
           <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
         </el-tabs>
@@ -87,6 +87,7 @@
 
 </template>
 <script>
+  import applyExamination from '@/components/workstation/applyExamination'
   import registrationMain from '@/components/workstation/registrationMain'
   export default {
     data() {
@@ -107,6 +108,7 @@
 
     },
     components:{
+      'applyExamination':applyExamination,
       'registrationMain':registrationMain
     }
   }

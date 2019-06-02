@@ -11,7 +11,6 @@ import registration from '@/components/registration/registration'
 import withdraw from '@/components/registration/withdraw'
 import disease from '@/components/management/disease'
 import workstation from '@/components/workstation/workstation'
-import registrationMain from '@/components/workstation/registrationMain'
 import axios from 'axios'
 Vue.prototype.axios = axios
 Vue.use(Router)
@@ -71,10 +70,7 @@ export default new Router({
     {
       path:'/workstation/workstation',
       name:'workstation',
-      components:{
-        default:workstation,
-        registrationMain:registrationMain
-      }
+      component:workstation
     }
   ]
 })

@@ -1,7 +1,7 @@
 <template>
   <el-container>
     <el-aside width="70%">
-      <el-header style="height: 20px;">
+      <el-header style="height: 20px;" >
         <el-button type="text" icon="el-icon-circle-plus">新增项目</el-button>
         <el-button type="text" icon="el-icon-delete">删除项目</el-button>
         <el-button type="text" icon="el-icon-circle-check">开立项目</el-button>

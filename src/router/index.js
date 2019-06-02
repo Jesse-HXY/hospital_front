@@ -14,6 +14,7 @@ import workstation from '@/components/workstation/workstation'
 import registrationMain from '@/components/workstation/registrationMain'
 import applyDispose from '@/components/workstation/applyDispose'
 import medicinePrescription from '@/components/workstation/medicinePrescription'
+import herbalPrescription from '@/components/workstation/herbalPrescription'
 import axios from 'axios'
 Vue.prototype.axios = axios
 Vue.use(Router)
@@ -78,7 +79,8 @@ export default new Router({
         default:workstation,
         registrationMain:registrationMain,
         applyDispose:applyDispose,
-        medicinePrescription:medicinePrescription
+        medicinePrescription:medicinePrescription,
+        herbalPrescription:herbalPrescription,
       }
 
     }

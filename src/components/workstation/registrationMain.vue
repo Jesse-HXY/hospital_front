@@ -1,3 +1,4 @@
+<!--病历首页-->
 <template>
   <el-container>
     <el-header style="text-align: left;height: 30px;">

@@ -77,7 +77,7 @@
         <el-tabs>
           <el-tab-pane label="病历首页"><registrationMain></registrationMain></el-tab-pane>
           <el-tab-pane label="检查申请"><applyExamination></applyExamination></el-tab-pane>
-          <el-tab-pane label="角色管理">角色管理</el-tab-pane>
+          <el-tab-pane label="门诊确诊"><confirmed></confirmed></el-tab-pane>
           <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
         </el-tabs>
       </el-main>
@@ -89,6 +89,7 @@
 <script>
   import applyExamination from '@/components/workstation/applyExamination'
   import registrationMain from '@/components/workstation/registrationMain'
+  import confirmed from '@/components/workstation/confirmed'
   export default {
     data() {
       return {
@@ -109,7 +110,8 @@
     },
     components:{
       'applyExamination':applyExamination,
-      'registrationMain':registrationMain
+      'registrationMain':registrationMain,
+      'confirmed':confirmed
     }
   }
 </script>

@@ -1,10 +1,16 @@
 <!--病历首页-->
 <template>
   <el-container>
-    <el-header style="text-align: left;height: 30px;">
+    <el-header style="height: 20px;margin-top:-10px;">
+      <el-button type="text" icon="el-icon-document">暂存</el-button>
+      <el-button type="text" icon="el-icon-success">提交</el-button>
+      <el-button type="text" icon="el-icon-delete">清空</el-button>
+      <el-button type="text" icon="el-icon-refresh">刷新</el-button>
+    </el-header>
+    <el-header style="text-align: left;height: 30px;margin-top: 7px;">
       <el-tag>病历内容</el-tag>
     </el-header>
-    <el-main>
+    <el-main style="margin-top: -15px">
     <el-form :label-position="right" label-width="100px">
       <el-form-item label="主诉：">
         <el-input
@@ -88,8 +94,6 @@
     </el-main>
     <el-footer style="display: inline-block;">
       <el-button type="primary">提交</el-button>
-      <el-button type="success">暂存</el-button>
-      <el-button type="danger">清空</el-button>
     </el-footer>
   </el-container>
 </template>

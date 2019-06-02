@@ -42,20 +42,21 @@
       <el-tabs type="card">
         <el-tab-pane label="常用模版">
           <el-table
-          :data="examinationTemplateList">
+            :data="examinationTemplateList">
             <el-table-column
               label="名称"
               prop="eTName"
             ></el-table-column>
             <el-table-column
               label="操作">
-              <el-button type="text" size="mini">使用</el-button>
+              <el-button type="text" size="mini" >使用</el-button>
               <el-button type="text" size="mini" @click="centerDialogVisible=true">详细</el-button>
             </el-table-column>
           </el-table>
         </el-tab-pane>
       </el-tabs>
     </el-main>
+    <!--详细按钮的对话框-->
     <el-dialog
       title="提示"
       :visible.sync="centerDialogVisible"
@@ -68,19 +69,21 @@
                 </span>
     </el-dialog>
   </el-container>
+
+
 </template>
 
 <script>
-    export default {
-        name: "applyExamination",
-      data(){
-          return{
-            applicationList:[{name:'模版：腱鞘炎',eIName:'一个看不懂还贼老长的名字',dName:'检验科',eStatus:'暂存',eIFee:'50',eResult:'balala'},{name:'模版：腱鞘炎',eIName:'一个看不懂还贼老长的名字',dName:'检验科',eStatus:'暂存',eIFee:'50',eResult:'balala'}],
-            examinationTemplateList:[{eTName:'小儿感冒'},{eTName:'小儿感冒'},{eTName:'小儿感冒'},{eTName:'小儿感冒'}],
-            centerDialogVisible:false,
-          }
+  export default {
+    name: "applyExamination",
+    data(){
+      return{
+        applicationList:[{name:'模版：腱鞘炎',eIName:'一个看不懂还贼老长的名字',dName:'检验科',eStatus:'暂存',eIFee:'50',eResult:'balala'},{name:'模版：腱鞘炎',eIName:'一个看不懂还贼老长的名字',dName:'检验科',eStatus:'暂存',eIFee:'50',eResult:'balala'}],
+        examinationTemplateList:[{eTName:'小儿感冒'},{eTName:'小儿感冒'},{eTName:'小儿感冒'},{eTName:'小儿感冒'}],
+        centerDialogVisible:false,
       }
     }
+  }
 </script>
 
 <style scoped>

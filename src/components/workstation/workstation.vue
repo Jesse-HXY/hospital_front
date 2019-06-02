@@ -78,7 +78,13 @@
           <el-tab-pane label="病历首页"><registrationMain></registrationMain></el-tab-pane>
           <el-tab-pane label="检查申请"><applyExamination></applyExamination></el-tab-pane>
           <el-tab-pane label="门诊确诊"><confirmed></confirmed></el-tab-pane>
-          <el-tab-pane label="定时任务补偿">定时任务补偿</el-tab-pane>
+          <el-tab-pane label="检验申请">角色管理</el-tab-pane>
+          <el-tab-pane label="处置申请"><applyDispose></applyDispose></el-tab-pane>
+          <el-tab-pane label="成药处方"><medicinePrescription></medicinePrescription></el-tab-pane>
+          <el-tab-pane label="草药处方">定时任务补偿</el-tab-pane>
+          <el-tab-pane label="费用查询">定时任务补偿</el-tab-pane>
+
+
         </el-tabs>
       </el-main>
     </el-container>
@@ -90,6 +96,9 @@
   import applyExamination from '@/components/workstation/applyExamination'
   import registrationMain from '@/components/workstation/registrationMain'
   import confirmed from '@/components/workstation/confirmed'
+  import applyDispose from  '@/components/workstation/applyDispose'
+  import medicinePrescription from  '@/components/workstation/medicinePrescription'
+
   export default {
     data() {
       return {
@@ -109,9 +118,13 @@
 
     },
     components:{
+
       'applyExamination':applyExamination,
       'registrationMain':registrationMain,
-      'confirmed':confirmed
+      'confirmed':confirmed,
+      'applyDispose': applyDispose,
+      'medicinePrescription':medicinePrescription,
+
     }
   }
 </script>

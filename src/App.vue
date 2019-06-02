@@ -1,10 +1,12 @@
 <template>
   <div id="app">
     <el-container style="height: 800px; border: 1px solid #eee">
-      <el-aside style="width:15%;height: 100%">
-        <el-menu>
+      <el-aside style="height: 100%;width: auto">
+        <div v-if="isCollapse"><el-button type="text" @click="isCollapse=false" size="mini">展开</el-button></div>
+        <div v-else><el-button type="text" @click="isCollapse=true">收起</el-button></div>
+        <el-menu class="el-menu-vertical-demo" :collapse="isCollapse">
           <el-submenu index="1">
-            <template slot="title"><i class="el-icon-setting"></i>基础信息维护</template>
+            <template slot="title"><i class="el-icon-setting"></i><span>基础信息维护</span></template>
             <el-menu-item index="1-1">常数类别管理</el-menu-item>
             <router-link to="/management/department"><el-menu-item index="1-2">科室管理</el-menu-item></router-link>
             <router-link to="/management/user"><el-menu-item index="1-3">用户管理</el-menu-item></router-link>
@@ -18,9 +20,9 @@
             </el-menu-item-group>
           </el-submenu>
           <el-submenu index="2">
-            <template slot="title"><i class="el-icon-setting"></i>门诊挂号收费</template>
+            <template slot="title"><i class="el-icon-setting"></i><span>门诊挂号收费</span></template>
             <router-link to="/registration/registration"><el-menu-item index="2-1">现场挂号</el-menu-item></router-link>
-            <el-menu-item index="2-2">退号</el-menu-item>
+            <router-link to="/registration/withdraw"><el-menu-item index="2-2">退号</el-menu-item></router-link>
             <el-menu-item index="2-3">收费</el-menu-item>
             <el-menu-item index="2-4">退费</el-menu-item>
             <el-menu-item index="2-5">发票补打</el-menu-item>
@@ -29,8 +31,8 @@
             <el-menu-item index="2-8">收费员日结</el-menu-item>
           </el-submenu>
           <el-submenu index="3">
-            <template slot="title"><i class="el-icon-setting"></i>门诊医生工作站</template>
-            <el-menu-item index="3-1">门诊病历首页</el-menu-item>
+            <template slot="title"><i class="el-icon-setting"></i><span>门诊医生工作站</span></template>
+            <router-link to="/workstation/workstation"><el-menu-item index="3-1">门诊病历首页</el-menu-item></router-link>
             <el-menu-item index="3-2">检查申请</el-menu-item>
             <el-menu-item index="3-3">检验申请</el-menu-item>
             <el-menu-item index="3-4">门诊确诊</el-menu-item>
@@ -44,26 +46,27 @@
             <el-menu-item index="3-12">中药处方模板管理</el-menu-item>
           </el-submenu>
           <el-submenu index="4">
-            <template slot="title"><i class="el-icon-setting"></i>门诊医技工作站</template>
+            <template slot="title"><i class="el-icon-setting"></i><span>门诊医技工作站</span></template>
             <el-menu-item index="4-1">患者检查</el-menu-item>
             <el-menu-item index="4-2">患者检验</el-menu-item>
             <el-menu-item index="4-3">患者处置</el-menu-item>
             <el-menu-item index="4-4">医技管理</el-menu-item>
           </el-submenu>
           <el-submenu index="5">
-            <template slot="title"><i class="el-icon-setting"></i>门诊药房工作站</template>
+            <template slot="title"><i class="el-icon-setting"></i><span>门诊药房工作站</span></template>
             <el-menu-item index="5-1">门诊发药</el-menu-item>
             <el-menu-item index="5-2">门诊退药</el-menu-item>
             <el-menu-item index="5-3">药品管理</el-menu-item>
           </el-submenu>
           <el-submenu index="6">
-            <template slot="title"><i class="el-icon-setting"></i>门诊财务管理</template>
+            <template slot="title"><i class="el-icon-setting"></i><span>门诊财务管理</span></template>
             <el-menu-item index="6-1">费用科目管理</el-menu-item>
             <el-menu-item index="6-2">门诊日结核对</el-menu-item>
             <el-menu-item index="6-3">门诊科室工作量统计</el-menu-item>
             <el-menu-item index="6-4">门诊医生工作量统计</el-menu-item>
           </el-submenu>
         </el-menu>
+
       </el-aside>
       <router-view></router-view>
     </el-container>
@@ -72,7 +75,13 @@
 
 <script>
   export default {
-    name: 'App'
+    name: 'App',
+    data(){
+      return {
+        isCollapse: true
+      }
+    }
+
   }
 </script>
 
@@ -87,19 +96,5 @@
   }
 </style>
 
-<script>
-export default {
-  name: 'App'
-}
-</script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
+

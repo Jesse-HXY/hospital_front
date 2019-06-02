@@ -21,23 +21,26 @@
         :data ="doctorList"
         style="width: 100%"
       >
-        <el-table-column>
+        <el-table-column width="25px">
           <template slot-scope="scope"><el-checkbox v-model="checkList[scope.$index]"></el-checkbox></template>
         </el-table-column>
-        <el-table-column
+        <el-table-column width="150px"
         label="规则名称"
         prop="arName"
         ></el-table-column>
         <el-table-column
+          width="150px"
           label="挂号等级"
           prop="rLName"
         ></el-table-column>
         <el-table-column
+          width="150px"
           label="医生姓名"
           prop="uName"
         ></el-table-column>
         <el-table-column
           label="时间"
+          style="width: auto;"
         ><template slot-scope="scope"><div v-for="day in scope.row.workingList" style="display: inline-block">
           <el-tag type="danger">{{day}}</el-tag>&nbsp&nbsp
         </div></template></el-table-column>

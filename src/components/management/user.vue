@@ -141,8 +141,7 @@
           label="用户类别"
           width="200">
           <template slot-scope="scope">
-        <span v-if="scope.$index == editIndex" style="margin-left: 10px"><el-select v-model="uCategory"
-                                                                                    placeholder="请选择活动区域">
+        <span v-if="scope.$index == editIndex" style="margin-left: 10px"><el-select v-model="uCategory" placeholder="请选择活动区域">
           <el-option v-if="isDoctor==='false'" label="挂号收费员" value="挂号收费员"></el-option>
           <el-option v-if="isDoctor==='true'" label="门诊医生" value="门诊医生"></el-option>
           <el-option v-if="isDoctor==='true'" label="医技医生" value="医技医生"></el-option>
@@ -157,14 +156,14 @@
           label="所属科室"
           width="300">
           <template slot-scope="scope">
-            <div v-if="scope.$index == editIndex">
+            <div v-if="scope.$index == editIndex" >
               <el-select v-model="chosenDepartmentList" multiple filterable placeholder="请选择">
                 <div v-for="item in departmentList">
                   <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
                 </div>
               </el-select>
             </div>
-          <div v-else v-for="department in scope.row.departments" style="display: inline-block">
+          <div v-else v-for="department in scope.row.departments" style="display: inline-block;">
             <el-tag type="danger">{{department.dName}}</el-tag>&nbsp&nbsp
           </div>
           </template>

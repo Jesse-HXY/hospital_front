@@ -22,10 +22,11 @@
 
     <el-container style="height: 100%; border: 1px solid #eee;font-size: 20px">
      <el-main style="text-align: left">
-       <el-header style="text-align: left; font-size: 20px">
+       <!--<el-header style="text-align: left; font-size: 20px">-->
+         <!--患者信息确认:-->
+       <!--</el-header>-->
+       <!--<el-main>-->
          患者信息确认:
-       </el-header>
-       <el-main>
        <el-table :data="patientList"
        stripe
        style="width: 100%">
@@ -53,7 +54,7 @@
 
        </el-table>
        </el-main>
-     </el-main>
+     <!--</el-main>-->
     </el-container>
       <el-container style="height: 100%; border: 1px solid #eee;font-size: 20px">
         <el-header>

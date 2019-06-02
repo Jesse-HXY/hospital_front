@@ -7,9 +7,11 @@ import arrangement from '@/components/management/arrangement'
 import user from '@/components/management/user'
 import registrationLevel from '@/components/management/registrationLevel'
 import examnationItem from '@/components/management/examnationItem'
-import regisitration from '@/components/registration/registration'
+import registration from '@/components/registration/registration'
 import withdraw from '@/components/registration/withdraw'
 import disease from '@/components/management/disease'
+import workstation from '@/components/workstation/workstation'
+import registrationMain from '@/components/workstation/registrationMain'
 import axios from 'axios'
 Vue.prototype.axios = axios
 Vue.use(Router)
@@ -59,12 +61,20 @@ export default new Router({
     {
       path:'/registration/registration',
       name:'registration',
-      component:regisitration
+      component:registration
     },
     {
       path:'/registration/withdraw',
       name:'/withdraw',
       component:withdraw
+    },
+    {
+      path:'/workstation/workstation',
+      name:'workstation',
+      components:{
+        default:workstation,
+        registrationMain:registrationMain
+      }
     }
   ]
 })

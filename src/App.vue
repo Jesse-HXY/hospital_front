@@ -33,12 +33,7 @@
           <el-submenu index="3">
             <template slot="title"><i class="el-icon-setting"></i><span>门诊医生工作站</span></template>
             <router-link to="/workstation/workstation"><el-menu-item index="3-1">门诊病历首页</el-menu-item></router-link>
-            <el-menu-item index="3-2">检查申请</el-menu-item>
-            <el-menu-item index="3-3">检验申请</el-menu-item>
-            <el-menu-item index="3-4">门诊确诊</el-menu-item>
-            <el-menu-item index="3-5">处置申请</el-menu-item>
-            <el-menu-item index="3-6">成药处方</el-menu-item>
-            <el-menu-item index="3-7">草药处方</el-menu-item>
+
             <el-menu-item index="3-8">诊毕</el-menu-item>
             <el-menu-item index="3-9">患者费用明细查询</el-menu-item>
             <el-menu-item index="3-10">医技模板管理</el-menu-item>

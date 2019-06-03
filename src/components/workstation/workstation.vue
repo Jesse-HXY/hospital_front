@@ -88,7 +88,7 @@
           <el-tab-pane label="处置申请"><applyDispose></applyDispose></el-tab-pane>
           <el-tab-pane label="成药处方"><medicinePrescription></medicinePrescription></el-tab-pane>
           <el-tab-pane label="草药处方"><herbalPrescription></herbalPrescription></el-tab-pane>
-          <el-tab-pane label="费用查询">定时任务补偿</el-tab-pane>
+          <el-tab-pane label="费用查询"><feeInquiry></feeInquiry></el-tab-pane>
 
 
         </el-tabs>
@@ -105,6 +105,7 @@
   import applyDispose from  '@/components/workstation/applyDispose'
   import medicinePrescription from  '@/components/workstation/medicinePrescription'
   import herbalPrescription from '@/components/workstation/herbalPrescription'
+  import feeInquiry from '@/components/workstation/feeInquiry'
 
 
   export default {
@@ -162,6 +163,7 @@
       'applyDispose': applyDispose,
       'medicinePrescription':medicinePrescription,
       'herbalPrescription':herbalPrescription,
+      'feeInquiry':feeInquiry,
 
     }
   }

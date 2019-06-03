@@ -220,7 +220,9 @@
          */
         checkTime:function (e) {
           let currentDate = new Date()
-          if(currentDate.getTime()>this.dateRange[0].getTime()){
+          console.log(currentDate.getTime()/(3600*1000*24))
+          console.log(this.dateRange[0].getTime()/(3600*1000*24))
+          if(Math.floor(currentDate.getTime()/(3600*1000*24)-this.dateRange[0].getTime()/(3600*1000*24))>0){
             alert("开始时间不能早于当前时间,重新选择")
             this.dateRange = ''
           }

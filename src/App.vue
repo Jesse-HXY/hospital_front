@@ -68,7 +68,34 @@
         </el-menu>
 
       </el-aside>
-      <router-view></router-view>
+      <el-container>
+          <el-header style="text-align: right;height: 40px;">
+              <div class="grid-content ">
+                <template >
+                  <el-button type="text" @click="centerDialogVisible=true" v-show="showLogin">登录</el-button>
+                  <el-tag v-show="!showLogin">{{username}}</el-tag>
+                  <el-button type="text">注销</el-button>
+                </template>
+              </div>
+          </el-header>
+        <el-dialog
+          title="登陆"
+          :visible.sync="centerDialogVisible"
+          width="30%"
+          center>
+          <span>用户名<el-input v-model="uId" placeholder="请输入用户名"></el-input></span>
+          <span>密码<el-input v-model="password" placeholder="请输入密码"></el-input></span>
+
+          <span slot="footer" class="dialog-footer">
+            <el-button @click.native="handleShow">取 消</el-button>
+            <el-button type="primary" @click.native="handleShow" >确 定</el-button>
+          </span>
+        </el-dialog>
+
+        <router-view></router-view>
+
+      </el-container>
+
     </el-container>
   </div>
 </template>
@@ -78,7 +105,33 @@
     name: 'App',
     data(){
       return {
-        isCollapse: true
+        showLogin:true,
+        uId:'',
+        username:'',
+        password:'',
+        isCollapse: true,
+        centerDialogVisible:false
+      }
+    },methods:{
+      handleShow:function () {
+        let that = this
+        this.$axios({
+          url:'user/login',
+          method:'post',
+          data:{
+            uId:that.uId,
+            uPassword:that.password
+          }
+        }).then(response=>{
+          console.log(response.data.uNickName)
+          that.username = response.data.uNickName
+          this.$cookie.set('uId', response.data.uId);
+        }).catch(err=>{
+          console.log(err)
+        })
+        this.showLogin=false;
+        this.centerDialogVisible=false;
+        console.log(this.showLogin)
       }
     }
 

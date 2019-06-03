@@ -8,6 +8,8 @@
         <el-input v-model="pId" style="width: 250px;margin-left:0" autocomplete="off" @blur="getPatient($event)"></el-input>
         <el-button @click="dialogFormVisible = true">添加</el-button>
       </el-form-item>
+      <div style="margin-top: -20px;">
+      </div>
       <el-form-item label="姓名：" :label-width="formLabelWidth" style="text-align:left">{{pName}}
       </el-form-item>
       <el-form-item label="性别：" :label-width="formLabelWidth" style="text-align:left">

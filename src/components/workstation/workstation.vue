@@ -69,9 +69,41 @@
   </transition>
     <el-container>
       <el-header style="text-align: left;height: 30px;display: inline-block">
-        <el-button v-if="viewPatient" @click="viewPatient=false" size="mini">隐藏患者栏</el-button>
-        <el-button v-else @click="viewPatient=true" size="mini">显示患者栏</el-button>
-        患者姓名：{{patient.name}} 病历号：{{patient.rId}} 年龄：{{patient.age}} 性别：{{patient.sex}}
+        <el-row>
+          <el-col :span="20">
+            <div class="grid-content">
+            <el-button v-if="viewPatient" @click="viewPatient=false" size="mini">隐藏患者栏</el-button>
+            <el-button v-else @click="viewPatient=true" size="mini">显示患者栏</el-button>
+            患者姓名：{{patient.name}} 病历号：{{patient.rId}} 年龄：{{patient.age}} 性别：{{patient.sex}}
+             </div></el-col>
+          <el-col :span="2">
+            <div class="grid-content ">
+              <template >
+            <el-button type="text" @click="centerDialogVisible=true" v-show="showLogin">登录</el-button>
+                <el-tag v-show="!showLogin">{{username}}</el-tag>
+              <el-button type="text">注销</el-button>
+              </template>
+          </div></el-col>
+        </el-row>
+
+        <el-dialog
+          title="提示"
+          :visible.sync="centerDialogVisible"
+          width="30%"
+          center>
+          <span>用户名<el-input v-model="username" placeholder="请输入用户名"></el-input></span>
+          <span>密码<el-input v-model="password" placeholder="请输入密码"></el-input></span>
+
+          <span slot="footer" class="dialog-footer">
+
+              <el-button @click.native="handleShow">取 消</el-button>
+              <el-button type="primary" @click.native="handleShow" >确 定</el-button>
+
+
+  </span>
+        </el-dialog>
+
+
       </el-header>
       <el-main>
         <el-tabs>
@@ -103,11 +135,18 @@
 
   export default {
     data() {
+        let showLogin=true;
+        let username= '';
+        let password = '';
       return {
         activeIndex: '1',
         activeIndex2: '1',
         searchrId:'',
         viewPatient:true,
+        centerDialogVisible: false,
+        showLogin:showLogin,
+        username:username,
+        password:password,
         patient:{
           name:'黄萎男',
           rId:'3838438',
@@ -117,7 +156,11 @@
       };
     },
     methods: {
-
+            handleShow:function () {
+             this.showLogin=false;
+             this.centerDialogVisible=false;
+             console.log(this.showLogin)
+            }
     },
     components:{
 
@@ -138,5 +181,31 @@
   }
   .input-with-select .el-input-group__prepend {
     background-color: #fff;
+  }
+  .el-row {
+    margin-bottom: 20px;
+  &:last-child {
+     margin-bottom: 0;
+   }
+  }
+  .el-col {
+    border-radius: 4px;
+  }
+  .bg-purple-dark {
+    background: #99a9bf;
+  }
+  .bg-purple {
+    background: #d3dce6;
+  }
+  .bg-purple-light {
+    background: #e5e9f2;
+  }
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+  .row-bg {
+    padding: 10px 0;
+    background-color: #f9fafc;
   }
 </style>

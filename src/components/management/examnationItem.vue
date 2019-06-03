@@ -37,9 +37,16 @@
           &nbsp&nbsp&nbsp&nbsp费用分类：
           <div style="width: 125px;display: inline-block">
             <el-input
-              v-model="searcheIFeeTee"
+              v-model="searcheIFeeType"
               size="mini"
               placeholder="输入费用分类"
+            /></div>
+          &nbsp&nbsp&nbsp&nbsp执行部门：
+          <div style="width: 125px;display: inline-block">
+            <el-input
+              v-model="searchdId"
+              size="mini"
+              placeholder="输入执行部门Id"
             /></div>
         </template>
         &nbsp&nbsp&nbsp&nbsp
@@ -122,6 +129,14 @@
               <span  style="margin-left: 10px">{{scope.row.eIFeeType}}</span>
             </template>
           </el-table-column>
+          <el-table-column
+            label="执行科室"
+            width="150">
+            <template slot-scope="scope">
+              <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="dId"></el-input></span>
+              <span  style="margin-left: 10px">{{scope.row.dId}}</span>
+            </template>
+          </el-table-column>
 
 
           <el-table-column
@@ -181,6 +196,8 @@
         let eISpecification = '';
         let eIFee = '';
         let eIFeeType = '';
+        let dId = '';
+
 
         return {
           examnationItemList: examnationItemList,
@@ -189,6 +206,8 @@
           searcheISpecification: searcheISpecification,
           searcheIFee: searcheIFee,
           searcheIFeeType: searcheIFeeType,
+          searchdId:searchdId,
+          dId:dId,
           eIId: eIId,
           eIName: eIName,
           eISpecification: eISpecification,
@@ -279,7 +298,7 @@
           };
           this.departmentList[index] = department;
           this.$axios({
-            url:'department/updateDepartment',
+            url:'examnationItem/updateExamnationItem',
             method:'post',
             data:{
               dId:dId,
@@ -318,7 +337,7 @@
           let that = this
           this.departmentList.splice(index,1)
           this.$axios({
-            url:'department/deleteDepartment',
+            url:'examnationItem/deleteExamnationItem',
             method:'post',
             data: {dId:dId},
 
@@ -338,13 +357,16 @@
         onTapSearch:function(){
           let that = this;
           this.$axios({
-            url: "department/getDepartments",
+            url: "examnationItem/getExamnationItems",
             method:"post",
             data:{
+              eIId:that.searcheIId,
+              eIName:that.searcheIName,
+              eISpecification:that.searcheISpecification,
+              eIFee:that.searcheIFee,
+              eIFeeType:that.searcheIFeeType,
               dId:that.searchdId,
-              dName:that.searchdName,
-              dType:that.searchdType,
-              dCategory:that.searchdCategory,
+
             }
 
           }).then(response => {

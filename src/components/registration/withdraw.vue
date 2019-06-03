@@ -127,7 +127,7 @@
               <template slot-scope="scope">
 <!---->
                 <el-button
-                  v-if="scope.row.rStatus=='未诊断'"
+                  v-if="scope.row.okToWithdraw==true"
                   size="mini"
                   type="danger"
                   @click="handleDelete(scope.$index, scope.row)">
@@ -180,8 +180,9 @@
       let dName='';
       let rStatus='';
       let pAddress='';
-      let patientList=[{rId:123,pName:"韩子豪",pId:131321,rDate:'2019/01/01',MorningOrEvening:'上午',dName:'艾滋病科',rStatus:'未诊断',pAddress:'妓院'},
-                       {rId:456,pName:"大傻逼",pId:1313214234,rDate:'2019/01/01',MorningOrEvening:'上午',dName:'艾滋病科',rStatus:'已诊断',pAddress:'美国'}];
+      let okToWithdraw='';
+      let patientList=[{rId:123,pName:"韩子豪",pId:131321,rDate:'2019/01/01',MorningOrEvening:'上午',dName:'艾滋病科',rStatus:'未诊断',pAddress:'妓院',okToWithdraw:true},
+                       {rId:456,pName:"大傻逼",pId:1313214234,rDate:'2019/01/01',MorningOrEvening:'上午',dName:'艾滋病科',rStatus:'已诊断',pAddress:'美国',okToWithdraw:false}];
 
       return{
         rId :rId,
@@ -192,8 +193,10 @@
         dName:dName,
         rStatus:rStatus,
         pAddress:pAddress,
+        okToWithdraw:okToWithdraw,
         patientList:patientList,
         searchrId:'',
+
         centerDialogVisible:false,
       }
     },
@@ -229,8 +232,6 @@
             {
               rId:rId,
               rStatus:rStatus
-
-
             },
 
         }).then(function (response) {

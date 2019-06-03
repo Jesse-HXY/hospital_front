@@ -6,7 +6,7 @@
           项目编码：
           <div style="width: 125px;display: inline-block">
             <el-input
-              v-model="searcheIId"
+              v-model="searcheICode"
               size="mini"
               placeholder="输入项目编码"
             />
@@ -41,12 +41,12 @@
               size="mini"
               placeholder="输入费用分类"
             /></div>
-          &nbsp&nbsp&nbsp&nbsp执行部门：
+          &nbsp&nbsp&nbsp&nbsp执行科室：
           <div style="width: 125px;display: inline-block">
             <el-input
               v-model="searchdId"
               size="mini"
-              placeholder="输入执行部门Id"
+              placeholder="输入执行科室Id"
             /></div>
         </template>
         &nbsp&nbsp&nbsp&nbsp
@@ -58,8 +58,9 @@
       <el-main>
         <el-dialog title="添加非药品项目" :visible.sync="dialogFormVisible" width="350px" >
           <el-form>
-            <el-form-item label="项目编码" :label-width="formLabelWidth">
-              <el-input v-model="eIId" autocomplete="off"></el-input>
+
+            <el-form-item label="执行科室" :label-width="formLabelWidth">
+              <el-input v-model="dId" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="项目名称" :label-width="formLabelWidth">
               <el-input v-model="eIName" autocomplete="off"></el-input>
@@ -72,6 +73,9 @@
             </el-form-item>
             <el-form-item label="收费分类" :label-width="formLabelWidth">
               <el-input v-model="eIFeeType" autocomplete="off"></el-input>
+            </el-form-item>
+            <el-form-item label="项目编码" :label-width="formLabelWidth">
+              <el-input v-model="eICode" autocomplete="off"></el-input>
             </el-form-item>
           </el-form>
           <div slot="footer" class="dialog-footer">
@@ -91,7 +95,7 @@
           <!--</el-table-column>-->
 
           <el-table-column
-            label="项目编码"
+            label="序号"
             width="125">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{scope.row.eIId}}</span>
@@ -102,7 +106,7 @@
             width="300">
             <template slot-scope="scope">
               <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="eIName"></el-input></span>
-              <span  style="margin-left: 10px">{{scope.row.eIName}}</span>
+              <span  v-else style="margin-left: 10px">{{scope.row.eIName}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -110,7 +114,7 @@
             width="150">
             <template slot-scope="scope">
               <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="eISpecification"></el-input></span>
-              <span style="margin-left: 10px">{{scope.row.eISpecification}}</span>
+              <span v-else style="margin-left: 10px">{{scope.row.eISpecification}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -118,7 +122,7 @@
             width="100">
             <template slot-scope="scope">
               <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="eIFee"></el-input></span>
-              <span  style="margin-left: 10px">{{scope.row.eIFee}}</span>
+              <span  v-else style="margin-left: 10px">{{scope.row.eIFee}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -126,7 +130,7 @@
             width="150">
             <template slot-scope="scope">
               <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="eIFeeType"></el-input></span>
-              <span  style="margin-left: 10px">{{scope.row.eIFeeType}}</span>
+              <span  v-else style="margin-left: 10px">{{scope.row.eIFeeType}}</span>
             </template>
           </el-table-column>
           <el-table-column
@@ -134,7 +138,15 @@
             width="150">
             <template slot-scope="scope">
               <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="dId"></el-input></span>
-              <span  style="margin-left: 10px">{{scope.row.dId}}</span>
+              <span  v-else style="margin-left: 10px">{{scope.row.dId}}</span>
+            </template>
+          </el-table-column>
+          <el-table-column
+            label="项目编码"
+            width="125">
+            <template slot-scope="scope">
+              <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="eICode"></el-input></span>
+              <span v-else style="margin-left: 10px">{{scope.row.eICode}}</span>
             </template>
           </el-table-column>
 
@@ -187,33 +199,34 @@
         name: "examnationItem",
       data(){
         let examnationItemList=[];
-        let searcheIName = '';
-        let searcheISpecification = '';
-        let searcheIFee = ''
-        let searcheIFeeType = '';
         let eIId = '';
         let eIName = '';
         let eISpecification = '';
         let eIFee = '';
         let eIFeeType = '';
         let dId = '';
+        let eICode='';
+        let editIndex=-1;
 
 
         return {
+          editIndex:editIndex,
           examnationItemList: examnationItemList,
-          searcheIId: searcheIId,
-          searcheIName: searcheIName,
-          searcheISpecification: searcheISpecification,
-          searcheIFee: searcheIFee,
-          searcheIFeeType: searcheIFeeType,
-          searchdId:searchdId,
+          searcheICode:'',
+          searcheIName: '',
+          searcheISpecification: '',
+          searcheIFee: '',
+          searcheIFeeType:'',
+          searchdId:'',
           dId:dId,
           eIId: eIId,
           eIName: eIName,
           eISpecification: eISpecification,
           eIFee: eIFee,
           eIFeeType: eIFeeType,
+          eICode: eICode,
           dialogFormVisible: false,
+          formLabelWidth: '120px',
           /**当前页面数*/
           currentPage: 1,
           /**页面总数*/
@@ -225,7 +238,7 @@
 
       },
       created:function(){
-          this.getExamnationItemByPage(1)
+          this.getExamnationItemByPage(1);
           this.getPageCount()
       },
 
@@ -268,10 +281,13 @@
         },
         reSet:function () {
           this.eIId = "";
+          this.dId='';
           this.eIName = "";
           this.eISpecification = "";
           this.eIFee = "";
           this.eIFeeType='';
+          this.eICode='';
+
         },
         /**
          * 分页
@@ -283,33 +299,38 @@
          * 分页
          */
         handleCurrentChange:function () {
-          this.getDepartmentsByPage(this.currentPage)
+          this.getExamnationItemByPage(this.currentPage)
         },
 
         handleAdd(index, row){
           let that = this;
           let eIId= this.examnationItemList[index].eIId;
-          let department={
+          let examination={
             eIId:eIId,
+            dId : this.dId,
             eIName: this.eIName,
             eISpecification:this.eISpecification,
             eIFee:this.eIFee,
-            eIFeeType :this.eIFeeType
+            eIFeeType :this.eIFeeType,
+            eICode:this.eICode,
           };
-          this.departmentList[index] = department;
+          this.examnationItemList[index] = examination;
           this.$axios({
             url:'examnationItem/updateExamnationItem',
             method:'post',
             data:{
-              dId:dId,
-              dName:dName,
-              dCategory:this.dCategory,
-              dType:this.dType,
+              eIId:eIId,
+              dId : this.dId,
+              eIName:this.eIName,
+              eISpecification:this.eISpecification,
+              eIFee:this.eIFee,
+              eIFeeType:this.eIFeeType,
+              eICode:this.eICode,
             }
           }).then(response => {
             that.reSet()
             console.log((response.data));
-            console.log(department)
+            console.log(examination)
 
           }).catch(err=>{
             console.log(err)
@@ -320,26 +341,34 @@
         },
         handleEdit(index, row){
           let that=this;
-          let dId = this.departmentList[index].dId;
-          let dName = this.departmentList[index].dName;
-          let dType = this.departmentList[index].dType;
-          let dCategory = this.departmentList[index].dCategory;
+          let eIId = this.examnationItemList[index].eIId;
+          let dId  = this.examnationItemList[index].dId;
+          let eIName = this.examnationItemList[index].eIName;
+          let eISpecification = this.examnationItemList[index].eISpecification;
+          let eIFee = this.examnationItemList[index].eIFee;
+          let eIFeeType = this.examnationItemList[index].eIFeeType;
+          let eICode = this.examnationItemList[index].eICode;
           this.editIndex = index;
 
           let data={
-            dType: that.dType,
-            dCategory: that.dCategory,
+            dId : that.dId,
+            eIName:that.eIName,
+            eISpecification:that.eISpecification,
+            eIFee:that.eIFee,
+            eIFeeType:that.eIFeeType,
+            eICode:that.eICode,
+
           }
 
         },
         handleDelete(index,row) {
-          let dId = this.departmentList[index].dId;
+          let eIId = this.examnationItemList[index].eIId;
           let that = this
-          this.departmentList.splice(index,1)
+          this.examnationItemList.splice(index,1)
           this.$axios({
             url:'examnationItem/deleteExamnationItem',
             method:'post',
-            data: {dId:dId},
+            data: {eIId:eIId},
 
           }).then(function (response) {
             that.getPageCount()
@@ -360,21 +389,51 @@
             url: "examnationItem/getExamnationItems",
             method:"post",
             data:{
-              eIId:that.searcheIId,
+              eICode:that.searcheICode,
               eIName:that.searcheIName,
               eISpecification:that.searcheISpecification,
               eIFee:that.searcheIFee,
               eIFeeType:that.searcheIFeeType,
               dId:that.searchdId,
 
+
             }
 
           }).then(response => {
-            that.departmentList = response.data;
+            that.examnationItemList = response.data;
           }).catch(err=>{
             console.log(err)
           })
         },
+        onTapAdd:function(){
+          this.dialogFormVisible = false
+          let that= this;
+
+          console.log()
+          this.$axios({
+            url:"examnationItem/insertExamnationItem",
+            method:"post",
+            data:{
+              dId:that.dId,
+              eIName: that.eIName,
+              eISpecification:that.eISpecification,
+              eIFee:that.eIFee,
+              eIFeeType:that.eIFeeType,
+              eICode:that.eICode,
+            }
+          }).then(response=>{
+            console.log(response.data)
+            that.getExamnationItemByPage(that.currentPage)
+            that.getPageCount()
+            that.reSet()
+          }).catch(err=>{
+            console.log(err)
+          })
+        },
+        onTapGiveUp:function () {
+          this.editIndex = -1
+        },
+
 
       }
     }

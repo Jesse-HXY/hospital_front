@@ -17,7 +17,7 @@
       </template>
 
 
-      <el-button type="primary" icon="el-icon-search">搜索</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="searchByrId">搜索</el-button>
     </el-header>
 
     <el-container style="height: 100%; border: 1px solid #eee;font-size: 20px">
@@ -138,6 +138,17 @@
               </template>
             </el-table-column>
           </el-table>
+          <el-dialog
+            title="退号"
+            :visible.sync="centerDialogVisible"
+            width="30%"
+            center>
+            <span>应退挂号费 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<el-tag align="right">0元</el-tag></span>
+            <span slot="footer" class="dialog-footer">
+    <el-button @click="centerDialogVisible = false">取 消</el-button>
+    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+  </span>
+          </el-dialog>
 
 
 
@@ -183,10 +194,10 @@
         pAddress:pAddress,
         patientList:patientList,
         searchrId:'',
+        centerDialogVisible:false,
       }
     },
     methods:{
-
 
 
        searchByrId:function () {
@@ -195,7 +206,7 @@
            url:'',
            method:'post',
            data:{
-             pId : that.pId,
+             rId : that.rId,
            }
          }).then(response=>{
            console.log(response.data)
@@ -207,7 +218,9 @@
       handleDelete(index,row) {
         let rId = this.patientList[index].rId;
         let rState = this.patientList[index].rState;
+        this.centerDialogVisible=true;
         let that = this;
+
         this.patientList.splice(index,1);
         this.$axios({
           url:'',

@@ -16,6 +16,7 @@
               &nbsp&nbsp&nbsp&nbsp范围：
               <div style="width: 150px;display: inline-block">
                 <el-select v-model="searchScope">
+                  <el-option label="所有" value=""></el-option>
                   <el-option label="全院" value="全院"></el-option>
                   <el-option label="个人" value="个人"></el-option>
                   <el-option label="科室" value="科室"></el-option>
@@ -28,6 +29,7 @@
               类型：
               <div style="width: 100px;display: inline-block">
                 <el-select v-model="searchRecordType">
+                  <el-option label="所有" value=""></el-option>
                   <el-option label="检查" value="检查"></el-option>
                   <el-option label="检验" value="检验"></el-option>
                   <el-option label="处置" value="处置"></el-option>

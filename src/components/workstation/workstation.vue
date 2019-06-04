@@ -145,7 +145,7 @@
       let that = this
       this.uId = this.$cookie.get('uId')
       this.$axios({
-        url:'user/selectByuId',
+        url:'department/selectByuId',
         method:'post',
         data:{
           uId:that.uId

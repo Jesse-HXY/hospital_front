@@ -73,12 +73,32 @@
 <script>
     export default {
         name: "applyExamination",
-      data(){
-          return{
-            applicationList:[{name:'模版：腱鞘炎',eIName:'一个看不懂还贼老长的名字',dName:'检验科',eStatus:'暂存',eIFee:'50',eResult:'balala'},{name:'模版：腱鞘炎',eIName:'一个看不懂还贼老长的名字',dName:'检验科',eStatus:'暂存',eIFee:'50',eResult:'balala'}],
-            examinationTemplateList:[{eTName:'小儿感冒'},{eTName:'小儿感冒'},{eTName:'小儿感冒'},{eTName:'小儿感冒'}],
-            centerDialogVisible:false,
+      data() {
+        return {
+          applicationList: [{
+            name: '模版：腱鞘炎',
+            eIName: '一个看不懂还贼老长的名字',
+            dName: '检验科',
+            eStatus: '暂存',
+            eIFee: '50',
+            eResult: 'balala'
+          }, {name: '模版：腱鞘炎', eIName: '一个看不懂还贼老长的名字', dName: '检验科', eStatus: '暂存', eIFee: '50', eResult: 'balala'}],
+          examinationTemplateList: [],
+          centerDialogVisible: false,
+        }
+      },
+      created:function () {
+          let that = this
+          let uId = this.$cookie.get('uId')
+        this.$axios({
+          url:'',
+          method:'post',
+          data:{
+            uId:uId
           }
+        }).then(response=>{
+          that.examinationTemplateList = that.examinationTemplateList + response.data
+        })
       }
     }
 </script>

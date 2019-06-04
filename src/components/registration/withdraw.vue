@@ -94,7 +94,7 @@
             label="挂号日期"
             width="250">
             <template slot-scope="scope">
-              <span style="margin-left: 10px">{{scope.row.rTime}}</span>
+              <span style="margin-left: 10px">{{scope.row.rDate}}</span>
             </template>
           </el-table-column>
             <el-table-column
@@ -115,7 +115,7 @@
               label="看诊状态"
               width="250">
               <template slot-scope="scope">
-                <span  style="margin-left: 10px">{{scope.row.rState}}</span>
+                <span  style="margin-left: 10px">{{scope.row.rStatus}}</span>
               </template>
             </el-table-column>
 
@@ -127,7 +127,7 @@
               <template slot-scope="scope">
 <!---->
                 <el-button
-                  v-if="scope.row.rState=='未诊断'"
+                  v-if="scope.row.okToWithdraw==true"
                   size="mini"
                   type="danger"
                   @click="handleDelete(scope.$index, scope.row)">
@@ -144,9 +144,9 @@
             width="30%"
             center>
             <span>应退挂号费 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<el-tag align="right">0元</el-tag></span>
-            <span slot="footer" class="dialog-footer">
-    <el-button @click="centerDialogVisible = false">取 消</el-button>
-    <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+             <div align="right">
+            <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+             </div>
   </span>
           </el-dialog>
 
@@ -171,29 +171,32 @@
 
     data(){
 
-
+      //
       let rId='';
       let pName='';
       let pId='';
-      let rTime='';
+      let rDate='';
       let MorningOrEvening='';
       let dName='';
-      let rState='';
+      let rStatus='';
       let pAddress='';
-      let patientList=[{rId:123,pName:"韩子豪",pId:131321,rTime:'2019/01/01',MorningOrEvening:'上午',dName:'艾滋病科',rState:'未诊断',pAddress:'妓院'},
-                       {rId:456,pName:"大傻逼",pId:1313214234,rTime:'2019/01/01',MorningOrEvening:'上午',dName:'艾滋病科',rState:'已诊断',pAddress:'美国'}];
+      let okToWithdraw='';
+      let patientList=[{rId:123,pName:"韩子豪",pId:131321,rDate:'2019/01/01',MorningOrEvening:'上午',dName:'艾滋病科',rStatus:'未诊断',pAddress:'妓院',okToWithdraw:true},
+                       {rId:456,pName:"大傻逼",pId:1313214234,rDate:'2019/01/01',MorningOrEvening:'上午',dName:'艾滋病科',rStatus:'已诊断',pAddress:'美国',okToWithdraw:false}];
 
       return{
         rId :rId,
         pName : pName,
         pId : pId,
-        rTime: rTime,
+        rDate: rDate,
         MorningOrEvening:MorningOrEvening,
         dName:dName,
-        rState:rState,
+        rStatus:rStatus,
         pAddress:pAddress,
+        okToWithdraw:okToWithdraw,
         patientList:patientList,
         searchrId:'',
+
         centerDialogVisible:false,
       }
     },
@@ -217,7 +220,7 @@
 
       handleDelete(index,row) {
         let rId = this.patientList[index].rId;
-        let rState = this.patientList[index].rState;
+        let rStatus = this.patientList[index].rStatus;
         this.centerDialogVisible=true;
         let that = this;
 
@@ -228,9 +231,7 @@
           data:
             {
               rId:rId,
-              rState:rState
-
-
+              rStatus:rStatus
             },
 
         }).then(function (response) {

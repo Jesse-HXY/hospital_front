@@ -6,7 +6,7 @@
     <el-form style="margin:0 auto;width:600px;">
       <el-form-item label="身份证号：" :label-width="formLabelWidth" style="text-align:left">
         <el-input v-model="pId" style="width: 250px;margin-left:0" autocomplete="off" @blur="getPatient($event)"></el-input>
-        <el-button @click="dialogFormVisible = true">添加</el-button>
+        <el-button @click="onTapAddPatient">添加</el-button>
       </el-form-item>
       <div style="margin-top: -20px;">
       </div>
@@ -144,6 +144,13 @@
       }
       ,
       methods: {
+        /**
+         *
+         * */
+        onTapAddPatient:function(){
+          this.reSetPatient()
+          this.dialogFormVisible = true
+        },
         /**添加病人*/
         onTapAdd: function () {
           let that = this

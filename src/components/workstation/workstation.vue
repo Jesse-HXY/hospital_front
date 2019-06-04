@@ -3,18 +3,37 @@
   <el-container style="height: 100%; border: 1px solid #eee">
 
     <transition name="el-zoom-in-top">
-      <el-aside v-if="viewPatient" width="420px" style="border: 1px solid #eee" >
+      <el-aside v-if="viewPatient" width="420px" style="border: 1px solid #eee;text-align: left;" >
         <el-container>
           <el-header>
-            <el-row>
-              <el-col :span="15"><div class="grid-content bg-purple">
-                <el-input placeholder="患者选择" disabled></el-input></div>
-              </el-col>
-              <el-col :span="4">
-                <div class="grid-content " style="text-align: right">
-                  <el-button type="primary" icon="el-icon-refresh"></el-button></div>
-              </el-col>
-            </el-row>
+            <!--<el-row>-->
+              <!--<el-col :span="15">-->
+                <!--<div class="grid-content bg-purple" style="width: 100px;">-->
+                  <!--<el-select style="width: 100px;" v-model="dId" filterable placeholder="请选择科室">-->
+                    <!--<el-option-->
+                      <!--v-for="department in departmentList"-->
+                      <!--:key="department.dId"-->
+                      <!--:label="department.dName"-->
+                      <!--:value="department.dId">-->
+                    <!--</el-option>-->
+                  <!--</el-select>-->
+                <!--</div>-->
+              <!--</el-col>-->
+              <!--<el-col :span="4">-->
+                <!--<div class="grid-content">-->
+                  <!--<el-button type="primary" icon="el-icon-refresh"></el-button>-->
+                <!--</div>-->
+              <!--</el-col>-->
+            <!--</el-row>-->
+            请选择科室：
+            <el-select style="width: 100px;" v-model="dId" filterable placeholder="请选择科室">
+              <el-option
+                v-for="department in departmentList"
+                :key="department.dId"
+                :label="department.dName"
+                :value="department.dId">
+              </el-option>
+            </el-select>
           </el-header>
           <el-main>
             <div style="margin-top: 15px;">
@@ -118,32 +137,46 @@
         finishPatientList:[],
         notFinishPatientList:[],
         uId:0,
-        patient:{}
+        patient:{},
+        departmentList:[],
+        dId:''
       };
     },created:function(){
+      let that = this
       this.uId = this.$cookie.get('uId')
+      this.$axios({
+        url:'user/selectByuId',
+        method:'post',
+        data:{
+          uId:that.uId
+        }
+      }).then(response=>{
+        that.departmentList = response.data
+      })
     },
     methods: {
       onTapSearch:function () {
         let that = this
         this.$axios({
-          url:'registration/getRegistrationInfoByuId',
+          url:'registration/getRegistrationInfoByuIdAndDId',
           method:'post',
           data:{
             rStatus:'诊毕',
             pName:that.searchPName,
-            uId:that.uId
+            uId:that.uId,
+            dId:that.dId
           }
         }).then(response=>{
           that.finishPatientList = response.data
         }).catch(err=>{console.log(err)})
         this.$axios({
-          url:'registration/getRegistrationInfoByuId',
+          url:'registration/getRegistrationInfoByuIdAndDId',
           method:'post',
           data:{
             rStatus:'',
             pName:that.searchPName,
-            uId:that.uId
+            uId:that.uId,
+            dId:that.dId
           }
         }).then(response=>{
           that.notFinishPatientList = response.data

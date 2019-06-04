@@ -36,7 +36,7 @@
 
             <el-menu-item index="3-8">诊毕</el-menu-item>
             <el-menu-item index="3-9">患者费用明细查询</el-menu-item>
-            <el-menu-item index="3-10">医技模板管理</el-menu-item>
+            <router-link to="/workstation/medicalTemplateManagement"><el-menu-item index="3-10">医技模板管理</el-menu-item></router-link>
             <el-menu-item index="3-11">西药处方模板管理</el-menu-item>
             <el-menu-item index="3-12">中药处方模板管理</el-menu-item>
           </el-submenu>
@@ -69,7 +69,7 @@
                 <template >
                   <el-button type="text" @click="centerDialogVisible=true" v-show="showLogin">登录</el-button>
                   <el-tag v-show="!showLogin">{{username}}</el-tag>
-                  <el-button type="text">注销</el-button>
+                  <el-button type="text" @click="logout">注销</el-button>
                 </template>
               </div>
           </el-header>
@@ -107,7 +107,15 @@
         isCollapse: true,
         centerDialogVisible:false
       }
-    },methods:{
+    },created:function(){
+      console.log("1111")
+      console.log(this.$cookie.get('uId'))
+      if(this.$cookie.get('uId') != ''){
+        this.username = this.$cookie.get('username')
+        this.uId = this.$cookie.get('uId')
+        this.showLogin=false;
+      }
+    }, methods:{
       handleShow:function () {
         let that = this
         this.$axios({
@@ -118,15 +126,27 @@
             uPassword:that.password
           }
         }).then(response=>{
-          console.log(response.data.uNickName)
-          that.username = response.data.uNickName
-          this.$cookie.set('uId', response.data.uId);
+          console.log(response.data)
+          if(response.data!=''){
+            that.username = response.data.uNickName
+            this.showLogin=false;
+            this.centerDialogVisible=false;
+            this.$cookie.set('uId', response.data.uId);
+            this.$cookie.set('username', response.data.uNickName);
+          }else{
+            alert("账号或者密码错误")
+          }
         }).catch(err=>{
           console.log(err)
         })
-        this.showLogin=false;
-        this.centerDialogVisible=false;
-        console.log(this.showLogin)
+      },
+      /**
+       * 注销
+       */
+      logout:function () {
+        this.showLogin=true;
+        this.$cookie.set('uId', '');
+        this.$cookie.set('username', '');
       }
     }
 

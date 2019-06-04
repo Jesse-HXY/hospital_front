@@ -69,8 +69,8 @@
               <el-table-column width="25px">
                 <el-checkbox></el-checkbox>
               </el-table-column>
-              <el-table-column label="ICD编码" prop="code"></el-table-column>
-              <el-table-column label="名称" prop="name"></el-table-column>
+              <el-table-column label="ICD编码" prop="disIcd"></el-table-column>
+              <el-table-column label="名称" prop="disName"></el-table-column>
               <el-table-column label="发病时间" prop="time"></el-table-column>
             </el-table>
           </div>
@@ -80,7 +80,7 @@
             <span style="font-size: 60px">未诊断</span>
           </div>
           <div style="text-align: left;">
-            <el-button @click="dialogVisible = true">进行诊断</el-button>
+            <el-button @click="startDiagnosis">进行诊断</el-button>
           </div>
         </el-card>
         <br><br>
@@ -113,13 +113,13 @@
             </el-select>
           </el-form-item>
           <div v-for="disease in diseaseList">
-            <el-form-item label="ICD编码：">{{disease.code}}</el-form-item>
-            <el-form-item label="疾病名称：">{{disease.name}}</el-form-item>
+            <el-form-item label="ICD编码：">{{disease.disIcd}}</el-form-item>
+            <el-form-item label="疾病名称：">{{disease.disName}}</el-form-item>
             <el-form-item label="发病时间：">{{disease.time}}</el-form-item>
           </div>
           <div v-if="addDisease">
             <el-form-item label="疾病：">
-              <el-input v-model="disease.name"></el-input>
+              <el-input v-model="disease.name" @blur="getDisName($event)"></el-input>
             </el-form-item>
             <el-form-item label="发病时间：">
               <div class="block">
@@ -139,12 +139,12 @@
           <el-button v-if="addDisease" @click="addDisease = false">放弃</el-button>
           <el-button v-else @click="addDisease = true">添加疾病</el-button>
           <el-button v-if="!addDisease" @click="dialogVisible = false">取 消</el-button>
-          <el-button v-if="!addDisease" type="primary" @click="onTapFininshDiagnosis">确 定</el-button>
+          <el-button v-if="!addDisease" type="primary" @click="onTapFinishDiagnosis">确 定</el-button>
         </span>
       </el-dialog>
     </el-main>
     <el-footer style="display: inline-block;">
-      <el-button type="primary">提交</el-button>
+      <el-button type="primary" @click="onTapSubmit">提交</el-button>
     </el-footer>
   </el-container>
 </template>
@@ -154,13 +154,14 @@
     name: "registrationMain",
     data() {
       return {
+        rId:'',
         mChiefComplaint: '',
         mHistoryOfPresentIllness: '',
         mSituation: '',
         mHistoryOfPastIllness: '',
         mAllergy: '',
         mPhysicalExamination: '',
-        diseaseList: [{code: 'SBS:438', name: '阳痿', time: '2016-9-10'}],
+        diseaseList: [],
         disease:{},
         mSuggestion: '',
         mAttention: '',
@@ -168,23 +169,109 @@
         hasDiagnosis: false,
         dialogVisible: false,
         diagnosisType:'',
-        addDisease:false
+        addDisease:false,
+        diagnosisTypes:[]
       };
+    },created:function(){
     },
     methods: {
+      /**
+       * 开始初步诊断
+       * */
+      startDiagnosis:function(){
+        this.dialogVisible = true
+        this.rId = Number(this.$cookie.get('rId'))
+        console.log(this.rId)
+      },
       /**
        * 点击确定添加疾病
        */
       onTapAddDisease:function () {
+        let currentDate = new Date()
+        if((this.disease.time.getTime()-currentDate.getTime())>0){
+          alert("大哥你穿越了吗")
+          return
+        }
+        let tempTime = this.disease.time
+        this.disease.time=this.disease.time.toLocaleDateString().replace(/\//g, "-") + " " + this.disease.time.toTimeString().substr(0, 8)
+        this.disease.diaTime=tempTime.getTime()
         this.diseaseList.push(this.disease)
+        this.disease = {}
+        console.log(this.diseaseList)
         this.addDisease=false
       },
       /**
        * 点击确定完成诊断
        */
-      onTapFininshDiagnosis:function () {
+      onTapFinishDiagnosis:function () {
+        for(let i = 0; i < this.diseaseList.length; i++){
+          let diagnosisType = {
+            rId:this.rId,
+            diaType:this.diagnosisType,
+            disId:this.diseaseList[i].disId,
+            diaTime:this.diseaseList[i].diaTime
+          }
+          this.diagnosisTypes.push(diagnosisType)
+        }
+        console.log(this.diagnosisTypes)
+        this.$axios({
+          url:'diagnosis/insertDiagnosisTypes',
+          method:'post',
+          data:{
+            diagnosisTypes:this.diagnosisTypes
+          }
+        }).then(response=>{}).catch(err=>{
+          console.log(err)
+        })
         this.dialogVisible=false
         this.hasDiagnosis=true
+      },
+      /**
+       * 得到疾病名称
+       */
+      getDisName:function (e) {
+        let that = this
+        this.$axios({
+          url:'disease/getDiseases',
+          method:'post',
+          data:{
+            disName:that.disease.name
+          }
+        }).then(response=>{
+          console.log(response.data)
+          that.disease.disName = response.data[0].disName
+          that.disease.disIcd = response.data[0].disIcd
+          that.disease.disId = response.data[0].disId
+        }).catch(err=>{
+          console.log(err)
+        })
+      },
+      /**
+       * 点击提交
+       */
+      onTapSubmit:function () {
+        let pId = this.$cookie.get('pId')
+        let that = this
+        console.log(data)
+        this.$axios({
+          url:'diagnosis/insertMedicalRecord',
+          method:'post',
+          data:{
+            pId:pId,
+            rId:that.rId,
+            mChiefComplaint: that.mChiefComplaint,
+            mHistoryOfPresentIllness: that.mHistoryOfPresentIllness,
+            mSituation: that.mSituation,
+            mHistoryOfPastIllness: that.mHistoryOfPastIllness,
+            mAllergy: that.mAllergy,
+            mPhysicalExamination: that.mPhysicalExamination,
+            mAttention: that.mAttention,
+            mSuggestion: that.mSuggestion
+          }
+        }).then(response=>{
+        }).catch(err=>{
+          console.log(err)
+        })
       }
     }
   }

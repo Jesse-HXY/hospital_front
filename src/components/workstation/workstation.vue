@@ -33,29 +33,30 @@
                 <el-tab-pane label="本人" name="first">
                   <el-tag>未诊患者</el-tag>
                   <el-container style="height:50% ;border: 1px solid #eee;">
-                    <el-table>
-                      <el-column>
-
-                      </el-column>
+                    <el-table :data="notFinishPatientList">
+                      <el-table-column label="患者姓名">
+                        <template slot-scope="scope">
+                          <el-button
+                            @click="selectPatient(scope.row)">{{scope.row.pName}}
+                          </el-button>
+                        </template>
+                      </el-table-column>
                     </el-table>
                   </el-container>
                   <el-tag>已诊患者</el-tag>
                   <el-container style="height:50% ;border: 1px solid #eee;">
-                    <el-table>
-                      <el-column>
-
-                      </el-column>
+                    <el-table :data="finishPatientList">
+                      <el-table-column label="患者姓名">
+                        <template slot-scope="scope">
+                          <el-button
+                            @click="selectPatient(scope.row)">{{scope.row.pName}}
+                          </el-button>
+                        </template>
+                      </el-table-column>
                     </el-table>
                   </el-container>
                 </el-tab-pane>
-
-
-
-
                 <el-tab-pane label="科室" name="second">
-
-
-
                 </el-tab-pane>
               </el-tabs>
             </template>
@@ -89,8 +90,6 @@
           <el-tab-pane label="成药处方"><medicinePrescription></medicinePrescription></el-tab-pane>
           <el-tab-pane label="草药处方"><herbalPrescription></herbalPrescription></el-tab-pane>
           <el-tab-pane label="费用查询"><feeInquiry></feeInquiry></el-tab-pane>
-
-
         </el-tabs>
       </el-main>
     </el-container>
@@ -117,13 +116,9 @@
         viewPatient:true,
         centerDialogVisible: false,
         finishPatientList:[],
+        notFinishPatientList:[],
         uId:0,
-        patient:{
-          name:'黄萎男',
-          rId:'3838438',
-          age:38,
-          sex:'变性人'
-        }
+        patient:{}
       };
     },created:function(){
       this.uId = this.$cookie.get('uId')
@@ -140,8 +135,8 @@
             uId:that.uId
           }
         }).then(response=>{
-          console.log(response.data)
-        })
+          that.finishPatientList = response.data
+        }).catch(err=>{console.log(err)})
         this.$axios({
           url:'registration/getRegistrationInfoByuId',
           method:'post',
@@ -151,12 +146,36 @@
             uId:that.uId
           }
         }).then(response=>{
-          console.log(response.data)
-        })
+          that.notFinishPatientList = response.data
+          console.log(that.notFinishPatientList)
+        }).catch(err=>{console.log(err)})
+      },
+      /**
+       * 选择
+       * @param patient
+       */
+      selectPatient:function (patient) {
+        console.log(patient)
+        this.patient = {
+          name:patient.pName,
+          rId:patient.rId,
+          age:this.jsGetAge(patient.pBirth),
+          sex:patient.pSex?"男":"女"
+        }
+        this.$cookie.set('rId',patient.rId)
+        this.$cookie.set('pId',patient.pId)
+      },
+      jsGetAge:function(strBirthday){
+        var strBirthdayArr=strBirthday.split("-");
+        var d = new Date();
+        var yearDiff = d.getFullYear()-strBirthdayArr[0];
+        var monthDiff = d.getMonth() + 1-strBirthdayArr[1];
+        var dayDiff = d.getDate()-strBirthdayArr[2];
+        var age=monthDiff<0||(monthDiff==0&&dayDiff<0)?yearDiff-1:yearDiff; //判断有没有到生日,没到就减1
+        return age=age<0?0:age;
       }
     },
     components:{
-
       'applyExamination':applyExamination,
       'registrationMain':registrationMain,
       'confirmed':confirmed,

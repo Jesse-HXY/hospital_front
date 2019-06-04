@@ -15,6 +15,7 @@ import registrationMain from '@/components/workstation/registrationMain'
 import applyDispose from '@/components/workstation/applyDispose'
 import medicinePrescription from '@/components/workstation/medicinePrescription'
 import herbalPrescription from '@/components/workstation/herbalPrescription'
+import medicalTemplateManagement from '@/components/workstation/medicalTemplateManagement'
 import axios from 'axios'
 Vue.prototype.axios = axios
 Vue.use(Router)
@@ -82,7 +83,11 @@ export default new Router({
         medicinePrescription:medicinePrescription,
         herbalPrescription:herbalPrescription,
       }
-
+    },
+    {
+      path:'/workstation/medicalTemplateManagement',
+      name:'medicalTemplateManagement',
+      component:medicalTemplateManagement
     }
   ]
 })

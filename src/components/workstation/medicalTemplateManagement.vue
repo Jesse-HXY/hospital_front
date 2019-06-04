@@ -396,9 +396,9 @@
             }
           }).then(response=>{
             that.showDetail = false
-            for(let i = 0; i < that.examinationItemList.length; i++){
-              if(that.examinationItemList[i].rId === that.rId){
-                that.examinationItemList.splice(i,1)
+            for(let i = 0; i < that.templateList.length; i++){
+              if(that.templateList[i].eTId === that.eTId){
+                that.templateList.splice(i,1)
                 break
               }
             }

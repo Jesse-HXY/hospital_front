@@ -16,6 +16,9 @@ import applyDispose from '@/components/workstation/applyDispose'
 import medicinePrescription from '@/components/workstation/medicinePrescription'
 import herbalPrescription from '@/components/workstation/herbalPrescription'
 import medicalTemplateManagement from '@/components/workstation/medicalTemplateManagement'
+import westernMedicine_template from '@/components/workstation/westernMedicine_template'
+import chineseMedicine_template from '@/components/workstation/chineseMedicine_template'
+
 import axios from 'axios'
 Vue.prototype.axios = axios
 Vue.use(Router)
@@ -88,6 +91,16 @@ export default new Router({
       path:'/workstation/medicalTemplateManagement',
       name:'medicalTemplateManagement',
       component:medicalTemplateManagement
+    },
+    {
+      path:'/workstation/westernMedicine_template',
+      name:'westernMedicine_template',
+      component:westernMedicine_template
+    },
+    {
+      path:'/workstation/chineseMedicine_template',
+      name:'chineseMedicine_template',
+      component:chineseMedicine_template
     }
   ]
 })

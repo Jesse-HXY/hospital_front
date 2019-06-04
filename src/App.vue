@@ -37,8 +37,8 @@
             <el-menu-item index="3-8">诊毕</el-menu-item>
             <el-menu-item index="3-9">患者费用明细查询</el-menu-item>
             <router-link to="/workstation/medicalTemplateManagement"><el-menu-item index="3-10">医技模板管理</el-menu-item></router-link>
-            <el-menu-item index="3-11">西药处方模板管理</el-menu-item>
-            <el-menu-item index="3-12">中药处方模板管理</el-menu-item>
+            <router-link to="/workstation/westernMedicine_template"><el-menu-item index="3-11">西药处方模板管理</el-menu-item></router-link>
+            <router-link to="/workstation/chineseMedicine_template"><el-menu-item index="3-12">中药处方模板管理</el-menu-item></router-link>
           </el-submenu>
           <el-submenu index="4">
             <template slot="title"><i class="el-icon-setting"></i><span>门诊医技工作站</span></template>

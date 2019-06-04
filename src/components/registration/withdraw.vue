@@ -94,14 +94,14 @@
             label="挂号日期"
             width="250">
             <template slot-scope="scope">
-              <span style="margin-left: 10px">{{scope.row.rDate}}</span>
+              <span style="margin-left: 10px">{{scope.row.rTime}}</span>
             </template>
           </el-table-column>
             <el-table-column
               label="挂号午别"
               width="250">
               <template slot-scope="scope">
-                <span  style="margin-left: 10px">{{scope.row.MorningOrEvening}}</span>
+                <span  style="margin-left: 10px">{{scope.row.morningOrEvening}}</span>
               </template>
             </el-table-column>
             <el-table-column
@@ -145,7 +145,7 @@
             center>
             <span>应退挂号费 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<el-tag align="right">0元</el-tag></span>
              <div align="right">
-            <el-button type="primary" @click="centerDialogVisible = false">确 定</el-button>
+            <el-button type="primary" @click="centerDialogVisible=false">确 定</el-button>
              </div>
   </span>
           </el-dialog>
@@ -166,78 +166,84 @@
 
 
   export default {
-
-    name: 'department',
+    name: 'withdraw',
 
     data(){
 
       //
-      let rId='';
+      let rId=0;
       let pName='';
       let pId='';
       let rDate='';
-      let MorningOrEvening='';
+      let morningOrEvening='';
       let dName='';
       let rStatus='';
       let pAddress='';
       let okToWithdraw='';
-      let patientList=[{rId:123,pName:"韩子豪",pId:131321,rDate:'2019/01/01',MorningOrEvening:'上午',dName:'艾滋病科',rStatus:'未诊断',pAddress:'妓院',okToWithdraw:true},
-                       {rId:456,pName:"大傻逼",pId:1313214234,rDate:'2019/01/01',MorningOrEvening:'上午',dName:'艾滋病科',rStatus:'已诊断',pAddress:'美国',okToWithdraw:false}];
-
+      let patientList = [];
       return{
         rId :rId,
         pName : pName,
         pId : pId,
         rDate: rDate,
-        MorningOrEvening:MorningOrEvening,
+        morningOrEvening:morningOrEvening,
         dName:dName,
         rStatus:rStatus,
         pAddress:pAddress,
         okToWithdraw:okToWithdraw,
         patientList:patientList,
         searchrId:'',
-
+        rTime:'',
         centerDialogVisible:false,
       }
     },
     methods:{
 
 
+      update:function(index){
+        this.patientList[index].okToWithdraw=false;
+        this.patientList[index].rStatus='已退号';
+      },
+
+
        searchByrId:function () {
          let that = this;
          this.$axios({
-           url:'',
+           url:'registration/getRegistrationInfoByrId',
            method:'post',
            data:{
-             rId : that.rId,
+             rId : that.searchrId,
            }
          }).then(response=>{
-           console.log(response.data)
+           console.log(response.data);
+
+           this.patientList = response.data;
          }).catch(err=>{
            console.log(err)
          })
        },
 
       handleDelete(index,row) {
+
         let rId = this.patientList[index].rId;
         let rStatus = this.patientList[index].rStatus;
         this.centerDialogVisible=true;
         let that = this;
 
-        this.patientList.splice(index,1);
+       // this.patientList.splice(index,1);
         this.$axios({
-          url:'',
+          url:'registration/updateRStatus',
           method:'post',
           data:
             {
               rId:rId,
-              rStatus:rStatus
+              rStatus:'已退号'
             },
 
         }).then(function (response) {
-          that.getPageCount()
-          console.log(response.data);
 
+          console.log(response.data);
+          that.update(index);
         }).catch(function (error) {
           console.log(error)
         })

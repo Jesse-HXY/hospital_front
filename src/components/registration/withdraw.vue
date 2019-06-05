@@ -147,7 +147,6 @@
              <div align="right">
             <el-button type="primary" @click="centerDialogVisible=false">确 定</el-button>
              </div>
-  </span>
           </el-dialog>
 
 

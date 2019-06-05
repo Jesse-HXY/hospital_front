@@ -11,7 +11,7 @@
       <el-main>
         <div style="text-align: left;">
           <el-tag>合计金额</el-tag>
-          <el-tag type="warning">0元</el-tag>
+          <el-tag type="warning">{{totalFee}}元</el-tag>
         </div>
         <el-table
           :data="examinationItemList">
@@ -243,7 +243,8 @@
           createTemplateDialogVisible:false,
           templateName: '',
           scope: '',
-          recordType:''
+          recordType:'',
+          totalFee:0.0
         }
       },
       created:function () {
@@ -508,8 +509,12 @@
           let eAIdList = []
           for(let i = this.checkList.length- 1; i > -1; i--){
             if(this.checkList[i]){
-              this.examinationItemList[i].eAStatus = '废除'
-              eAIdList.push(this.examinationItemList[i].eAId)
+              if(this.examinationItemList[i].eAStatus === '开立'){
+                alert("开立项目不能废除")
+              }else{
+                this.examinationItemList[i].eAStatus = '废除'
+                eAIdList.push(this.examinationItemList[i].eAId)
+              }
             }
           }
           this.$axios({
@@ -615,6 +620,13 @@
               })
             }
           })
+        },
+        'examinationItemList':function (examinationItemList) {
+            let totalFee = 0.0
+          for(let i = 0; i < examinationItemList.length; i++){
+            totalFee = totalFee + examinationItemList[i].eIFee
+          }
+          this.totalFee = totalFee
         }
       }
     }

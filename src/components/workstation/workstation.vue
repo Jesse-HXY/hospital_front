@@ -26,7 +26,7 @@
               <!--</el-col>-->
             <!--</el-row>-->
             请选择科室：
-            <el-select style="width: 100px;" v-model="dId" filterable placeholder="请选择科室">
+            <el-select style="width: 100px;" v-model="dId" @change="dIdChange" filterable placeholder="请选择科室">
               <el-option
                 v-for="department in departmentList"
                 :key="department.dId"
@@ -102,7 +102,7 @@
       <el-main>
         <el-tabs>
           <el-tab-pane label="病历首页"><registrationMain></registrationMain></el-tab-pane>
-          <el-tab-pane label="检查申请"><applyExamination></applyExamination></el-tab-pane>
+          <el-tab-pane label="检查申请"><applyExamination v-bind:dId="dId" v-bind:rId="rId"></applyExamination></el-tab-pane>
           <el-tab-pane label="门诊确诊"><confirmed></confirmed></el-tab-pane>
           <el-tab-pane label="检验申请">角色管理</el-tab-pane>
           <el-tab-pane label="处置申请"><applyDispose></applyDispose></el-tab-pane>
@@ -125,7 +125,6 @@
   import herbalPrescription from '@/components/workstation/herbalPrescription'
   import feeInquiry from '@/components/workstation/feeInquiry'
 
-
   export default {
     data() {
       return {
@@ -139,7 +138,8 @@
         uId:0,
         patient:{},
         departmentList:[],
-        dId:''
+        dId:'',
+        rId:0
       };
     },created:function(){
       let that = this
@@ -195,7 +195,7 @@
           age:this.jsGetAge(patient.pBirth),
           sex:patient.pSex?"男":"女"
         }
-        this.$cookie.set('rId',patient.rId)
+        this.rId = patient.rId
         this.$cookie.set('pId',patient.pId)
       },
       jsGetAge:function(strBirthday){
@@ -206,6 +206,14 @@
         var dayDiff = d.getDate()-strBirthdayArr[2];
         var age=monthDiff<0||(monthDiff==0&&dayDiff<0)?yearDiff-1:yearDiff; //判断有没有到生日,没到就减1
         return age=age<0?0:age;
+      },
+      /**
+       * did改变获取检查项目模版
+       */
+      dIdChange:function () {
+        this.$cookie.set('dId',this.dId)
+        console.log(this.dId)
+        // applyExamination.$emit('getExaminationTemplate',applyExamination)
       }
     },
     components:{
@@ -215,8 +223,7 @@
       'applyDispose': applyDispose,
       'medicinePrescription':medicinePrescription,
       'herbalPrescription':herbalPrescription,
-      'feeInquiry':feeInquiry,
-
+      'feeInquiry':feeInquiry
     }
   }
 </script>

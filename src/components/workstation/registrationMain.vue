@@ -3,8 +3,8 @@
   <el-container>
     <el-header style="height: 20px;margin-top:-10px;">
       <el-button type="text" icon="el-icon-document">暂存</el-button>
-      <el-button type="text" icon="el-icon-success">提交</el-button>
-      <el-button type="text" icon="el-icon-delete">清空</el-button>
+      <el-button type="text" icon="el-icon-success" @click="onTapSubmit">提交</el-button>
+      <el-button type="text" icon="el-icon-delete" @click="onTapClean">清空</el-button>
       <el-button type="text" icon="el-icon-refresh">刷新</el-button>
     </el-header>
     <el-header style="text-align: left;height: 30px;margin-top: 7px;">
@@ -267,11 +267,18 @@
             mPhysicalExamination: that.mPhysicalExamination,
             mAttention: that.mAttention,
             mSuggestion: that.mSuggestion
+
           }
         }).then(response=>{
         }).catch(err=>{
           console.log(err)
         })
+      },
+      /**
+       * 清除
+       */
+      onTapClean:function () {
+        
       }
     }
   }

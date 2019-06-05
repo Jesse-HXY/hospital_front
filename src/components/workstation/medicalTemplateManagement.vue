@@ -146,7 +146,7 @@
             label="操作"
           >
             <template slot-scope="scope">
-              <el-button type="danger" size="small" @click="onTapDelete(scope.$index)">删除</el-button>
+              <el-button type="danger" size="small" @click="onTapDeleteItem(scope.$index)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -332,7 +332,7 @@
         /**
          * 删除
          */
-        onTapDelete:function (index) {
+        onTapDeleteItem:function (index) {
           this.examinationItemList.splice(index,1)
         },
         /**

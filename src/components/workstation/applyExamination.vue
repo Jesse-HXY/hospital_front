@@ -212,7 +212,7 @@
       </el-table>
       <span slot="footer" class="dialog-footer">
        <el-button @click="createTemplateDialogVisible = false">取 消</el-button>
-       <el-button type="primary" @click="createTemplateDialogVisible = false">确 定</el-button>
+       <el-button type="primary" @click="onTapConfirmCreateTemplate">确 定</el-button>
       </span>
     </el-dialog>
   </el-container>
@@ -527,9 +527,39 @@
         onTapAddTemplate:function () {
           let that = this
           let eTDate = new Date()
-          that.createTime = response.data.eTDate * 1000
+          that.createTime = eTDate * 1000
           that.displayTime = eTDate.toLocaleDateString().replace(/\//g, "-") + " " + eTDate.toTimeString().substr(0, 8)
-          this.createTemplateDialogVisible
+          this.createTemplateDialogVisible = true
+        },
+        /**
+         * 点击确认创建模版
+         */
+        onTapConfirmCreateTemplate:function () {
+          let eIIds = []
+          for (let i = 0; i < this.examinationItemList.length; i++) {
+            eIIds.push(this.examinationItemList[i].eIId)
+          }
+          let that = this
+          let data = {
+            eTName: that.templateName,
+            eTDate: that.createTime,
+            eTScope: that.scope,
+            recordType: that.recordType,
+            eIds: eIIds
+          }
+          if (this.scope === '个人') {
+            data.uId = this.$cookie.get('uId')
+          } else if (this.scope === '科室') {
+            data.dId = this.dId
+          }
+          console.log(data)
+          this.$axios({
+            url: 'examnationItem/insertExaminationTemplate',
+            method: 'post',
+            data: data
+          }).then(response=>{
+
+          })
         }
       },watch:{
           'dId':function (dId) {

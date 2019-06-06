@@ -18,7 +18,6 @@ import herbalPrescription from '@/components/workstation/herbalPrescription'
 import medicalTemplateManagement from '@/components/workstation/medicalTemplateManagement'
 import westernMedicine_template from '@/components/workstation/westernMedicine_template'
 import chineseMedicine_template from '@/components/workstation/chineseMedicine_template'
-import applyExamination from '@/components/workstation/applyExamination'
 import charge from '@/components/registration/charge'
 
 import axios from 'axios'

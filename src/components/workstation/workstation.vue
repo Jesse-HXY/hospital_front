@@ -47,8 +47,7 @@
           </el-main>
           <el-footer>
             <template>
-              <el-tabs type="border-card">
-
+              <el-tabs type="card">
                 <el-tab-pane label="本人" name="first">
                   <el-tag>未诊患者</el-tag>
                   <el-container style="height:50% ;border: 1px solid #eee;">
@@ -74,8 +73,6 @@
                       </el-table-column>
                     </el-table>
                   </el-container>
-                </el-tab-pane>
-                <el-tab-pane label="科室" name="second">
                 </el-tab-pane>
               </el-tabs>
             </template>
@@ -103,8 +100,8 @@
         <el-tabs>
           <el-tab-pane label="病历首页"><registrationMain></registrationMain></el-tab-pane>
           <el-tab-pane label="检查申请"><applyExamination v-bind:dId="dId" v-bind:rId="rId"></applyExamination></el-tab-pane>
+          <el-tab-pane label="检验申请"><testApplication v-bind:dId="dId" v-bind:rId="rId"></testApplication></el-tab-pane>
           <el-tab-pane label="门诊确诊"><confirmed></confirmed></el-tab-pane>
-          <el-tab-pane label="检验申请">角色管理</el-tab-pane>
           <el-tab-pane label="处置申请"><applyDispose></applyDispose></el-tab-pane>
           <el-tab-pane label="成药处方"><medicinePrescription></medicinePrescription></el-tab-pane>
           <el-tab-pane label="草药处方"><herbalPrescription></herbalPrescription></el-tab-pane>
@@ -124,6 +121,7 @@
   import medicinePrescription from  '@/components/workstation/medicinePrescription'
   import herbalPrescription from '@/components/workstation/herbalPrescription'
   import feeInquiry from '@/components/workstation/feeInquiry'
+  import testApplication from '@/components/workstation/testApplication'
 
   export default {
     data() {
@@ -212,7 +210,7 @@
        */
       dIdChange:function () {
         this.$cookie.set('dId',this.dId)
-        console.log(this.dId)
+        this.onTapSearch()
         // applyExamination.$emit('getExaminationTemplate',applyExamination)
       }
     },
@@ -223,7 +221,10 @@
       'applyDispose': applyDispose,
       'medicinePrescription':medicinePrescription,
       'herbalPrescription':herbalPrescription,
-      'feeInquiry':feeInquiry
+      'feeInquiry':feeInquiry,
+      'testApplication':testApplication
+    },watch:{
+      'searchPName':'onTapSearch'
     }
   }
 </script>

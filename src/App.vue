@@ -67,7 +67,7 @@
           <el-header style="text-align: right;height: 40px;">
               <div class="grid-content ">
                 <template >
-                  <el-button type="text" @click="centerDialogVisible=true" v-show="showLogin">登录</el-button>
+                  <el-button type="text" @click="onTapLogin" v-show="showLogin">登录</el-button>
                   <el-tag v-show="!showLogin">{{username}}</el-tag>
                   <el-button type="text" @click="logout">注销</el-button>
                 </template>
@@ -145,8 +145,15 @@
        */
       logout:function () {
         this.showLogin=true;
-        this.$cookie.set('uId', '');
-        this.$cookie.set('username', '');
+        this.$cookie.delete('uId')
+        this.$cookie.delete('username')
+      },
+      /**
+       * 登陆
+       */
+      onTapLogin:function () {
+        this.centerDialogVisible=true
+        this.uId = this.$cookie.get('uId')
       }
     }
 

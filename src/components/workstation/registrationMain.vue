@@ -213,16 +213,6 @@
           }
           this.diagnosisTypes.push(diagnosisType)
         }
-        console.log(this.diagnosisTypes)
-        this.$axios({
-          url:'diagnosis/insertDiagnosisTypes',
-          method:'post',
-          data:{
-            diagnosisTypes:this.diagnosisTypes
-          }
-        }).then(response=>{}).catch(err=>{
-          console.log(err)
-        })
         this.dialogVisible=false
         this.hasDiagnosis=true
       },
@@ -252,7 +242,6 @@
       onTapSubmit:function () {
         let pId = this.$cookie.get('pId')
         let that = this
-        console.log(data)
         this.$axios({
           url:'diagnosis/insertMedicalRecord',
           method:'post',
@@ -267,10 +256,18 @@
             mPhysicalExamination: that.mPhysicalExamination,
             mAttention: that.mAttention,
             mSuggestion: that.mSuggestion
-
           }
         }).then(response=>{
         }).catch(err=>{
+          console.log(err)
+        })
+        this.$axios({
+          url:'diagnosis/insertDiagnosisTypes',
+          method:'post',
+          data:{
+            diagnosisTypes:this.diagnosisTypes
+          }
+        }).then(response=>{}).catch(err=>{
           console.log(err)
         })
       },
@@ -278,8 +275,18 @@
        * 清除
        */
       onTapClean:function () {
-        
+        this.diagnosisTypes = []
+        this.mChiefComplaint = ''
+        this.mHistoryOfPresentIllness = ''
+        this.mSituation = ''
+        this.mHistoryOfPastIllness = ''
+        this.mAllergy = ''
+        this.mPhysicalExamination = ''
+        this.mAttention = ''
+        this.mSuggestion = ''
       }
+    },watch:{
+
     }
   }
 </script>

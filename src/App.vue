@@ -42,7 +42,7 @@
           </el-submenu>
           <el-submenu index="4">
             <template slot="title"><i class="el-icon-setting"></i><span>门诊医技工作站</span></template>
-            <el-menu-item index="4-1">患者检查</el-menu-item>
+            <router-link to="/medicalLaboratory/medicalLaboratoryMain"><el-menu-item index="4-1">门诊医技工作站</el-menu-item></router-link>
             <el-menu-item index="4-2">患者检验</el-menu-item>
             <el-menu-item index="4-3">患者处置</el-menu-item>
             <el-menu-item index="4-4">医技管理</el-menu-item>

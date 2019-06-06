@@ -237,7 +237,9 @@
           templateName: '',
           scope: '',
           recordType:'检验',
-          totalFee:0.0
+          totalFee:0.0,
+          displayTime:'',
+          right:'right'
         }
       },
       created:function () {

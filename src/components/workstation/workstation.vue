@@ -6,25 +6,6 @@
       <el-aside v-if="viewPatient" width="420px" style="border: 1px solid #eee;text-align: left;" >
         <el-container>
           <el-header>
-            <!--<el-row>-->
-              <!--<el-col :span="15">-->
-                <!--<div class="grid-content bg-purple" style="width: 100px;">-->
-                  <!--<el-select style="width: 100px;" v-model="dId" filterable placeholder="请选择科室">-->
-                    <!--<el-option-->
-                      <!--v-for="department in departmentList"-->
-                      <!--:key="department.dId"-->
-                      <!--:label="department.dName"-->
-                      <!--:value="department.dId">-->
-                    <!--</el-option>-->
-                  <!--</el-select>-->
-                <!--</div>-->
-              <!--</el-col>-->
-              <!--<el-col :span="4">-->
-                <!--<div class="grid-content">-->
-                  <!--<el-button type="primary" icon="el-icon-refresh"></el-button>-->
-                <!--</div>-->
-              <!--</el-col>-->
-            <!--</el-row>-->
             请选择科室：
             <el-select style="width: 100px;" v-model="dId" @change="dIdChange" filterable placeholder="请选择科室">
               <el-option
@@ -137,7 +118,8 @@
         patient:{},
         departmentList:[],
         dId:'',
-        rId:0
+        rId:0,
+        right:'right'
       };
     },created:function(){
       let that = this

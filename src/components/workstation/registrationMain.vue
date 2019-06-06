@@ -119,7 +119,15 @@
           </div>
           <div v-if="addDisease">
             <el-form-item label="疾病：">
-              <el-input v-model="disease.name" @blur="getDisName($event)"></el-input>
+              <!--<el-input v-model="disease.name" @blur="getDisName($event)"></el-input>-->
+              <el-autocomplete
+                class="inline-input"
+                v-model="disease.name"
+                :fetch-suggestions="querySearch"
+                placeholder="请输入内容"
+                :trigger-on-focus="false"
+                @select="handleSelect"
+              ></el-autocomplete>
             </el-form-item>
             <el-form-item label="发病时间：">
               <div class="block">
@@ -127,8 +135,7 @@
                   v-model="disease.time"
                   type="datetime"
                   placeholder="选择日期时间"
-                  align="right"
-                  :picker-options="pickerOptions1">
+                  align="right">
                 </el-date-picker>
               </div>
             </el-form-item>
@@ -155,6 +162,7 @@
     data() {
       return {
         rId:'',
+        right:'right',
         mChiefComplaint: '',
         mHistoryOfPresentIllness: '',
         mSituation: '',
@@ -235,6 +243,35 @@
         }).catch(err=>{
           console.log(err)
         })
+      },
+      querySearch(queryString, cb) {
+        let matchList = []
+        let that = this
+        this.$axios({
+          url:'disease/getDiseases',
+          method:'post',
+          data:{
+            disName:that.disease.name
+          }
+        }).then(response=>{
+          console.log(response.data)
+          for(let i = 0; i < response.data.length; i++){
+            matchList.push({
+              value:response.data[i].disName,
+              disease:{
+                disName:response.data[i].disName,
+                disIcd:response.data[i].disIcd,
+                disId:response.data[i].disId
+              }
+            })
+          }
+          cb(matchList);
+        })
+      },
+      handleSelect(item){
+        this.disease = item.disease
+        this.disease.name = this.disease.disName
+        console.log(this.disease.disName)
       },
       /**
        * 点击提交

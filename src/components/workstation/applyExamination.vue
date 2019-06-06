@@ -244,7 +244,9 @@
           templateName: '',
           scope: '',
           recordType:'',
-          totalFee:0.0
+          totalFee:0.0,
+          displayTime:'',
+          right:'right'
         }
       },
       created:function () {
@@ -450,8 +452,7 @@
               eIId:examinationItem.eIId,
               dId:examinationItem.dId,
               eAStatus:examinationItem.eAStatus,
-              rId:that.rId,
-              dId:examinationItem.dId
+              rId:that.rId
             }
           }).then(response=>{
             examinationItem.eAId = response.data.eAId
@@ -468,8 +469,12 @@
           let eAIdList = []
           for(let i = this.checkList.length - 1; i > -1; i--){
             if(this.checkList[i]){
-              eAIdList.push(this.examinationItemList[i].eAId)
-              this.examinationItemList.splice(i,1)
+              if(this.examinationItemList[i].eAStatus === '开立'){
+                alert("开立项目不能删除")
+              }else {
+                eAIdList.push(this.examinationItemList[i].eAId)
+                this.examinationItemList.splice(i, 1)
+              }
             }
           }
           this.$axios({
@@ -509,12 +514,8 @@
           let eAIdList = []
           for(let i = this.checkList.length- 1; i > -1; i--){
             if(this.checkList[i]){
-              if(this.examinationItemList[i].eAStatus === '开立'){
-                alert("开立项目不能废除")
-              }else{
-                this.examinationItemList[i].eAStatus = '废除'
-                eAIdList.push(this.examinationItemList[i].eAId)
-              }
+              this.examinationItemList[i].eAStatus = '废除'
+              eAIdList.push(this.examinationItemList[i].eAId)
             }
           }
           this.$axios({

@@ -51,6 +51,8 @@
         name: "confirmed",
       data(){
           return{
+            right:'right',
+            eResult:'',
             disease:[{code:'SBS:438',name:'阳痿',time:'2016-9-10'}],
             examinationList:[{eName:'aaaaa',eResult:''},{eName:'aaaaa',eResult:''},{eName:'aaaaa',eResult:''}]
           }

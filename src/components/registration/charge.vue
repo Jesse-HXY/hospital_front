@@ -183,7 +183,7 @@
               for(let i = 0; i < response.data.length; i++){
                 let item = response.data[i]
                 item.Fee = item.examnationItem.eIFee
-                item.payType = item.examnationItem.eIFeeType
+                item.feeType = item.examnationItem.eIFeeType
                 item.status = item.eAStatus
                 let eTDate = new Date(response.data[i].beginTime * 1000)
                 item.displayTime = eTDate.toLocaleDateString().replace(/\//g, "-") + " " + eTDate.toTimeString().substr(0, 8)
@@ -209,17 +209,52 @@
          * 点击收费的确认
          */
         onTapConfirm:function () {
-          for(let i = 0; i < checkList.length; i++){
-            if(checkList[i]){
-              total = total + this.itemList[i].Fee
+          if(this.chargeFee<this.totalFee){
+            alert("来医院坑钱你的良心不会痛吗")
+            return
+          }
+          let cId = this.$cookie.get('uId')
+          let accounts = []
+          let eAIdList = []
+          for(let i = 0; i < this.checkList.length; i++){
+            if(this.checkList[i]){
+              let currentTime = new Date()
+              console.log(this.itemList[i])
+              let account={
+                dId:this.itemList[i].dId,
+                payTime:currentTime.getTime()/1000,
+                fee:this.itemList[i].Fee,
+                feeType:this.itemList[i].feeType,
+                payType:this.payType,
+                rId:this.rId,
+                cId:cId
+              }
+              console.log(account)
+              accounts.push(account)
+              if(this.itemList[i].eAId !== null && this.itemList[i].eAId !== 0){
+                eAIdList.push(this.itemList[i].eAId)
+              }
             }
           }
           this.$axios({
-            url:'',
-            method:'',
+            url:'account/insertAccount',
+            method:'post',
             data:{
-
+              accounts:accounts
             }
+          }).then(response=>{
+          }).catch(err=>{
+            console.log(err)
+          })
+          this.$axios({
+            url:'diagnosis/updateStatus',
+            method:'post',
+            data:{
+              eAIdList:eAIdList,
+              eAStatus: '已收费'
+            }
+          }).then(response=>{
+            this.onTapSearch()
           })
         }
       },watch:{

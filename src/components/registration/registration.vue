@@ -46,11 +46,6 @@
         </template>
       </el-form-item>
       <el-form-item label="看诊医生：" :label-width="formLabelWidth" style="text-align:left">
-        <!--<el-select v-model="uId" placeholder="请选看诊医生" @focus="getUser($event)">-->
-          <!--<el-option label="专家号" value="专家号"></el-option>-->
-          <!--<el-option label="普通号" value="普通号"></el-option>-->
-          <!--<el-option label="急诊号" value="急诊号"></el-option>-->
-        <!--</el-select>-->
         <el-select v-model="uId" filterable placeholder="请选看诊医生" @focus="getUser($event)">
           <div v-for="item in userList">
             <el-option :key="item.uId" :value="item.uId" :label="item.uName"></el-option>

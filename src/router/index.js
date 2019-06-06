@@ -19,6 +19,7 @@ import medicalTemplateManagement from '@/components/workstation/medicalTemplateM
 import westernMedicine_template from '@/components/workstation/westernMedicine_template'
 import chineseMedicine_template from '@/components/workstation/chineseMedicine_template'
 import charge from '@/components/registration/charge'
+import medicalLaboratoryMain from '@/components/medicalLaboratory/medicalLaboratoryMain'
 
 import axios from 'axios'
 Vue.prototype.axios = axios
@@ -107,6 +108,11 @@ export default new Router({
       path:'/registration/charge',
       name:'charge',
       component:charge
+    },
+    {
+      path:'/medicalLaboratory/medicalLaboratoryMain',
+      name:'medicalLaboratoryMain',
+      component:medicalLaboratoryMain
     }
   ]
 })

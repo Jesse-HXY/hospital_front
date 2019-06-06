@@ -152,15 +152,16 @@
             checkList:[],
             formLabelWidth: '120px',
             dialogFormVisible:false,
-            chargeFee:0,
+            chargeFee:'',
             payType:'',
-            returnFee:0
+            returnFee:''
           }
       },
       methods:{
         onTapSearch:function () {
           let that = this;
-          that.itemList=[]
+          that.itemList = []
+          that.checkList = []
           this.$axios({
             url:'registration/getRegistrationInfoByrId',
             method:'post',
@@ -168,7 +169,6 @@
               rId : that.searchrId,
             }
           }).then(response=>{
-            console.log(response.data);
             this.patientList = response.data;
             this.pName = response.data[0].pName
             this.rId = this.searchrId
@@ -191,7 +191,6 @@
                 that.itemList.push(item)
                 that.checkList.push(false)
               }
-              console.log(response.data)
             })
           }).catch(err=>{
             console.log(err)
@@ -219,7 +218,6 @@
           for(let i = 0; i < this.checkList.length; i++){
             if(this.checkList[i]){
               let currentTime = new Date()
-              console.log(this.itemList[i])
               let account={
                 dId:this.itemList[i].dId,
                 payTime:currentTime.getTime()/1000,
@@ -227,15 +225,18 @@
                 feeType:this.itemList[i].feeType,
                 payType:this.payType,
                 rId:this.rId,
-                cId:cId
+                cId:cId,
               }
-              console.log(account)
-              accounts.push(account)
               if(this.itemList[i].eAId !== null && this.itemList[i].eAId !== 0){
                 eAIdList.push(this.itemList[i].eAId)
+                account.eAId = this.itemList[i].eAId
+              }else{
+                account.eAId = -1
               }
+              accounts.push(account)
             }
           }
+          console.log(accounts)
           this.$axios({
             url:'account/insertAccount',
             method:'post',
@@ -255,6 +256,7 @@
             }
           }).then(response=>{
             this.onTapSearch()
+            this.dialogFormVisible = false
           })
         }
       },watch:{

@@ -1,7 +1,7 @@
 <template>
     <el-container>
       <el-header>
-        <div class="block">
+        <div class="block">?
           <el-date-picker
             v-model="dates"
             type="datetimerange"
@@ -19,8 +19,7 @@
           stripe
         >
           <el-table-column
-          prop=""
-          label="看诊人次"
+          prop="dName"
           width="150"></el-table-column>
           <el-table-column
             prop=""
@@ -28,47 +27,47 @@
             width="100"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="发票数量"
             width="100"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="西药费"
             width="100"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="中药费"
             width="100"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="挂号费"
             width="100"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="诊查费"
             width="100"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="检查费"
             width="100"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="检验费"
             width="100"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="治疗费"
             width="200"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="材料费"
             width="200"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="手术费"
             width="200"></el-table-column>
           <el-table-column
             prop=""
-            label="看诊人次"
+            label="其他治疗费"
             width="200"></el-table-column>
         </el-table>
       </el-main>

@@ -61,6 +61,13 @@
       <el-form-item label="应收金额：" :label-width="formLabelWidth" style="text-align:left">
         {{rFee}}元
       </el-form-item>
+      <el-form-item label="选择开单科室" :label-width="formLabelWidth">
+        <el-select v-model="postDId" filterable placeholder="请选择">
+          <div v-for="item in departmentList">
+            <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
+          </div>
+        </el-select>
+      </el-form-item>
       <el-button  width="100" type="primary" @click="onTapSave">保存<i class="el-icon-success el-icon--right"></i></el-button>
     </el-form>
 
@@ -125,7 +132,8 @@
             departmentList:'',
             userList:'',
             rFee:0.0,
-            rLFee: 0.0
+            rLFee: 0.0,
+            postDId:''
           }
       },
       created:function () {
@@ -302,6 +310,7 @@
             payType:this.payType,
             rId:rId,
             cId:this.$cookie.get('uId'),
+            postDId:this.postDId
           }
           let accounts = []
           accounts.push(account)

@@ -11,7 +11,7 @@
         <el-button type="text" icon="el-icon-delete" @click="onTapDelete">删方</el-button>
         <el-button type="text" icon="el-icon-circle-check" @click="onTapBegin">开立</el-button>
         <el-button type="text" icon="el-icon-delete" @click="onTapAbandon">作废</el-button>
-        <el-button type="text" icon="el-icon-plus">刷新</el-button>
+        <el-button type="text" icon="el-icon-plus" @click="onTapUpdate">刷新</el-button>
        </div>
 
 
@@ -187,8 +187,29 @@
              </el-table-column>
              <el-table-column
                label="数量"
-               prop="mAmount">
+              >
+               <template slot-scope="scope">
+                 <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="mAmount"></el-input></span>
+                 <span v-else style="margin-left: 10px">{{scope.row.mAmount}}</span>
+               </template>
              </el-table-column>
+            <el-table-column>
+             <template slot-scope="scope">
+               <el-button
+                 size="mini"
+                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+               <el-button
+                 size="mini"
+                 @click="handleAdd(scope.$index, scope.row)" v-if="scope.$index == editIndex">添加</el-button>
+               <el-button
+                 size="mini" v-else disabled>添加</el-button>
+               <el-button
+                 size="mini"
+                 type="danger"
+                 @click="onTapGiveUp" v-if="scope.$index == editIndex">放弃</el-button>
+
+             </template>
+            </el-table-column>
            </el-table>
          </el-main>
        </el-container>
@@ -277,7 +298,30 @@
          </el-tab-pane>
          <el-tab-pane label="常用药品">常用药品</el-tab-pane>
          <el-tab-pane label="建议方案">建议方案</el-tab-pane>
-         <el-tab-pane label="历史处方">历史处方</el-tab-pane>
+         <el-tab-pane label="历史处方">
+           <el-table :data="historyList">
+             <el-table-column
+             label="处方名称"
+             prop="diaName">
+
+           </el-table-column>
+             <el-table-column
+               label="处方类型"
+               prop="diaType">
+
+             </el-table-column>
+             <el-table-column
+               label="创建时间"
+               prop="createDate">
+
+             </el-table-column>
+             <el-table-column
+               label="使用时间"
+               prop="useDate">
+
+             </el-table-column>
+           </el-table>
+         </el-tab-pane>
        </el-tabs>
 
    </el-container>
@@ -288,7 +332,9 @@
         data() {
           let editIndex=-1;
           let totalMoney=0;
+          let mAmount  = 0;
             return {
+              historyList:[],
               searchmSpell:'',
               searchmCode:'',
               searchTemplateName:'',
@@ -330,21 +376,89 @@
               datId:0,
               totalMoney:totalMoney,
               controlDelete:false,
-              controlAdd:false
+              controlAdd:false,
+              mFee:0,
+              mSpecification:'',
+              mAmount:mAmount,
             }
         },
       created:function(){
+          this.selectHistory()
           this.showPrescription()
-
           this.onTapSearch()
-
-
 
       },
 
       methods:{
+        handleAdd(index, row){
+          let that = this
+          let diaId;
+          let mId= this.medicinePrescriptionList[index].mId;
+          let mName  = this.medicinePrescriptionList[index].mName;
+          let mSpecification = this.medicinePrescriptionList[index].mSpecification
+          let mFee = this.medicinePrescriptionList[index].mFee
+          let instruction = this.medicinePrescriptionList[index].instruction
+          let dosage = this.medicinePrescriptionList[index].dosage
+          let times = this.medicinePrescriptionList[index].times
+          let medicinePrescription={
+            mId:mId,
+            dName:mName,
+            mSpecification:mSpecification,
+            mFee:mFee,
+            instruction:instruction,
+            dosage:dosage,
+            times:times,
+            mAmount:this.mAmount,
+
+            editIndex :-1
+          };
+          for(let i = this.checkList.length - 1; i > -1; i--) {
+            if (this.checkList[i]) {
+              diaId = this.diagnosisList[i].diaId
+            }
+          }
+          this.medicinePrescriptionList[index] = medicinePrescription;
+
+          this.$axios({
+            url:'diagnosis/updateDiagnosisMedicineBydiaIdAndMId',
+            method:'post',
+            data:{
+              diaId:diaId,
+              mId:mId,
+              mAmount:this.mAmount,
+            }
+          }).then(response => {
+            that.reSet()
+            console.log((response.data));
+            console.log(medicinePrescription)
+
+          }).catch(err=>{
+            console.log(err)
+          });
 
 
+          this.editIndex = -1
+        },
+        handleEdit(index, row){
+          this.reSetmAmount();
+          let diaId = 0
+          let that=this;
+          this.editIndex = index;
+          let mAmount = this.medicinePrescriptionList[index].mAmount
+
+          let data={
+              mAmount:that.mAmount
+          }
+
+        },
+        onTapGiveUp:function () {
+          this.editIndex = -1
+        },
+
+        onTapUpdate:function () {
+          this.selectHistory()
+
+        },
 
         showPrescriptionDetail:function(){
           let diaId=0;
@@ -352,8 +466,6 @@
           let that = this
           for(let i = this.checkList.length - 1; i > -1; i--) {
             if (this.checkList[i]) {
-              // const tempCounter = i
-              console.log("cnm", typeof this.diagnosisList[i].diaId)
               diaId = this.diagnosisList[i].diaId
               if(this.diagnosisList[i].diaState ==='废除'){
                 that.controlDelete = true;
@@ -375,7 +487,7 @@
                   that.controlDelete = false;
                   that.controlAdd = true;
                 }
-                else if(this.diagnosisList[i].diaState==='废除'){
+                else if(this.diagnosisList[i].diaState==='废除' || this.diagnosisList[i].diaState==='开立'){
                   that.controlDelete = true;
                   that.controlAdd = true;
                 }
@@ -396,7 +508,10 @@
 
         },
 
-
+        // haha:function(){
+        //   let that = this
+        //   console.log('32323',that.totalMoney)
+        // },
 
         addMedicine:function(){
           let that = this
@@ -557,6 +672,7 @@
           addPrescription:function(){
 
             let that = this;
+            let uId = this.$cookie.get('uId')
             console.log("123",that.rId);
             this.$axios({
               url:'diagnosis/insertDiagnosis',
@@ -565,6 +681,7 @@
                 diaName:that.inputdiaName,
                 diaType:'西药',
                 rId:that.rId,
+                uId:uId,
               }
             }).then(response=>{
               console.log(response)
@@ -581,8 +698,10 @@
          * 删除项目
          */
         onTapDelete:function () {
+
           let that = this
           let diaIdList = []
+
           for(let i = this.checkList.length - 1; i > -1; i--){
             if(this.checkList[i]){
               if(this.diagnosisList[i].diaState === '开立'){
@@ -591,6 +710,8 @@
                else{
                 diaIdList.push(this.diagnosisList[i].diaId);
                 this.diagnosisList.splice(i,1)
+                //同步删除checklist
+                this.checkList.splice(i,1)
               }
               }
 
@@ -612,8 +733,9 @@
          * 开立项目
          */
         onTapBegin:function () {
-
+          let that = this
           let diaIdList = []
+          // console.log('totalMoney',that.totalMoney);
           for(let i = this.checkList.length - 1; i > -1; i--){
             if(this.checkList[i]){
               if(this.diagnosisList[i].diaState ==='废除'){
@@ -637,6 +759,7 @@
                 diaState: '开立'
               }
             })
+
 
         },
         /**
@@ -690,6 +813,7 @@
             })
           },
         viewTemplate:function(index){
+
           console.log(index)
           let that = this
           this.datId = index
@@ -810,6 +934,25 @@
           })
         },
 
+        selectHistory:function(){
+
+          let that = this
+          let uId = this.$cookie.get('uId')
+              this.$axios({
+                url:'diagnosis/selectHistoryDiagnosis',
+                method:'post',
+                data:{
+                  uId:uId
+                }
+              }).then(response=>{
+                console.log('cmsk',response.data)
+                that.historyList = response.data
+              }).catch(err=>{
+                console.log(err)
+              })
+        },
+
+
         reSet:function () {
           this.searchmCode='';
           this.searchmSpell='';
@@ -820,11 +963,18 @@
 
         },
         reSetMoney:function () {
-          this.totalMoney=0
-          this.controlAdd=false
-          this.controlDelete=false
+          let that = this;
+          this.totalMoney=0;
+          this.controlAdd=false;
+          this.controlDelete=false;
+
+        },
+        reSetmAmount:function () {
+          this.mAmount = 0;
         }
       },
+
+
       //
 
       watch:{

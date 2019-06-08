@@ -236,7 +236,8 @@
           data:
             {
               rId:rId,
-              rStatus:'已退号'
+              rStatus:'已退号',
+              rResult:''
             },
 
         }).then(function (response) {

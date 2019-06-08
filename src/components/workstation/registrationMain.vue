@@ -158,10 +158,10 @@
 
 <script>
   export default {
+    props:["rId"],
     name: "registrationMain",
     data() {
       return {
-        rId:'',
         right:'right',
         mChiefComplaint: '',
         mHistoryOfPresentIllness: '',
@@ -188,8 +188,6 @@
        * */
       startDiagnosis:function(){
         this.dialogVisible = true
-        this.rId = Number(this.$cookie.get('rId'))
-        console.log(this.rId)
       },
       /**
        * 点击确定添加疾病

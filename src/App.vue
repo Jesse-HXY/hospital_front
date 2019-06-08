@@ -57,7 +57,7 @@
             <template slot="title"><i class="el-icon-setting"></i><span>门诊财务管理</span></template>
             <el-menu-item index="6-1">费用科目管理</el-menu-item>
             <el-menu-item index="6-2">门诊日结核对</el-menu-item>
-            <el-menu-item index="6-3">门诊科室工作量统计</el-menu-item>
+            <router-link to="/financeManagement/financeOfDepartment"><el-menu-item index="6-3">门诊科室工作量统计</el-menu-item></router-link>
             <el-menu-item index="6-4">门诊医生工作量统计</el-menu-item>
           </el-submenu>
         </el-menu>

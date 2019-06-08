@@ -124,8 +124,8 @@
             rLName:'',
             departmentList:'',
             userList:'',
-            rFee:0,
-            rLFee: 0
+            rFee:0.0,
+            rLFee: 0.0
           }
       },
       created:function () {
@@ -251,7 +251,7 @@
         },
         /** 是否要病历本改变 */
         changeRecord: function (value) {
-          if (this.hasMedicineRecord == 'true') {
+          if (this.hasMedicineRecord === 'true') {
             console.log(this.hasMedicineRecord)
             this.rFee = this.rLFee + 1
           } else {
@@ -263,7 +263,7 @@
          */
         onTapSave: function () {
           let hasMedicineRecord = 0
-          if(this.hasMedicineRecord == 'true'){
+          if(this.hasMedicineRecord === 'true'){
             hasMedicineRecord = 1
           }
           let that = this
@@ -282,9 +282,35 @@
               rDate:currentDate
             }
           }).then(response=>{
-
+            console.log(response.data)
+            this.insertIntoAccount(response.data)
           }).catch(err=>{
             console.log(err)
+          })
+        },
+        /**
+         * 将挂号插入account
+         */
+        insertIntoAccount:function(rId){
+          console.log(rId)
+          let currentTime = new Date()
+          let account={
+            dId:this.dId,
+            payTime:currentTime.getTime()/1000,
+            fee:this.rFee,
+            feeType:'挂号费',
+            payType:this.payType,
+            rId:rId,
+            cId:this.$cookie.get('uId'),
+          }
+          let accounts = []
+          accounts.push(account)
+          this.$axios({
+            url:'account/insertAccount',
+            method:'post',
+            data:{
+              accounts:accounts
+            }
           })
         },
         /**

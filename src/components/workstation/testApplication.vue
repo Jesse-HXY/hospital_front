@@ -577,10 +577,11 @@
         'rId':function (rId) {
           let that = this
           this.$axios({
-            url:'diagnosis/selectByrId',
+            url:'diagnosis/selectByrIdAndEIFeeType',
             method:'post',
             data:{
-              rId:rId
+              rId:rId,
+              eIFeeType:'检验费'
             }
           }).then(response=>{
             console.log(response.data)

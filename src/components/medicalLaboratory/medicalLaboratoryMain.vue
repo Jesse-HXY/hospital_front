@@ -28,8 +28,8 @@
       <el-main>
         <el-tabs>
           <el-tab-pane label="患者检查"><patientExamination v-bind:rId="patient.rId" v-bind:dId="dId"></patientExamination></el-tab-pane>
-          <el-tab-pane label="患者检验"></el-tab-pane>
-          <el-tab-pane label="患者处置"></el-tab-pane>
+          <el-tab-pane label="患者检验"><patientTest v-bind:rId="patient.rId" v-bind:dId="dId"></patientTest></el-tab-pane>
+          <el-tab-pane label="患者处置"><patientDispose v-bind:rId="patient.rId" v-bind:dId="dId"></patientDispose></el-tab-pane>
         </el-tabs>
       </el-main>
     </el-header>
@@ -86,6 +86,8 @@
 
 <script>
   import patientExamination from '@/components/medicalLaboratory/patientExamination'
+  import patientTest from '@/components/medicalLaboratory/patientTest'
+  import patientDispose from '@/components/medicalLaboratory/patientDispose'
     export default {
         name: "medicalLaboratory",
       data(){
@@ -151,7 +153,9 @@
           }
         }
       ,components:{
-          'patientExamination':patientExamination
+          'patientExamination':patientExamination,
+        'patientTest':patientTest,
+        'patientDispose':patientDispose
       },watch:{
       }
     }

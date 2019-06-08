@@ -127,6 +127,13 @@
           <el-form-item label="找零金额" :label-width="formLabelWidth">
             {{returnFee}}
           </el-form-item>
+          <el-form-item label="选择开单科室" :label-width="formLabelWidth">
+            <el-select v-model="postDId" filterable placeholder="请选择">
+              <div v-for="item in departmentList">
+                <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
+              </div>
+            </el-select>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -154,8 +161,17 @@
             dialogFormVisible:false,
             chargeFee:'',
             payType:'',
-            returnFee:''
+            returnFee:'',
+            postDId:''
           }
+      },created:function(){
+        let that = this
+        this.$axios({
+          url:"department/getAllDepartments",
+          method:"post",
+        }).then(response=>{
+          that.departmentList = response.data
+        })
       },
       methods:{
         onTapSearch:function () {
@@ -226,6 +242,7 @@
                 payType:this.payType,
                 rId:this.rId,
                 cId:cId,
+                postDId: this.postDId
               }
               if(this.itemList[i].eAId !== null && this.itemList[i].eAId !== 0){
                 eAIdList.push(this.itemList[i].eAId)
@@ -236,7 +253,6 @@
               accounts.push(account)
             }
           }
-          console.log(accounts)
           this.$axios({
             url:'account/insertAccount',
             method:'post',

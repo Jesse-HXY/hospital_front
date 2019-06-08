@@ -49,9 +49,9 @@
           </el-submenu>
           <el-submenu index="5">
             <template slot="title"><i class="el-icon-setting"></i><span>门诊药房工作站</span></template>
-            <el-menu-item index="5-1">门诊发药</el-menu-item>
+            <router-link to="/medicineWorkStation/deliverMedicine"><el-menu-item index="5-1">门诊发药</el-menu-item></router-link>
             <el-menu-item index="5-2">门诊退药</el-menu-item>
-            <el-menu-item index="5-3">药品管理</el-menu-item>
+           <router-link to="/medicineWorkStation/drugManagement"> <el-menu-item index="5-3">药品管理</el-menu-item></router-link>
           </el-submenu>
           <el-submenu index="6">
             <template slot="title"><i class="el-icon-setting"></i><span>门诊财务管理</span></template>
@@ -73,6 +73,20 @@
                 </template>
               </div>
           </el-header>
+        <!---->
+        <!--<el-main>-->
+          <!--<el-carousel :interval="4000" type="card" height="200px">-->
+            <!--<el-carousel-item v-for="item in 6" :key="item">-->
+              <!--<h3 class="medium">{{ item }}</h3>-->
+            <!--</el-carousel-item>-->
+          <!--</el-carousel>-->
+        <!--</el-main>-->
+
+
+
+
+
+
         <el-dialog
           title="登陆"
           :visible.sync="centerDialogVisible"
@@ -168,6 +182,21 @@
     text-align: center;
     color: #2c3e50;
     margin-top: 60px;
+  }
+  .el-carousel__item h3 {
+    color: #475669;
+    font-size: 14px;
+    opacity: 0.75;
+    line-height: 200px;
+    margin: 0;
+  }
+
+  .el-carousel__item:nth-child(2n) {
+    background-color: #99a9bf;
+  }
+
+  .el-carousel__item:nth-child(2n+1) {
+    background-color: #d3dce6;
   }
 </style>
 

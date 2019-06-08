@@ -312,12 +312,14 @@
              </el-table-column>
              <el-table-column
                label="创建时间"
-               prop="createDate">
+               prop="createDate"
+               :formatter="formatDateCreateDate">
 
              </el-table-column>
              <el-table-column
                label="使用时间"
-               prop="useDate">
+               prop="useDate"
+               :formatter="formatDateUseDate">
 
              </el-table-column>
            </el-table>
@@ -745,6 +747,7 @@
                 this.diagnosisList[i].diaState = '开立'
                 console.log(this.diagnosisList[i])
                 diaIdList.push(this.diagnosisList[i].diaId)
+                this.updateTotalMoney(this.diagnosisList[i].diaId,that.totalMoney)
               }
             }
           }
@@ -760,7 +763,20 @@
               }
             })
 
-
+        },
+        updateTotalMoney:function(diaId,totalMoney){
+          this.$axios({
+            url:'diagnosis/updateDiaFee',
+            method:'post',
+            data:{
+              diaId:diaId,
+              diaFee:totalMoney
+            }
+          }).then(response=>{
+            console.log(response)
+          }).catch(err=>{
+            console.log(err)
+          })
         },
         /**
             作废
@@ -947,10 +963,34 @@
               }).then(response=>{
                 console.log('cmsk',response.data)
                 that.historyList = response.data
+
               }).catch(err=>{
                 console.log(err)
               })
         },
+        formatDateCreateDate(row, column) {
+          let date = new Date(parseInt(row.createDate) * 1000);
+          let Y = date.getFullYear() + '-';
+          let M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-';
+          let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+          let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+          let m = date.getMinutes()  < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+          let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+          return Y + M + D + h + m + s;
+        },
+        formatDateUseDate(row, column) {
+          let date = new Date(parseInt(row.useDate) * 1000);
+          let Y = date.getFullYear() + '-';
+          let M = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) + '-' : date.getMonth() + 1 + '-';
+          let D = date.getDate() < 10 ? '0' + date.getDate() + ' ' : date.getDate() + ' ';
+          let h = date.getHours() < 10 ? '0' + date.getHours() + ':' : date.getHours() + ':';
+          let m = date.getMinutes()  < 10 ? '0' + date.getMinutes() + ':' : date.getMinutes() + ':';
+          let s = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+          return Y + M + D + h + m + s;
+        },
+
+
+
 
 
         reSet:function () {

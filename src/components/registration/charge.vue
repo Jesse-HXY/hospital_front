@@ -174,10 +174,17 @@
         })
       },
       methods:{
+
+
+
         onTapSearch:function () {
+
           let that = this;
           that.itemList = []
           that.checkList = []
+          /**
+           * 搜索已经开立的非药品
+           * **/
           this.$axios({
             url:'registration/getRegistrationInfoByrId',
             method:'post',
@@ -196,6 +203,7 @@
                 eAStatus:'开立'
               }
             }).then(response=>{
+
               for(let i = 0; i < response.data.length; i++){
                 let item = response.data[i]
                 item.Fee = item.examnationItem.eIFee
@@ -207,10 +215,33 @@
                 that.itemList.push(item)
                 that.checkList.push(false)
               }
+              console.log(that.itemList)
+              this.axios({
+                url:'diagnosis/getDetailByrId',
+                method:'post',
+                data:{
+                  rId:that.rId
+                }
+              }).then(res=>{
+                console.log('123',res.data)
+                for(let i =0; i<res.data.length;i++){
+                  let medicine = res.data[i];
+                  let medicineList={
+
+                    Fee:medicine.mFee,
+                    number:medicine.mAmount,
+                    status :'开立'
+                  }
+                  that.itemList.push(medicineList)
+                  that.checkList.push(false)
+                }
+              })
             })
+
           }).catch(err=>{
             console.log(err)
           })
+
         },
         /***
          * 点击收费

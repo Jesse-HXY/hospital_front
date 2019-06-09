@@ -1,29 +1,29 @@
 <template>
-       
+     
   <el-container>
     <el-header>
       <el-row :gutter="20">
         <el-col :span="6"><div class="grid-content ">
-          <el-tag>门诊发药</el-tag>
+          <el-tag>门诊退药</el-tag>
         </div></el-col>
-      <el-col :span="6"><div class="grid-content ">
-       <el-input placeholder="请输入病历号" v-model="searchrId"></el-input>
-      </div></el-col>
-      <el-col :span="6"><div class="grid-content ">
-        <el-input placeholder="请输入时间" v-model="searchDate"></el-input>
-      </div></el-col>
-      <el-col :span="6"><div class="grid-content ">
-        <el-button @click="onTapSearch">查询</el-button>
-        <el-button>发药</el-button>
-      </div></el-col>
+        <el-col :span="6"><div class="grid-content ">
+          <el-input placeholder="请输入病历号" v-model="searchrId"></el-input>
+        </div></el-col>
+        <el-col :span="6"><div class="grid-content ">
+          <el-input placeholder="请输入时间" v-model="searchDate"></el-input>
+        </div></el-col>
+        <el-col :span="6"><div class="grid-content ">
+          <el-button @click="onTapSearch">查询</el-button>
+          <el-button>发药</el-button>
+        </div></el-col>
 
-    </el-row>
+      </el-row>
     </el-header>
     <el-main>
       <el-table>
         <el-table-column
-        label="药品编码"
-        prop="">
+          label="药品编码"
+          prop="">
 
         </el-table-column>
         <el-table-column
@@ -91,32 +91,32 @@
 </template>
 
 <script>
-    export default {
-        data() {
-            return {
-              searchrId:'',
-              searchDate:'',
-              searchResult:[],
-            }
-        },
-      methods:{
-        onTapSearch:function(){
-          let that = this;
-          this.$axios({
-            url: "",
-            method:"post",
-            data:{
-              searchrId:that.searchrId,
-              searchDate:that.searchDate,
-            }
-          }).then(response => {
-            that.searchResult = response.data;
-          }).catch(err=>{
-            console.log(err)
-          })
-        },
+  export default {
+    data() {
+      return {
+        searchrId:'',
+        searchDate:'',
+        searchResult:[],
       }
+    },
+    methods:{
+      onTapSearch:function(){
+        let that = this;
+        this.$axios({
+          url: "",
+          method:"post",
+          data:{
+            searchrId:that.searchrId,
+            searchDate:that.searchDate,
+          }
+        }).then(response => {
+          that.searchResult = response.data;
+        }).catch(err=>{
+          console.log(err)
+        })
+      },
     }
+  }
 </script>
 <style>
   .el-row {

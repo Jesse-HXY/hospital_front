@@ -50,7 +50,7 @@
           <el-submenu index="5">
             <template slot="title"><i class="el-icon-setting"></i><span>门诊药房工作站</span></template>
             <router-link to="/medicineWorkStation/deliverMedicine"><el-menu-item index="5-1">门诊发药</el-menu-item></router-link>
-            <el-menu-item index="5-2">门诊退药</el-menu-item>
+            <router-link to="/medicineWorkStation/drugWithdrawal"><el-menu-item index="5-2">门诊退药</el-menu-item></router-link>
            <router-link to="/medicineWorkStation/drugManagement"> <el-menu-item index="5-3">药品管理</el-menu-item></router-link>
           </el-submenu>
           <el-submenu index="6">

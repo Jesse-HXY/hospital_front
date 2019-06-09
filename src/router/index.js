@@ -23,7 +23,7 @@ import medicalLaboratoryMain from '@/components/medicalLaboratory/medicalLaborat
 import financeOfDepartment from '@/components/financeManagement/financeOfDepartment'
 import deliverMedicine from '@/components/medicineWorkStation/deliverMedicine'
 import drugManagement from '@/components/medicineWorkStation/drugManagement'
-
+import drugWithdrawal from '@/components/medicineWorkStation/drugWithdrawal'
 import axios from 'axios'
 Vue.prototype.axios = axios
 Vue.use(Router)
@@ -131,6 +131,11 @@ export default new Router({
       path: '/medicineWorkStation/drugManagement',
       name:'drugManagement',
       component:drugManagement
+    },
+    {
+      path: '/medicineWorkStation/drugWithdrawal',
+      name:'drugWithdrawal',
+      component:drugWithdrawal
     }
   ]
 })

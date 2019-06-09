@@ -162,7 +162,8 @@
             chargeFee:'',
             payType:'',
             returnFee:'',
-            postDId:''
+            postDId:'',
+            dId:''
           }
       },created:function(){
         let that = this
@@ -195,6 +196,7 @@
             this.patientList = response.data;
             this.pName = response.data[0].pName
             this.rId = this.searchrId
+            this.dId=response.data[0].dId
             this.$axios({
               url:'diagnosis/selectByrIdAndStatus',
               method: 'post',
@@ -203,7 +205,6 @@
                 eAStatus:'开立'
               }
             }).then(response=>{
-
               for(let i = 0; i < response.data.length; i++){
                 let item = response.data[i]
                 item.Fee = item.examnationItem.eIFee
@@ -226,12 +227,16 @@
               }).then(res=>{
                 console.log('123',res.data)
                 for(let i =0; i<res.data.length;i++){
+                  let eTDate = new Date(res.data[i].useDate * 1000)
                   let medicine = res.data[i];
                   let medicineList={
+                    dia_M_Id:medicine.dia_M_Id,
                     name:medicine.mName,
                     Fee:medicine.mFee,
                     number:medicine.mAmount,
-                    status :'开立'
+                    status :medicine.diaState,
+                    displayTime : eTDate.toLocaleDateString().replace(/\//g, "-") + " " + eTDate.toTimeString().substr(0, 8),
+                    dId:that.dId
                   }
                   that.itemList.push(medicineList)
                   that.checkList.push(false)
@@ -244,6 +249,7 @@
           })
 
         },
+
         /***
          * 点击收费
          */
@@ -256,64 +262,94 @@
          * 点击收费的确认
          */
         onTapConfirm:function () {
-          if(this.chargeFee<this.totalFee){
+          if (this.chargeFee < this.totalFee) {
             alert("来医院坑钱你的良心不会痛吗")
             return
           }
           let cId = this.$cookie.get('uId')
           let accounts = []
           let eAIdList = []
-          for(let i = 0; i < this.checkList.length; i++){
-            if(this.checkList[i]){
+          let dia_M_idList = []
+
+          for (let i = 0; i < this.checkList.length; i++) {
+
+            if (this.checkList[i]) {
               let currentTime = new Date()
-              let account={
-                dId:this.itemList[i].dId,
-                payTime:currentTime.getTime()/1000,
-                fee:this.itemList[i].Fee,
-                feeType:this.itemList[i].feeType,
-                payType:this.payType,
-                rId:this.rId,
-                cId:cId,
+              let account = {
+                dId: this.itemList[i].dId,
+                payTime: currentTime.getTime() / 1000,
+                fee: this.itemList[i].Fee,
+                feeType: this.itemList[i].feeType,
+                payType: this.payType,
+                rId: this.rId,
+                cId: cId,
                 postDId: this.postDId
               }
-              if(this.itemList[i].eAId !== null && this.itemList[i].eAId !== 0){
+              if (this.itemList[i].eAId !== null && this.itemList[i].eAId !== 0) {
                 eAIdList.push(this.itemList[i].eAId)
                 account.eAId = this.itemList[i].eAId
-              }else{
+              } else {
                 account.eAId = -1
+              }
+              if (this.itemList[i].dia_M_Id !== null && this.itemList[i].dia_M_Id !== 0) {
+                dia_M_idList.push(this.itemList[i].dia_M_Id)
+                account.dia_M_Id = this.itemList[i].dia_M_Id
+
+              }
+              else {
+                account.dia_M_Id = -1
               }
               accounts.push(account)
             }
           }
           this.$axios({
-            url:'account/insertAccount',
-            method:'post',
-            data:{
-              accounts:accounts
+            url: 'account/insertAccount',
+            method: 'post',
+            data: {
+              accounts: accounts
             }
-          }).then(response=>{
-          }).catch(err=>{
+          }).then(response => {
+          }).catch(err => {
             console.log(err)
           })
-          this.$axios({
-            url:'diagnosis/updateStatus',
-            method:'post',
-            data:{
-              eAIdList:eAIdList,
-              eAStatus: '已收费'
-            }
-          }).then(response=>{
-            this.onTapSearch()
-            this.dialogFormVisible = false
-          })
+
+              this.$axios({
+                url: 'diagnosis/updateStatus',
+                method: 'post',
+                data: {
+                  eAIdList: eAIdList,
+                  eAStatus: '已收费'
+                }
+              }).then(response => {
+                this.onTapSearch()
+                this.dialogFormVisible = false
+              })
+
+              this.axios({
+                url: 'diagnosis/updateMStateBydia_M_Id',
+                method: 'post',
+                data: {
+                  dia_M_Id: dia_M_idList,
+                  mState: '已缴费'
+                }
+              }).then(response => {
+                this.onTapSearch()
+                this.dialogFormVisible = false
+              }).then(err => {
+                console.log(err)
+              })
+
+
+
         }
+
       },watch:{
           'searchrId':'onTapSearch',
         'checkList':function (checkList) {
             let total = 0.0
             for(let i = 0; i < checkList.length; i++){
               if(checkList[i]){
-                total = total + this.itemList[i].Fee
+                total = total + this.itemList[i].Fee*this.itemList[i].number
               }
             }
             this.totalFee = total

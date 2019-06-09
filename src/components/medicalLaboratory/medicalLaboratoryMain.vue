@@ -1,25 +1,25 @@
 <template>
   <el-container>
-    <el-header style="text-align: left">
+    <el-header style="text-align: left;font-size: 12px">
         患者姓名：
       <div style="display: inline-block;">
-        <el-input v-model="searchPName"></el-input>
+        <el-input size="mini" v-model="searchPName"></el-input>
       </div>
       &nbsp&nbsp&nbsp病历号：
       <div style="display: inline-block;">
-        <el-input v-model="searchRId"></el-input>
+        <el-input size="mini" v-model="searchRId"></el-input>
       </div>
-      &nbsp&nbsp&nbsp<el-button @click="onTapSearch" type="primary" icon="el-icon-search">查询</el-button>
+      &nbsp&nbsp&nbsp<el-button @click="onTapSearch" size="mini" type="primary" icon="el-icon-search">查询</el-button>
     </el-header>
-    <el-header style="text-align: left">
+    <el-header style="text-align: left;font-size:12px;">
       患者信息确认:
-      <el-tag>病历号</el-tag>&nbsp{{patient.rId}}&nbsp
-      <el-tag>姓名</el-tag>&nbsp{{patient.pName}}&nbsp
-      <el-tag>身份证号</el-tag>&nbsp{{patient.pId}}&nbsp
+      <el-tag size="small">病历号</el-tag>&nbsp{{patient.rId}}&nbsp
+      <el-tag size="small">姓名</el-tag>&nbsp{{patient.pName}}&nbsp
+      <el-tag size="small">身份证号</el-tag>&nbsp{{patient.pId}}&nbsp
       <br><br>
       执行科室：
       <div style="display: inline-block;">
-        <el-select v-model="dId" filterable placeholder="请选择">
+        <el-select v-model="dId" filterable placeholder="请选择" size="mini">
           <div v-for="item in departmentList">
             <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
           </div>

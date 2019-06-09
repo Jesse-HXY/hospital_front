@@ -41,13 +41,6 @@
               size="mini"
               placeholder="输入费用分类"
             /></div>
-          &nbsp&nbsp&nbsp&nbsp执行科室：
-          <div style="width: 125px;display: inline-block">
-            <el-input
-              v-model="searchdId"
-              size="mini"
-              placeholder="输入执行科室Id"
-            /></div>
         </template>
         &nbsp&nbsp&nbsp&nbsp
         <el-button width="100" @click="onTapSearch">查询</el-button>
@@ -96,7 +89,7 @@
 
           <el-table-column
             label="序号"
-            width="125">
+            width="100">
             <template slot-scope="scope">
               <span style="margin-left: 10px">{{scope.row.eIId}}</span>
             </template>
@@ -134,16 +127,8 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="执行科室"
-            width="150">
-            <template slot-scope="scope">
-              <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="dId"></el-input></span>
-              <span  v-else style="margin-left: 10px">{{scope.row.dId}}</span>
-            </template>
-          </el-table-column>
-          <el-table-column
             label="项目编码"
-            width="125">
+            width="300">
             <template slot-scope="scope">
               <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="eICode"></el-input></span>
               <span v-else style="margin-left: 10px">{{scope.row.eICode}}</span>
@@ -152,7 +137,7 @@
 
 
           <el-table-column
-            align="right">
+            width="220">
             <!--<template slot="header" slot-scope="scope">-->
             <!--<el-button width="100" @click="onTapSearch">查询</el-button>-->
             <!--</template>-->

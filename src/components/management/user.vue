@@ -91,7 +91,7 @@
         style="width: 100%">
         <el-table-column
           label="用户编号"
-          width="150">
+          width="100">
           <template slot-scope="scope">
             <!--<span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input v-model="dId"></el-input></span>-->
             <span style="margin-left: 10px">{{scope.row.uId}}</span>
@@ -99,7 +99,7 @@
         </el-table-column>
         <el-table-column
           label="登录名"
-          width="200">
+          width="100">
           <template slot-scope="scope">
             <span v-if="scope.$index == editIndex" style="margin-left: 10px"><el-input
               v-model="uNickName"></el-input></span>
@@ -108,7 +108,7 @@
         </el-table-column>
         <el-table-column
           label="密码"
-          width="200">
+          width="150">
           <template slot-scope="scope">
             <span v-if="scope.$index == editIndex" style="margin-left: 10px"><el-input
               v-model="uPassword"></el-input></span>
@@ -117,7 +117,7 @@
         </el-table-column>
         <el-table-column
           label="真实姓名"
-          width="200">
+          width="100">
           <template slot-scope="scope">
             <span v-if="scope.$index == editIndex" style="margin-left: 10px"><el-input
               v-model="uName"></el-input></span>
@@ -126,7 +126,7 @@
         </el-table-column>
         <el-table-column
           label="是否是医生"
-          width="200">
+          width="100">
           <template slot-scope="scope">
             <span v-if="scope.$index == editIndex" style="margin-left: 10px">
               <el-select v-model="isDoctor" placeholder="请选择是否是医生">
@@ -139,7 +139,7 @@
         </el-table-column>
         <el-table-column
           label="用户类别"
-          width="200">
+          width="100">
           <template slot-scope="scope">
         <span v-if="scope.$index == editIndex" style="margin-left: 10px"><el-select v-model="uCategory" placeholder="请选择活动区域">
           <el-option v-if="isDoctor==='false'" label="挂号收费员" value="挂号收费员"></el-option>

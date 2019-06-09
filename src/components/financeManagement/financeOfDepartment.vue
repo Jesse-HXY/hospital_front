@@ -78,6 +78,20 @@
             width="100"></el-table-column>
         </el-table>
       </el-main>
+      <el-footer>
+        <div class="block">
+          <span class="demonstration">调整每页显示条数</span>
+          <el-pagination
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            :current-page.sync="currentPage"
+            :page-sizes="[10, 20, 30, 50]"
+            :page-size="pageSize"
+            layout="sizes, prev, pager, next"
+            :total="pageCount">
+          </el-pagination>
+        </div>
+      </el-footer>
     </el-container>
 </template>
 
@@ -89,49 +103,124 @@
             dates:[],
             accounts:[],
             departmentList:[],
-            departmentCondition:''
+            departmentCondition:'',
+            currentPage:1,
+            pageSize:10,
+            pageCount:1
           }
       },created:function() {
-        let that = this
-        this.$axios({
-          url:"department/getAllDepartments",
-          method:"post",
-        }).then(response=>{
-          that.departmentList = response.data
-        })
+
       },methods:{
           onTapSearch:function () {
-            for(let i = 0; i < this.departmentList.length; i++){
-              const tempDId = this.departmentList[i].dId
-              this.$axios({
-                url:'workloadsCount/getWorkloadsCountBydId',
-                method:'post',
-                data:{
-                  beginTime:this.dates[0].getTime()/1000,
-                  endTime:this.dates[1].getTime()/1000,
-                  dId:tempDId
-                }
-              }).then(response=>{
-                console.log(response.data)
-                this.accounts.push({
-                  dName:this.departmentList[i].dName,
-                  visits:response.data.visits,
-                  diagnosticFee:response.data.diagnosticFee,
-                  examinationFee:response.data.examinationFee,
-                  invoiceNum:response.data.invoiceNum,
-                  materialFee:response.data.materialFee,
-                  otherFee:response.data.otherFee,
-                  registrationFee:response.data.registrationFee,
-                  surgeryFee:response.data.surgeryFee,
-                  treatmentFee:response.data.treatmentFee,
-                  xyFee:response.data.xyFee,
-                  zyFee:response.data.zyFee,
-                  testFee:response.data.testFee
-                })
+            this.getDepartmentsByPage(1)
+            this.getPageCount()
+          },
+        /**
+         * 通过dId得到accounts
+         */
+        getAccountsByDId:function(){
+          this.accounts = []
 
-              })
-            }
+          for(let i = 0; i < this.departmentList.length; i++){
+              const tempDepartment = this.departmentList[i]
+              if(this.departmentCondition === "执行科室"){
+                this.$axios({
+                  url:'workloadsCount/getWorkloadsCountBydId',
+                  method:'post',
+                  data:{
+                    beginTime:this.dates[0].getTime()/1000,
+                    endTime:this.dates[1].getTime()/1000,
+                    dId:tempDepartment.dId
+                  }
+                }).then(response=>{
+                  this.pushAccountIntoAccounts(tempDepartment, response.data)
+                })
+              }else{
+                this.$axios({
+                  url:'workloadsCount/getWorkloadsCountByPostDId',
+                  method:'post',
+                  data:{
+                    beginTime:this.dates[0].getTime()/1000,
+                    endTime:this.dates[1].getTime()/1000,
+                    postDId:tempDepartment.dId
+                  }
+                }).then(response=>{
+                  this.pushAccountIntoAccounts(tempDepartment, response.data)
+                })
+              }
+
           }
+        },
+        /**
+         * 将account推入accounts
+         */
+        pushAccountIntoAccounts:function(tempDepartment,data){
+          this.accounts.push({
+            dName:tempDepartment.dName,
+            visits:data.visits,
+            diagnosticFee:data.diagnosticFee,
+            examinationFee:data.examinationFee,
+            invoiceNum:data.invoiceNum,
+            materialFee:data.materialFee,
+            otherFee:data.otherFee,
+            registrationFee:data.registrationFee,
+            surgeryFee:data.surgeryFee,
+            treatmentFee:data.treatmentFee,
+            xyFee:data.xyFee,
+            zyFee:data.zyFee,
+            testFee:data.testFee
+          })
+        },
+        /**
+         * 得到页数
+         * */
+        getPageCount:function(){
+          let that = this
+          this.$axios({
+            url:"department/getDepartmentCount",
+            method:"post"
+          }).then(response=>{
+            console.log(response.data)
+            that.pageCount = response.data
+          }).catch(err=>{
+            console.log(err)
+          })
+        },
+        /**
+         * 分页得到departments
+         * */
+        getDepartmentsByPage:function (pageNum) {
+          let that = this;
+          pageNum = pageNum - 1
+          pageNum = pageNum * that.pageSize
+          console.log(that.pageSize)
+          this.$axios({
+            url: 'department/getDepartmentByPage',
+            method:"post",
+            data:{
+              pageNum:pageNum,
+              pageSize:that.pageSize
+            }
+          }).then(response => {
+            that.departmentList = response.data
+            this.getAccountsByDId()
+          }).catch(err=>{
+            console.log(err)
+          })
+        },
+        /**
+         * 分页
+         */
+        handleSizeChange:function (pageSize) {
+          this.pageSize = pageSize
+          this.getDepartmentsByPage(this.currentPage)
+        },
+        /**
+         * 分页
+         */
+        handleCurrentChange:function () {
+          this.getDepartmentsByPage(this.currentPage)
+        }
         }
     }
 </script>

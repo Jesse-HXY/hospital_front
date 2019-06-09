@@ -81,7 +81,7 @@
           <el-table-column
             label="项目名称"
             width="250"
-          prop="examnationItem.eIName">
+          prop="name">
           </el-table-column>
           <el-table-column
             label="单价"
@@ -208,6 +208,7 @@
                 let item = response.data[i]
                 item.Fee = item.examnationItem.eIFee
                 item.feeType = item.examnationItem.eIFeeType
+                item.name = item.examnationItem.eIName
                 item.status = item.eAStatus
                 let eTDate = new Date(response.data[i].beginTime * 1000)
                 item.displayTime = eTDate.toLocaleDateString().replace(/\//g, "-") + " " + eTDate.toTimeString().substr(0, 8)
@@ -227,7 +228,7 @@
                 for(let i =0; i<res.data.length;i++){
                   let medicine = res.data[i];
                   let medicineList={
-
+                    name:medicine.mName,
                     Fee:medicine.mFee,
                     number:medicine.mAmount,
                     status :'开立'

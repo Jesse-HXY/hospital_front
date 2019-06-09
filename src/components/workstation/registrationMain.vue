@@ -222,26 +222,6 @@
         this.dialogVisible=false
         this.hasDiagnosis=true
       },
-      /**
-       * 得到疾病名称
-       */
-      getDisName:function (e) {
-        let that = this
-        this.$axios({
-          url:'disease/getDiseases',
-          method:'post',
-          data:{
-            disName:that.disease.name
-          }
-        }).then(response=>{
-          console.log(response.data)
-          that.disease.disName = response.data[0].disName
-          that.disease.disIcd = response.data[0].disIcd
-          that.disease.disId = response.data[0].disId
-        }).catch(err=>{
-          console.log(err)
-        })
-      },
       querySearch(queryString, cb) {
         let matchList = []
         let that = this

@@ -227,7 +227,8 @@
                     number:medicine.mAmount,
                     status :medicine.diaState,
                     displayTime : eTDate.toLocaleDateString().replace(/\//g, "-") + " " + eTDate.toTimeString().substr(0, 8),
-                    dId:that.dId
+                    dId:medicine.dId,
+                    feeType:medicine.mType,
                   }
                   that.itemList.push(medicineList)
                   that.checkList.push(false)

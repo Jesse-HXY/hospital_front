@@ -60,6 +60,15 @@
              @select="handleSelectBymSpell"
            ></el-autocomplete>
          </el-form-item>
+
+         <el-form-item label="选择执行科室" :label-width="formLabelWidth">
+           <el-select v-model="dId" filterable placeholder="请选择">
+             <div v-for="item in departmentList">
+               <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
+             </div>
+           </el-select>
+         </el-form-item>
+
          <el-table :data="medicineDetailList">
            <el-table-column
            label="药品编码"
@@ -170,6 +179,10 @@
                prop="mSpecification">
              </el-table-column>
              <el-table-column
+               label="执行科室"
+               prop="dId">
+             </el-table-column>
+             <el-table-column
                label="单价"
                prop="mFee">
              </el-table-column>
@@ -185,6 +198,7 @@
                label="频次"
                prop="times">
              </el-table-column>
+
              <el-table-column
                label="数量"
               >
@@ -261,8 +275,28 @@
                  <el-row>
                    <el-col :span="12"><div class="grid-content ">模板明细</div></el-col>
                    <el-col :span="12" align="right"><div class="grid-content ">
-                     <el-button type="text" @click="useTemplate" :disabled="controlAdd">使用该模板</el-button></div></el-col>
+                     <el-button type="text" @click="chooseDepartmentDialog=true" :disabled="controlAdd">使用该模板</el-button></div></el-col>
                  </el-row>
+                  <el-dialog
+                    title="提示"
+                    :visible.sync="chooseDepartmentDialog"
+                    width="30%"
+                    center>
+                    <el-form>
+                    <el-form-item label="选择执行科室" :label-width="formLabelWidth">
+                      <el-select v-model="dId" filterable placeholder="请选择">
+                        <div v-for="item in departmentList">
+                          <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
+                        </div>
+                      </el-select>
+                    </el-form-item>
+                    </el-form>
+                    <span slot="footer" class="dialog-footer">
+    <el-button @click="chooseDepartmentDialog = false">取 消</el-button>
+    <el-button type="primary" @click="useTemplate">确 定</el-button>
+  </span>
+                  </el-dialog>
+
                  <el-divider></el-divider>
                <el-table :data="medicineList">
 
@@ -336,6 +370,7 @@
           let totalMoney=0;
           let mAmount  = 0;
             return {
+              chooseDepartmentDialog:false,
               historyList:[],
               searchmSpell:'',
               searchmCode:'',
@@ -382,9 +417,19 @@
               mFee:0,
               mSpecification:'',
               mAmount:mAmount,
+              departmentList:'',
+              formLabelWidth: '120px',
+              dId:'',
             }
         },
       created:function(){
+        let that = this
+        this.$axios({
+          url:"department/getAllDepartments",
+          method:"post",
+        }).then(response=>{
+          that.departmentList = response.data
+        })
           this.selectHistory()
           this.showPrescription()
           this.onTapSearch()
@@ -549,6 +594,7 @@
               instruction: that.inputInstruction,
               dosage: that.inputDosage,
               times: that.inputTimes,
+
               mAmount: Number(that.inputmAmount)
               }
             let prescriptionList = []
@@ -560,7 +606,8 @@
               method:'post',
 
               data:{
-                diaId: diaId,
+                diaId:diaId,
+                dId:that.dId,
                 diagnosisMedicine:prescriptionList
               }
             }).then(res=>{
@@ -898,9 +945,11 @@
           })
         },
         useTemplate:function(){
+          let that = this
+          this.chooseDepartmentDialog=false;
           let diaId = 0;
           let medicineAddList=[];
-          let that = this
+          let dId = that.dId;
           for(let i = this.checkList.length - 1; i > -1; i--) {
             if (this.checkList[i]) {
               // const tempCounter = i
@@ -925,7 +974,7 @@
                 console.log('23213123', medicineAddList);
                 console.log('4343', diaId)
 
-                this.insertTemplateMedicine(diaId, medicineAddList)
+                this.insertTemplateMedicine(diaId, medicineAddList,dId)
               }).catch(err => {
                 console.log(err)
               })
@@ -933,13 +982,15 @@
 
         },
         //将模板药品放入到处方中
-        insertTemplateMedicine:function(diaId, medicineAddList){
+        insertTemplateMedicine:function(diaId, medicineAddList,dId){
           this.$axios({
             url:'diagnosis/insertDiagnosisMedicine',
             method:'post',
             data:{
               diaId:diaId,
-              diagnosisMedicine:medicineAddList
+              dId:dId,
+              diagnosisMedicine:medicineAddList,
+
             }
           }).then(response=>{
             console.log(response.data)

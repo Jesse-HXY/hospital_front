@@ -213,7 +213,8 @@
                 url:'diagnosis/getDetailByrId',
                 method:'post',
                 data:{
-                  rId:that.rId
+                  rId:that.rId,
+                  mState:'未收费'
                 }
               }).then(res=>{
                 console.log('123',res.data)

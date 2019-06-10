@@ -4,10 +4,10 @@
       <el-header >
         <el-row>
           <el-col :span="3"><div class="grid-content ">患者姓名：</div></el-col>
-          <el-col :span="4"><div class="grid-content "><el-input placeholder="输入患者姓名"></el-input>
+          <el-col :span="4"><div class="grid-content "><el-input v-model="pName" placeholder="输入患者姓名"></el-input>
           </div></el-col>
           <el-col :span="3"><div class="grid-content ">病历号：</div></el-col>
-          <el-col :span="4"><div class="grid-content "><el-input placeholder="输入患者病历号"></el-input>
+          <el-col :span="4"><div class="grid-content "><el-input v-model="rId" placeholder="输入患者病历号"></el-input>
           </div></el-col>
           <el-col :span="8"><div class="grid-content "> <el-button>搜索</el-button></div></el-col>
 
@@ -28,8 +28,14 @@
 <script>
     export default {
         data() {
-            return {msg: 'vue模板页'}
-        }
+            return {
+              pName:'',
+              rId:''
+            }
+        },
+      methods:{
+
+      }
     }
 </script>
 <style>

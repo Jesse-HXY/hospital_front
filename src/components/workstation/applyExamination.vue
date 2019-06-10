@@ -250,7 +250,6 @@
         }
       },
       created:function () {
-        console.log(this.dId);
         let that = this;
         that.orginalExaminationTemplateList = [];
         let uId = this.$cookie.get('uId');
@@ -309,7 +308,6 @@
           }).then(response=>{
             let examinationItemList = response.data.examnationItemList;
             let templateName = response.data.eTName;
-            console.log(examinationItemList);
             for(let i = 0; i < examinationItemList.length; i++){
               let examinationItem = {
                 eIFee: examinationItemList[i].eIFee,
@@ -348,7 +346,6 @@
               examinationItemList : response.data.examnationItemList,
               recordType : response.data.recordType
             };
-            console.log(examinationTemplate);
             if(examinationTemplate.scope === '科室'){
               examinationTemplate.dId = response.data.department.dId
             }
@@ -383,7 +380,6 @@
               recordType:'检查'
             }
           }).then(response=>{
-            console.log(response.data);
             for(let i = 0; i < response.data.length; i++){
               this.searchExaminationItemList.push({value:response.data[i].eIName})
             }
@@ -416,7 +412,6 @@
               appName: that.eAName,
               dId:that.executeDId
             };
-            console.log("aaaa")
             this.getDNamebyDIdAndInsertIntoEaminaitonItemList(this.executeDId,examinationItem);
           })
         },
@@ -433,8 +428,6 @@
             }
           }).then(response=>{
             examinationItem.dName = response.data[0].dName
-            console.log(examinationItem)
-            console.log(response.data)
             this.insertExamination(examinationItem)
           })
         },
@@ -443,7 +436,6 @@
          */
         insertExamination:function (examinationItem) {
           let that = this
-          console.log(examinationItem)
           this.$axios({
             url:'diagnosis/insertAndGet',
             method:'post',
@@ -456,7 +448,6 @@
             }
           }).then(response=>{
             examinationItem.eAId = response.data.eAId
-            console.log(examinationItem)
             that.examinationItemList.push(examinationItem);
             that.checkList.push(false)
           })
@@ -493,11 +484,9 @@
           for(let i = this.checkList.length - 1; i > -1; i--){
             if(this.checkList[i]){
               this.examinationItemList[i].eAStatus = '开立'
-              console.log(this.examinationItemList[i])
               eAIdList.push(this.examinationItemList[i].eAId)
             }
           }
-          console.log(this.examinationItemList)
           this.$axios({
             url:'diagnosis/updateStatus',
             method:'post',
@@ -558,7 +547,6 @@
           } else if (this.scope === '科室') {
             data.dId = this.dId
           }
-          console.log(data)
           this.$axios({
             url: 'examnationItem/insertExaminationTemplate',
             method: 'post',
@@ -583,7 +571,6 @@
               }
             }).then(response => {
               that.examinationTemplateList = that.orginalExaminationTemplateList.concat(response.data);
-              console.log(examinationTemplateList)
             })
           },
         'rId':function (rId) {
@@ -596,7 +583,6 @@
               eIFeeType:'检查费'
             }
           }).then(response=>{
-            console.log(response.data)
             for(let i = 0; i < response.data.length; i++){
               const tempCounter = i
               const examination = {
@@ -628,7 +614,7 @@
           for(let i = 0; i < examinationItemList.length; i++){
             totalFee = totalFee + examinationItemList[i].eIFee
           }
-          this.totalFee = totalFee
+          this.totalFee = Math.round(totalFee * 100) / 100
         }
       }
     }

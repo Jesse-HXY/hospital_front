@@ -344,7 +344,7 @@
                 total = total + this.itemList[i].Fee*this.itemList[i].number
               }
             }
-            this.totalFee = total
+            this.totalFee = Math.round(total * 100) / 100
         },
         'chargeFee':function (chargeFee) {
           this.returnFee = (chargeFee>this.totalFee)?Math.round((chargeFee-this.totalFee) * 100) / 100:0

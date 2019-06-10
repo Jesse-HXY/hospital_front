@@ -45,7 +45,8 @@
         &nbsp&nbsp&nbsp&nbsp
         <el-button width="100" @click="onTapSearch">查询</el-button>
         <el-button width="100"  @click="dialogFormVisible = true">增加</el-button>
-        <el-button type="primary" @click="onTapInput">导入</el-button>
+        <el-button v-if="input" type="primary" @click="onTapInput">导入</el-button>
+        <el-button v-else type="primary" disabled>导入</el-button>
 
       </el-header>
 
@@ -218,7 +219,8 @@
           /**页面总数*/
           pageCount: 1,
           /**页面大小*/
-          pageSize: 10
+          pageSize: 10,
+          input:true
         }
 
 
@@ -427,11 +429,15 @@
             url:'examnationItem/importExamnationItems',
             method:'post',
           }).then(response=>{
+            console.log(response.data)
             if(response.data){
               this.$message({
                 message: '导入成功',
                 type: 'success'
               })
+              this.getExamnationItemByPage(1);
+              this.getPageCount()
+              this.input=false
             }
           })
         }

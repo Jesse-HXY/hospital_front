@@ -77,8 +77,6 @@
             label="其他治疗费"
             width="100"></el-table-column>
         </el-table>
-      </el-main>
-      <el-footer>
         <div class="block">
           <span class="demonstration">调整每页显示条数</span>
           <el-pagination
@@ -91,7 +89,7 @@
             :total="pageCount">
           </el-pagination>
         </div>
-      </el-footer>
+      </el-main>
     </el-container>
 </template>
 

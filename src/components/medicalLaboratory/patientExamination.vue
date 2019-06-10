@@ -81,6 +81,8 @@
               eAId:this.examinationItemList[this.currentIndex].eAId,
               eAResult: this.result
             }
+          }).then(response=>{
+            this.inputResultDialog=false
           })
         },
         /**

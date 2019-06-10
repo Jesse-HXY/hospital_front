@@ -7,9 +7,12 @@
         <div class="grid-content ">
           <el-input placeholder="请输入药品助记码" v-model="searchmCode"></el-input>
         </div></el-col>
-      <el-col :span="6"><div class="grid-content "><el-button type="primary" icon="el-icon-view" @click="onTapSearch">查询药品</el-button></div></el-col>
-      <el-col :span="6"><div class="grid-content "><el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">新增药品</el-button></div></el-col>
-      <el-col :span="6"><div class="grid-content "><el-button type="primary" icon="el-icon-sell" @click="onTapInput">导入药品</el-button></div></el-col>
+      <el-col :span="3"><div class="grid-content "><el-button type="primary" icon="el-icon-view" @click="onTapSearch">查询药品</el-button></div></el-col>
+      <el-col :span="3"><div class="grid-content "><el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">新增药品</el-button></div></el-col>
+      <el-col :span="3"><div class="grid-content ">
+        <el-button v-if="input" type="primary" icon="el-icon-sell" @click="onTapInput">导入药品</el-button>
+        <el-button v-else type="primary" icon="el-icon-sell" disabled>导入药品</el-button>
+      </div></el-col>
     </el-row>
     </el-header>
     <el-main>
@@ -21,10 +24,12 @@
         prop="mCode"></el-table-column>
         <el-table-column
           label="药品名称"
-          prop="mName"></el-table-column>
+          prop="mName"
+        width="200"></el-table-column>
         <el-table-column
           label="药品规格"
-          prop="mSpecification">
+          prop="mSpecification"
+        width="200">
           <template slot-scope="scope">
             <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="mSpecification"></el-input></span>
             <span v-else style="margin-left: 10px">{{scope.row.mSpecification}}</span>
@@ -32,6 +37,7 @@
         </el-table-column>
         <el-table-column
           label="药品单位"
+          width="85"
          >
           <template slot-scope="scope">
             <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="mUnit"></el-input></span>
@@ -40,6 +46,7 @@
         </el-table-column>
         <el-table-column
           label="药品单价"
+          width="85"
          >
           <template slot-scope="scope">
             <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="mFee"></el-input></span>
@@ -48,6 +55,7 @@
         </el-table-column>
         <el-table-column
           label="药品剂型"
+          width="85"
       >
           <template slot-scope="scope">
             <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="mFormulation"></el-input></span>
@@ -56,6 +64,7 @@
         </el-table-column>
         <el-table-column
           label="药品类型"
+          width="85"
         >
           <template slot-scope="scope">
             <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-input  v-model="mType"></el-input></span>
@@ -186,7 +195,8 @@
               /**页面总数*/
               pageCount:1,
               /**页面大小*/
-              pageSize:10
+              pageSize:10,
+              input:true
             }
         },created:function(){
           this.showMedicine(1)
@@ -388,6 +398,9 @@
                 message: '导入成功',
                 type: 'success'
               })
+              this.input=false
+              this.showMedicine(1)
+              this.getPageCount()
           }
           })
         }

@@ -2,8 +2,11 @@
        
    <el-container>
   <el-header align="left">
-    <el-tag>门诊诊断：</el-tag>
-    <el-tag type="warning">【西医诊断】流行性腮腺炎</el-tag>
+    <div style="display:inline-block;white-space: nowrap; ">
+      <el-tag>门诊诊断：</el-tag>
+      <el-tag type="warning" style="white-space: nowrap; ">【西医诊断】</el-tag>
+        <el-tag v-for="disease in diseaseList" type="warning">{{disease.disease.disName}}</el-tag>
+    </div>
     <el-row :gutter="20" class=" bg-purple-light">
       <el-col :span="16" align="center">
         <div class="grid-content ">
@@ -21,8 +24,8 @@
           width="30%"
           center>
           <el-row>
-            <el-col :span="4"><div class="grid-content ">处方名称：</div></el-col>
-            <el-col :span="16"><div class="grid-content "><el-input placeholder="请输入处方名称" v-model="inputdiaName"></el-input></div></el-col>
+            <el-col :span="5"><div class="grid-content ">处方名称：</div></el-col>
+            <el-col :span="16"><div class="grid-content "><el-input size="mini" placeholder="请输入处方名称" v-model="inputdiaName"></el-input></div></el-col>
           </el-row>
           <span slot="footer" class="dialog-footer">
     <el-button @click="centerDialogVisible = false">取 消</el-button>
@@ -48,6 +51,7 @@
              placeholder="请输入内容"
              :trigger-on-focus="false"
              @select="handleSelectBymCode"
+             style="margin-left: 40px;"
            ></el-autocomplete>
          </el-form-item>
          <el-form-item label="输入药品拼音">
@@ -58,11 +62,12 @@
              placeholder="请输入内容"
              :trigger-on-focus="false"
              @select="handleSelectBymSpell"
+             style="margin-left: 40px;"
            ></el-autocomplete>
          </el-form-item>
 
-         <el-form-item label="选择执行科室" :label-width="formLabelWidth">
-           <el-select v-model="dId" filterable placeholder="请选择">
+         <el-form-item label="选择执行科室">
+           <el-select v-model="dId" filterable placeholder="请选择" style="margin-left: -10px;">
              <div v-for="item in departmentList">
                <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
              </div>
@@ -110,7 +115,7 @@
 
            </el-table-column>
          </el-table>
-          <div align="left">
+          <div align="left" style="margin-top: 10px;">
          <el-row >
            <el-col :span="11"><div class="grid-content ">用法</div></el-col>
            <el-col :span="7"><div class="grid-content "><el-input placeholder="请输入用法" v-model="inputInstruction"></el-input></div></el-col>
@@ -409,8 +414,7 @@
               inputInstruction: '',
               inputDosage: '',
               inputTimes: '',
-              inputmAmount: 0,
-              datId:0,
+              inputmAmount: '',
               totalMoney:totalMoney,
               controlDelete:false,
               controlAdd:false,
@@ -419,7 +423,7 @@
               mAmount:mAmount,
               departmentList:'',
               formLabelWidth: '120px',
-              dId:'',
+              diseaseList:[]
             }
         },
       created:function(){
@@ -1070,8 +1074,21 @@
 
       watch:{
         'checkList':'showPrescriptionDetail',
-
-
+        'rId':function (rId) {
+          let that = this
+          this.$axios({
+            url:'diagnosis/getDiagnosisTypeByrId',
+            method:'post',
+            data:{
+              rId:rId
+            }
+          }).then(response=>{
+            if(response.data[0].diaType === '西医诊断'){
+              this.diseaseList = response.data
+              console.log(this.diseaseList)
+            }
+        })
+        }
 
       }
     }

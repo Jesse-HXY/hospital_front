@@ -11,7 +11,7 @@
       <el-tag>病历内容</el-tag>
     </el-header>
     <el-main style="margin-top: -15px">
-      <el-form :label-position="right" label-width="100px">
+      <el-form :label-position="right" label-width="120px">
         <el-form-item label="主诉：">
           <el-input
             type="textarea"
@@ -118,7 +118,7 @@
             <el-form-item label="发病时间：">{{disease.time}}</el-form-item>
           </div>
           <div v-if="addDisease">
-            <el-form-item label="疾病：">
+            <el-form-item label="疾病：" style="text-align: left;">
               <!--<el-input v-model="disease.name" @blur="getDisName($event)"></el-input>-->
               <el-autocomplete
                 class="inline-input"
@@ -129,7 +129,7 @@
                 @select="handleSelect"
               ></el-autocomplete>
             </el-form-item>
-            <el-form-item label="发病时间：">
+            <el-form-item label="发病时间：" style="text-align: left;">
               <div class="block">
                 <el-date-picker
                   v-model="disease.time"
@@ -282,7 +282,12 @@
           data:{
             diagnosisTypes:this.diagnosisTypes
           }
-        }).then(response=>{}).catch(err=>{
+        }).then(response=>{
+          this.$message({
+            message: '保存成功',
+            type: 'success'
+          })
+        }).catch(err=>{
           console.log(err)
         })
       },

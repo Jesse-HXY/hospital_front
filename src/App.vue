@@ -15,7 +15,6 @@
           </el-submenu>
           <el-submenu index="1" style="text-align: left;">
             <template slot="title"><i class="el-icon-setting"></i><span style="font-weight:bold;">基础信息维护</span></template>
-            <el-menu-item index="1-1">常数类别管理</el-menu-item>
             <router-link to="/management/department"><el-menu-item index="1-2">科室管理</el-menu-item></router-link>
             <router-link to="/management/user"><el-menu-item index="1-3">用户管理</el-menu-item></router-link>
             <router-link to="/management/registrationLevel"><el-menu-item index="1-4">挂号级别管理</el-menu-item></router-link>
@@ -36,7 +35,6 @@
             <el-menu-item index="2-5">发票补打</el-menu-item>
             <el-menu-item index="2-6">发票重打</el-menu-item>
             <el-menu-item index="2-7">患者费用查询</el-menu-item>
-            <el-menu-item index="2-8">收费员日结</el-menu-item>
           </el-submenu>
           <el-submenu index="3" style="text-align: left;">
             <template slot="title"><i class="el-icon-first-aid-kit"></i><span style="font-weight:bold;">门诊医生工作站</span></template>
@@ -48,7 +46,6 @@
           <el-submenu index="4" style="text-align: left;">
             <template slot="title"><i class="el-icon-suitcase"></i><span style="font-weight:bold;">门诊医技工作站</span></template>
             <router-link to="/medicalLaboratory/medicalLaboratoryMain"><el-menu-item index="4-1">门诊医技工作站</el-menu-item></router-link>
-            <el-menu-item index="4-4">医技管理</el-menu-item>
           </el-submenu>
           <el-submenu index="5" style="text-align: left;">
             <template slot="title"><i class="el-icon-help"></i><span style="font-weight:bold;">门诊药房工作站</span></template>
@@ -58,7 +55,6 @@
           </el-submenu>
           <el-submenu index="6" style="text-align: left;">
             <template slot="title"><i class="el-icon-document"></i><span style="font-weight:bold;">门诊财务管理</span></template>
-            <el-menu-item index="6-1">费用科目管理</el-menu-item>
             <router-link to="/financeManagement/dailySettlement"><el-menu-item index="6-2">门诊日结核对</el-menu-item></router-link>
             <router-link to="/financeManagement/financeOfDepartment"><el-menu-item index="6-3">门诊科室工作量统计</el-menu-item></router-link>
             <router-link to="/financeManagement/financeOfUser"><el-menu-item index="6-4">门诊医生工作量统计</el-menu-item></router-link>
@@ -76,19 +72,6 @@
                 </template>
               </div>
           </el-header>
-        <!---->
-        <!--<el-main>-->
-          <!--<el-carousel :interval="4000" type="card" height="200px">-->
-            <!--<el-carousel-item v-for="item in 6" :key="item">-->
-              <!--<h3 class="medium">{{ item }}</h3>-->
-            <!--</el-carousel-item>-->
-          <!--</el-carousel>-->
-        <!--</el-main>-->
-
-
-
-
-
 
         <el-dialog
           title="登陆"
@@ -96,6 +79,7 @@
           width="30%"
           center>
           <span>用户名<el-input v-model="uId" placeholder="请输入用户名"></el-input></span>
+          <br><br>
           <span>密码<el-input type="password" v-model="password" placeholder="请输入密码"></el-input></span>
 
           <span slot="footer" class="dialog-footer">
@@ -127,7 +111,7 @@
     },created:function(){
       console.log("1111")
       console.log(this.$cookie.get('uId'))
-      if(this.$cookie.get('uId') != ''){
+      if(this.$cookie.get('uId') !== null){
         this.username = this.$cookie.get('username')
         this.uId = this.$cookie.get('uId')
         this.showLogin=false;
@@ -144,7 +128,7 @@
           }
         }).then(response=>{
           console.log(response.data)
-          if(response.data!=''){
+          if(response.data!==null){
             that.username = response.data.uNickName
             this.showLogin=false;
             this.centerDialogVisible=false;

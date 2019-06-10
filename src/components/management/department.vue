@@ -234,17 +234,11 @@
         this.editIndex = -1
       },
       handleEdit(index, row){
-        let that=this;
         let dId = this.departmentList[index].dId;
         let dName = this.departmentList[index].dName;
-        let dType = this.departmentList[index].dType;
-        let dCategory = this.departmentList[index].dCategory;
+        this.dType = this.departmentList[index].dType;
+        this.dCategory = this.departmentList[index].dCategory;
         this.editIndex = index;
-
-        let data={
-          dType: that.dType,
-          dCategory: that.dCategory,
-        }
 
       },
       handleDelete(index,row) {

@@ -35,7 +35,8 @@
         </el-form>
       </el-main>
       <el-footer>
-        <el-button type="primary" icon="el-icon-success" @click="onTapSubmit">提交</el-button>
+        <el-button v-if="submit" type="primary" icon="el-icon-success" @click="onTapSubmit">提交</el-button>
+        <el-button v-else type="primary" icon="el-icon-success" disabled>提交</el-button>
       </el-footer>
     </el-container>
 </template>
@@ -50,7 +51,8 @@
             rResult:'',
             diagnosisType:'',
             diseaseList:[],
-            examinationList:[]
+            examinationList:[],
+            submit:true
           }
       },created:function() {
       },methods:{
@@ -67,6 +69,12 @@
                 rStatus:'诊毕',
                 rResult: this.rResult
               }
+            }).then(response=>{
+              this.$message({
+                message: '提交成功',
+                type: 'success'
+              })
+              this.submit=false
             })
           },
         },
@@ -80,7 +88,6 @@
             rId:rId
           }
         }).then(response=>{
-          console.log(response.data)
           this.diagnosisType = response.data[0].diaType
           for(let i = 0; response.data.length; i++){
             let displayTime = new Date(response.data[i].diaTime * 1000)
@@ -102,7 +109,6 @@
             rId:rId
           }
         }).then(response=>{
-          console.log(response.data)
           this.examinationList = response.data
         })
       }

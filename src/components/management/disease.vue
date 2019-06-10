@@ -52,7 +52,8 @@
           &nbsp&nbsp&nbsp&nbsp
         <el-button width="100" @click="onTapSearch">查询</el-button>
         <el-button width="100"  @click="dialogFormVisible = true">增加</el-button>
-        <el-button @click="onTapInput">导入</el-button>
+        <el-button @click="onTapInput" v-if="input">导入</el-button>
+        <el-button @click="onTapInput" v-else disabled>导入</el-button>
 
 
       </el-header>
@@ -212,7 +213,7 @@
         pageCount:1,
         /**页面大小*/
         pageSize:10,
-
+        input:true
 
       };
     },  created: function () {
@@ -438,6 +439,9 @@
               message: '导入成功',
               type: 'success'
             })
+            this.input=false
+            this.getDiseaseType()
+            this.getPageCount()
           }
         })
       }

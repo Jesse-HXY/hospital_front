@@ -5,7 +5,8 @@
           欢迎来到东软云医院
         </span>
       </el-header>
-      <el-carousel indicator-position="outside" height="505px" style="width: 1370px;">
+      <el-main style="text-align: center;">
+      <el-carousel indicator-position="outside" height="505px" style="width: 1370px;display: inline-block;">
         <el-carousel-item v-for="picture in imageList" :key="picture">
           <el-image :src="picture"></el-image>
         </el-carousel-item>
@@ -13,16 +14,15 @@
       <el-footer>
 
         <div>
-              地　　址：
-              浑南新区新秀街2号东软集团A9楼
-          服务热线： 000-1234567
+              地　　址：浑南新区新秀街2号东软集团A9楼 服务热线： 000-1234567
         <div>
-            Copyright 2019 东软云医院 All Rights Reserved.
+            Copyright © 2019 东软云医院 All Rights Reserved.
             <br/>
             辽ICP 备 012345678号-1 文保网安备案号：012345678 辽卫网审字【2019】第39号
         </div>
         </div>
       </el-footer>
+      </el-main>
     </el-container>
 </template>
 

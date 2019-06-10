@@ -116,9 +116,7 @@
           </el-table-column>
           <el-table-column
             align="right">
-            <!--<template slot="header" slot-scope="scope">-->
-            <!--<el-button width="100" @click="onTapSearch">查询</el-button>-->
-            <!--</template>-->
+
             <template slot-scope="scope">
               <el-button
                 size="mini"

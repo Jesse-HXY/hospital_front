@@ -429,7 +429,17 @@
        * 导入
        */
       onTapInput:function () {
-
+        this.$axios({
+          url:'disease/importDiseases',
+          method:'post'
+        }).then(response=>{
+          if(response.data){
+            this.$message({
+              message: '导入成功',
+              type: 'success'
+            })
+          }
+        })
       }
     }
   }

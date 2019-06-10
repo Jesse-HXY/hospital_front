@@ -423,7 +423,17 @@
          * 导入
          */
         onTapInput:function () {
-
+          this.axios({
+            url:'examnationItem/importExamnationItems',
+            method:'post',
+          }).then(response=>{
+            if(response.data){
+              this.$message({
+                message: '导入成功',
+                type: 'success'
+              })
+            }
+          })
         }
       }
     }

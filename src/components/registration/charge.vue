@@ -277,16 +277,16 @@
                 cId: cId,
                 postDId: this.postDId
               }
-              if (this.itemList[i].eAId !== null && this.itemList[i].eAId !== 0) {
+              if (typeof(this.itemList[i].eAId) !== "undefined" ) {
+                console.log(this.itemList[i].eAId)
                 eAIdList.push(this.itemList[i].eAId)
                 account.eAId = this.itemList[i].eAId
               } else {
                 account.eAId = -1
               }
-              if (this.itemList[i].dia_M_Id !== null && this.itemList[i].dia_M_Id !== 0) {
+              if (typeof(this.itemList[i].dia_M_Id) !== "undefined") {
                 dia_M_idList.push(this.itemList[i].dia_M_Id)
                 account.dia_M_Id = this.itemList[i].dia_M_Id
-
               }
               else {
                 account.dia_M_Id = -1
@@ -322,7 +322,7 @@
                 method: 'post',
                 data: {
                   dia_M_Id: dia_M_idList,
-                  mState: '已缴费'
+                  mState: '已收费'
                 }
               }).then(response => {
                 this.onTapSearch()

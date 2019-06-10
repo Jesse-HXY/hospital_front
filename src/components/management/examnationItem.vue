@@ -45,6 +45,7 @@
         &nbsp&nbsp&nbsp&nbsp
         <el-button width="100" @click="onTapSearch">查询</el-button>
         <el-button width="100"  @click="dialogFormVisible = true">增加</el-button>
+        <el-button type="primary" @click="onTapInput">导入</el-button>
 
       </el-header>
 
@@ -418,8 +419,12 @@
         onTapGiveUp:function () {
           this.editIndex = -1
         },
+        /**
+         * 导入
+         */
+        onTapInput:function () {
 
-
+        }
       }
     }
 </script>

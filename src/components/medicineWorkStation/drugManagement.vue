@@ -9,7 +9,7 @@
         </div></el-col>
       <el-col :span="6"><div class="grid-content "><el-button type="primary" icon="el-icon-view" @click="onTapSearch">查询药品</el-button></div></el-col>
       <el-col :span="6"><div class="grid-content "><el-button type="primary" icon="el-icon-edit" @click="dialogFormVisible = true">新增药品</el-button></div></el-col>
-      <el-col :span="6"><div class="grid-content "><el-button type="primary" icon="el-icon-sell">导入药品</el-button></div></el-col>
+      <el-col :span="6"><div class="grid-content "><el-button type="primary" icon="el-icon-sell" @click="onTapInput">导入药品</el-button></div></el-col>
     </el-row>
     </el-header>
     <el-main>
@@ -374,6 +374,12 @@
          */
         handleCurrentChange:function () {
           this.showMedicine(this.currentPage)
+        },
+        /**
+         * 导入
+         */
+        onTapInput:function () {
+          
         }
       }
     }

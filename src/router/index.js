@@ -24,6 +24,7 @@ import financeOfDepartment from '@/components/financeManagement/financeOfDepartm
 import deliverMedicine from '@/components/medicineWorkStation/deliverMedicine'
 import drugManagement from '@/components/medicineWorkStation/drugManagement'
 import financeOfUser from '@/components/financeManagement/financeOfUser'
+import dailySettlement from '@/components/financeManagement/dailySettlement'
 import index from '@/components/index'
 
 import axios from 'axios'
@@ -143,6 +144,11 @@ export default new Router({
       path:'/',
       name:'index',
       component:index
+    },
+    {
+      path:'/financeManagement/dailySettlement',
+      name:'dailySettlement',
+      component:dailySettlement
     }
   ]
 })

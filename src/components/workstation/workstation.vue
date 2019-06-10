@@ -78,16 +78,18 @@
 
       </el-header>
       <el-main>
-        <el-tabs>
-          <el-tab-pane label="病历首页"><registrationMain v-bind:rId="rId"></registrationMain></el-tab-pane>
-          <el-tab-pane label="检查申请"><applyExamination v-bind:dId="dId" v-bind:rId="rId"></applyExamination></el-tab-pane>
-          <el-tab-pane label="检验申请"><testApplication v-bind:dId="dId" v-bind:rId="rId"></testApplication></el-tab-pane>
-          <el-tab-pane label="门诊确诊"><confirmed v-bind:rId="rId"></confirmed></el-tab-pane>
-          <el-tab-pane label="处置申请"><applyDispose></applyDispose></el-tab-pane>
-          <el-tab-pane label="成药处方"><medicinePrescription v-bind:did="did" v-bind:rId="rId"></medicinePrescription></el-tab-pane>
-          <el-tab-pane label="草药处方"><herbalPrescription></herbalPrescription></el-tab-pane>
-          <el-tab-pane label="费用查询"><feeInquiry></feeInquiry></el-tab-pane>
-        </el-tabs>
+        <div v-if="rId!==-1">
+          <el-tabs>
+            <el-tab-pane label="病历首页"><registrationMain v-bind:rId="rId"></registrationMain></el-tab-pane>
+            <el-tab-pane label="检查申请"><applyExamination v-bind:dId="dId" v-bind:rId="rId"></applyExamination></el-tab-pane>
+            <el-tab-pane label="检验申请"><testApplication v-bind:dId="dId" v-bind:rId="rId"></testApplication></el-tab-pane>
+            <el-tab-pane label="门诊确诊"><confirmed v-bind:rId="rId"></confirmed></el-tab-pane>
+            <el-tab-pane label="处置申请"><applyDispose></applyDispose></el-tab-pane>
+            <el-tab-pane label="成药处方"><medicinePrescription v-bind:did="did" v-bind:rId="rId"></medicinePrescription></el-tab-pane>
+            <el-tab-pane label="草药处方"><herbalPrescription></herbalPrescription></el-tab-pane>
+            <el-tab-pane label="费用查询"><feeInquiry></feeInquiry></el-tab-pane>
+          </el-tabs>
+        </div>
       </el-main>
     </el-container>
   </el-container>
@@ -118,7 +120,7 @@
         patient:{},
         departmentList:[],
         dId:'',
-        rId:0,
+        rId:-1,
         right:'right'
       };
     },created:function(){

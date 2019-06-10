@@ -23,6 +23,7 @@ import medicalLaboratoryMain from '@/components/medicalLaboratory/medicalLaborat
 import financeOfDepartment from '@/components/financeManagement/financeOfDepartment'
 import deliverMedicine from '@/components/medicineWorkStation/deliverMedicine'
 import drugManagement from '@/components/medicineWorkStation/drugManagement'
+import drugWithdrawal from '@/components/medicineWorkStation/drugWithdrawal'
 import financeOfUser from '@/components/financeManagement/financeOfUser'
 import dailySettlement from '@/components/financeManagement/dailySettlement'
 import index from '@/components/index'
@@ -149,7 +150,12 @@ export default new Router({
       path:'/financeManagement/dailySettlement',
       name:'dailySettlement',
       component:dailySettlement
-    }
+    },
+    {
+      path: '/medicineWorkStation/drugWithdrawal',
+      name:'drugWithdrawal',
+      component:drugWithdrawal
+    },
   ]
 })
 //

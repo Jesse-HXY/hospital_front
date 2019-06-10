@@ -216,7 +216,7 @@
              <template slot-scope="scope">
                <el-button
                  size="mini"
-                 @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                 @click="handleEdit(scope.$index, scope.row)" :disabled="controlAdd">编辑</el-button>
                <el-button
                  size="mini"
                  @click="handleAdd(scope.$index, scope.row)" v-if="scope.$index == editIndex">添加</el-button>
@@ -616,12 +616,13 @@
               }
             }).then(res=>{
               console.log('4334',res.data)
+              this.showPrescriptionDetail();
 
             }).catch(err=>
             {
               console.log(err)
             })
-           this.addmedicineVisible = false
+            this.addmedicineVisible = false
             this.reSet()
 
 
@@ -813,6 +814,8 @@
                 diaState: '开立'
               }
             })
+          this.controlAdd=true;
+          this.controlDelete=true;
 
         },
         updateTotalMoney:function(diaId,totalMoney){
@@ -927,6 +930,7 @@
               mId = this.medicinePrescriptionList[i].mId
               console.log("123",this.medicinePrescriptionList[i].mId)
               mIdList.push(this.medicinePrescriptionList[i].mId)
+
             }
           }
           this.$axios({
@@ -940,7 +944,8 @@
             console.log(response.data)
             for(let i = 0; i < that.medicinePrescriptionList.length; i++){
               if(that.medicinePrescriptionList[i].mId === mId){
-                that.medicinePrescriptionList.splice(i,1)
+                mIdList.splice(i,1);
+                that.medicinePrescriptionList.splice(i,1);
                 break
               }
             }

@@ -127,13 +127,6 @@
           <el-form-item label="找零金额" :label-width="formLabelWidth">
             {{returnFee}}
           </el-form-item>
-          <el-form-item label="选择开单科室" :label-width="formLabelWidth">
-            <el-select v-model="postDId" filterable placeholder="请选择">
-              <div v-for="item in departmentList">
-                <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
-              </div>
-            </el-select>
-          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -175,9 +168,6 @@
         })
       },
       methods:{
-
-
-
         onTapSearch:function () {
 
           let that = this;
@@ -190,13 +180,14 @@
             url:'registration/getRegistrationInfoByrId',
             method:'post',
             data:{
-              rId : that.searchrId,
+              rId : that.searchrId
             }
           }).then(response=>{
+            console.log(response.data)
             this.patientList = response.data;
             this.pName = response.data[0].pName
             this.rId = this.searchrId
-            this.dId=response.data[0].dId
+            this.postDId=response.data[0].dId
             this.$axios({
               url:'diagnosis/selectByrIdAndStatus',
               method: 'post',
@@ -355,7 +346,7 @@
             this.totalFee = total
         },
         'chargeFee':function (chargeFee) {
-          this.returnFee = (chargeFee>this.totalFee)?Math.floor((chargeFee-this.totalFee) * 100) / 100:0
+          this.returnFee = (chargeFee>this.totalFee)?Math.round((chargeFee-this.totalFee) * 100) / 100:0
 
         }
       }

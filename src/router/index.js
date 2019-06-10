@@ -26,6 +26,7 @@ import drugManagement from '@/components/medicineWorkStation/drugManagement'
 import drugWithdrawal from '@/components/medicineWorkStation/drugWithdrawal'
 import financeOfUser from '@/components/financeManagement/financeOfUser'
 import dailySettlement from '@/components/financeManagement/dailySettlement'
+
 import index from '@/components/index'
 
 import axios from 'axios'
@@ -156,6 +157,11 @@ export default new Router({
       name:'drugWithdrawal',
       component:drugWithdrawal
     },
+    {
+      path:'/registration/withdraw',
+      name:'withdraw',
+      component:withdraw
+    }
   ]
 })
 //

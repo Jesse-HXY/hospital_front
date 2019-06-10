@@ -17,7 +17,7 @@
       </template>
 
 
-      <el-button type="primary" icon="el-icon-search" @click="searchByrId">搜索</el-button>
+      <el-button type="primary" icon="el-icon-search" @click="onTapSearch">搜索</el-button>
     </el-header>
 
     <el-container style="height: 100%; border: 1px solid #eee;font-size: 20px">
@@ -63,91 +63,68 @@
 
         <el-main>
           <el-table
-            :data="patientList"
+            :data="itemList"
             stripe
             style="width: 100%">
-
+            <el-table-column
+              width="35">
+              <template slot-scope="scope">
+                <el-checkbox v-model="checkList[scope.$index]"></el-checkbox>
+              </template>
+            </el-table-column>
             <el-table-column
               label="病历号"
-              width="250">
-              <template slot-scope="scope">
-                <span style="margin-left: 10px">{{scope.row.rId}}</span>
-
-              </template>
+              width="100">
+              {{rId}}
             </el-table-column>
             <el-table-column
               label="姓名"
-              width="250">
+              width="100">
               <template slot-scope="scope">
-                <span  style="margin-left: 10px">{{scope.row.pName}}</span>
+                <span  style="margin-left: 10px">{{pName}}</span>
               </template>
             </el-table-column>
 
             <el-table-column
-              label="身份证号"
-              width="250">
-              <template slot-scope="scope">
-                <span   style="margin-left: 10px">{{scope.row.pId}}</span>
-              </template>
+              label="项目名称"
+              width="250"
+              prop="name">
             </el-table-column>
             <el-table-column
-            label="挂号日期"
-            width="250">
-            <template slot-scope="scope">
-              <span style="margin-left: 10px">{{scope.row.rTime}}</span>
-            </template>
-          </el-table-column>
-            <el-table-column
-              label="挂号午别"
-              width="250">
-              <template slot-scope="scope">
-                <span  style="margin-left: 10px">{{scope.row.morningOrEvening}}</span>
-              </template>
+              label="单价"
+              width="100"
+              prop="Fee">
             </el-table-column>
             <el-table-column
-              label="看诊科室"
-              width="250">
-              <template slot-scope="scope">
-                <span  style="margin-left: 10px">{{scope.row.dName}}</span>
-              </template>
+              label="数量"
+              width="50"
+              prop="number">
             </el-table-column>
             <el-table-column
-              label="看诊状态"
-              width="250">
-              <template slot-scope="scope">
-                <span  style="margin-left: 10px">{{scope.row.rStatus}}</span>
-              </template>
+              label="开立时间"
+              width="250"
+              prop="displayTime">
             </el-table-column>
-
-
             <el-table-column
-              align="right"
-            label="操作">
-
-              <template slot-scope="scope">
-<!---->
-                <el-button
-                  v-if="scope.row.okToWithdraw==true"
-                  size="mini"
-                  type="danger"
-                  @click="handleDelete(scope.$index, scope.row)">
-                  退号
-                </el-button>
-                <el-button v-else disabled  size="mini"
-                           type="primary">退号</el-button>
-              </template>
+              label="状态"
+              width="250"
+              prop="status">
             </el-table-column>
           </el-table>
-          <el-dialog
-            title="退号"
-            :visible.sync="centerDialogVisible"
-            width="30%"
-            center>
-            <span>应退挂号费 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<el-tag align="right">0元</el-tag></span>
-             <div align="right">
-            <el-button type="primary" @click="centerDialogVisible=false">确 定</el-button>
-             </div>
-          </el-dialog>
+          <div style="margin-top: 10px;">
+            合计:{{totalFee}}
+            <el-button type="primary" icon="el-icon-goods" @click="withdralMoney">退费</el-button>
+          </div>
+          <!--<el-dialog-->
+            <!--title="退号"-->
+            <!--:visible.sync="centerDialogVisible"-->
+            <!--width="30%"-->
+            <!--center>-->
+            <!--<span>应退挂号费 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<el-tag align="right">0元</el-tag></span>-->
+             <!--<div align="right">-->
+            <!--<el-button type="primary" @click="centerDialogVisible=false">确 定</el-button>-->
+             <!--</div>-->
+          <!--</el-dialog>-->
 
 
 
@@ -169,88 +146,159 @@
 
     data(){
 
-      //
-      let rId=0;
-      let pName='';
-      let pId='';
-      let rDate='';
-      let morningOrEvening='';
-      let dName='';
-      let rStatus='';
-      let pAddress='';
-      let okToWithdraw='';
-      let patientList = [];
+
+
       return{
-        rId :rId,
-        pName : pName,
-        pId : pId,
-        rDate: rDate,
-        morningOrEvening:morningOrEvening,
-        dName:dName,
-        rStatus:rStatus,
-        pAddress:pAddress,
-        okToWithdraw:okToWithdraw,
-        patientList:patientList,
+
         searchrId:'',
-        rTime:'',
-        centerDialogVisible:false,
+        patientList:[],
+        pName:'',
+        rId: '',
+        itemList: [],
+        mList:[],
+        totalFee:0.0,
+        checkList:[],
+        formLabelWidth: '120px',
+        dialogFormVisible:false,
+        chargeFee:'',
+        payType:'',
+        returnFee:'',
+        postDId:'',
+        dId:''
       }
     },
-    methods:{
+    methods: {
 
+      onTapSearch: function () {
 
-      update:function(index){
-        this.patientList[index].okToWithdraw=false;
-        this.patientList[index].rStatus='已退号';
-      },
-
-
-       searchByrId:function () {
-         let that = this;
-         this.$axios({
-           url:'registration/getRegistrationInfoByrId',
-           method:'post',
-           data:{
-             rId : that.searchrId,
-           }
-         }).then(response=>{
-           console.log(response.data);
-
-           this.patientList = response.data;
-         }).catch(err=>{
-           console.log(err)
-         })
-       },
-
-      handleDelete(index,row) {
-
-        let rId = this.patientList[index].rId;
-        let rStatus = this.patientList[index].rStatus;
-        this.centerDialogVisible=true;
         let that = this;
-
-       // this.patientList.splice(index,1);
+        that.itemList = []
+        that.checkList = []
+        /**
+         * 搜索已经开立的非药品
+         * **/
         this.$axios({
-          url:'registration/updateRStatus',
-          method:'post',
-          data:
-            {
-              rId:rId,
-              rStatus:'已退号',
-              rResult:''
-            },
+          url: 'registration/getRegistrationInfoByrId',
+          method: 'post',
+          data: {
+            rId: that.searchrId
+          }
+        }).then(response => {
+          console.log(response.data)
+          this.patientList = response.data;
+          this.pName = response.data[0].pName
+          this.rId = this.searchrId
+          this.postDId = response.data[0].dId
+          this.$axios({
+            url: 'diagnosis/selectByrIdAndStatus',
+            method: 'post',
+            data: {
+              rId: that.rId,
+              eAStatus: '已收费'
+            }
+          }).then(response => {
+            for (let i = 0; i < response.data.length; i++) {
+              let item = response.data[i]
+              item.Fee = item.examnationItem.eIFee
+              item.feeType = item.examnationItem.eIFeeType
+              item.name = item.examnationItem.eIName
+              item.status = item.eAStatus
+              let eTDate = new Date(response.data[i].beginTime * 1000)
+              item.displayTime = eTDate.toLocaleDateString().replace(/\//g, "-") + " " + eTDate.toTimeString().substr(0, 8)
+              item.number = 1
+              that.itemList.push(item)
+              that.checkList.push(false)
+            }
+            console.log(that.itemList)
+            this.axios({
+              url: 'diagnosis/getDetailByrId',
+              method: 'post',
+              data: {
+                rId: that.rId,
+                mState: '已退药'
+              }
+            }).then(res => {
+              console.log('123', res.data)
+              for (let i = 0; i < res.data.length; i++) {
+                let eTDate = new Date(res.data[i].useDate * 1000)
+                let medicine = res.data[i];
+                let medicineList = {
+                  dia_M_Id: medicine.dia_M_Id,
+                  name: medicine.mName,
+                  Fee: medicine.mFee,
+                  number: medicine.mAmount,
+                  status: '已退药',
+                  displayTime: eTDate.toLocaleDateString().replace(/\//g, "-") + " " + eTDate.toTimeString().substr(0, 8),
+                  dId: medicine.dId,
+                  feeType: medicine.mType,
+                }
 
-        }).then(function (response) {
+                that.itemList.push(medicineList)
 
-          console.log(response.data);
-          that.update(index);
-        }).catch(function (error) {
-          console.log(error)
+
+                that.checkList.push(false)
+
+              }
+            })
+          })
+
+        }).catch(err => {
+          console.log(err)
         })
-        console.log(index,row);
-      },
 
-    }
+      },
+      withdralMoney: function () {
+        let that = this
+        let eAIdList = [];
+        let mIdList = [];
+        let eAFee = [];
+        let medicineFee=[];
+
+        console.log('jyhj',that.itemList)
+        for (let i = 0; i < this.checkList.length; i++) {
+          if (this.checkList[i]) {
+            console.log('iii',that.itemList[i])
+            eAIdList.push(that.itemList[i].eAId)
+            mIdList.push(that.itemList[i].dia_M_Id)
+            if(that.itemList[i].feeType==='中药'||that.itemList[i].feeType==='西药'){
+              medicineFee.push(that.itemList[i].number * that.itemList[i].Fee)
+            }
+              else
+            {
+              eAFee.push(that.itemList[i].number * that.itemList[i].Fee)
+            }
+
+
+          }
+
+        }
+        // console.log('1', eAIdList)
+        // console.log('2', mIdList)
+        // console.log('3', eAFee)
+        // console.log('4', medicineFee)
+
+        //
+        // this.$axios({
+        //   url:'',
+        //   method:'post'
+        // })
+      }
+      }, watch: {
+
+        'checkList': function (checkList) {
+          let that = this
+          let total = 0.0
+          for (let i = 0; i < checkList.length; i++) {
+            if (checkList[i]) {
+              total = total + this.itemList[i].Fee * this.itemList[i].number
+            }
+          }
+          that.totalFee = total
+        },
+
+
+      }
+
 
   }
 

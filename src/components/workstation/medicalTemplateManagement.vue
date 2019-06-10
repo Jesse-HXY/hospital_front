@@ -197,7 +197,8 @@
             dId:'',
             showDetail:false,
             isAdd:false,
-            eTId:0
+            eTId:0,
+
           }
       },created:function(){
         let that = this
@@ -416,7 +417,8 @@
           this.scope = ''
           this.dId = ''
           this.examinationItemList = []
-        }
+        },
+
       }
     }
 </script>

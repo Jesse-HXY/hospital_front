@@ -258,30 +258,43 @@
         for (let i = 0; i < this.checkList.length; i++) {
           if (this.checkList[i]) {
             console.log('iii',that.itemList[i])
-            eAIdList.push(that.itemList[i].eAId)
-            mIdList.push(that.itemList[i].dia_M_Id)
+
+
             if(that.itemList[i].feeType==='中药'||that.itemList[i].feeType==='西药'){
               medicineFee.push(that.itemList[i].number * that.itemList[i].Fee)
+              mIdList.push(that.itemList[i].dia_M_Id)
             }
               else
             {
               eAFee.push(that.itemList[i].number * that.itemList[i].Fee)
+              eAIdList.push(that.itemList[i].eAId)
             }
 
 
           }
 
         }
-        // console.log('1', eAIdList)
-        // console.log('2', mIdList)
-        // console.log('3', eAFee)
-        // console.log('4', medicineFee)
+        console.log('1', eAIdList)
+        console.log('2', mIdList)
+        console.log('3', eAFee)
+        console.log('4', medicineFee)
 
-        //
-        // this.$axios({
-        //   url:'',
-        //   method:'post'
-        // })
+
+        this.$axios({
+          url:'account/returnMoney',
+          method:'post',
+          data:{
+            eAIds:eAIdList,
+            eAFee:eAFee,
+            dia_M_Ids:mIdList,
+            medicineFee:medicineFee
+          }
+        }).then(response=>{
+          console.log(response)
+        }).catch(err=>{
+          console.log(err)
+        })
+        this.onTapSearch()
       }
       }, watch: {
 

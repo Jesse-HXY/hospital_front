@@ -575,6 +575,7 @@
           },
         'rId':function (rId) {
             let that = this
+          this.examinationItemList = []
           this.$axios({
             url:'diagnosis/selectByrIdAndEIFeeType',
             method:'post',

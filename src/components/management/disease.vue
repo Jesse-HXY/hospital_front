@@ -1,7 +1,7 @@
 
 <template>
 
-  <el-container style="height: 100%; border: 1px solid #eee">
+  <el-container >
 
     <el-aside width="150px" style="background-color: rgb(238, 241, 246)" >
       <el-menu :default-openeds="['1', '3']" >
@@ -219,21 +219,11 @@
     },  created: function () {
       this.getDiseaseType();
 
-      this.getPageCount()
+    //  this.getPageCount()
     },
     methods: {
-      // showDiseaseType: function () {
-      //   let that = this;
-      //   this.axios({
-      //     url: 'disease/getDiseaseByPage',
-      //     method: 'post'
-      //   }).then(response => {
-      //     that.diseaseList = response.data
-      //     console.log(response)
-      //   }).catch(err => {
-      //     console.log(err)
-      //   })
-      // },
+
+
       handleAdd(index, row){
         let that = this
         let disId= this.diseaseList[index].disId;
@@ -302,6 +292,7 @@
       },
       getDiseaseType:function(){
         let that = this;
+
         this.$axios({
           url:'disease/getDiseaseType',
           method:'post',
@@ -318,6 +309,9 @@
 
       getDiseasesByPage: function (pageNum,type) {
         let that = this;
+
+        this.getPageCount()
+
         pageNum = pageNum - 1
         pageNum = pageNum * that.pageSize;
         console.log('123',type)
@@ -335,6 +329,7 @@
           console.log(type);
           that.diseaseList = response.data
           that.pageType = type
+
         }).catch(err => {
           console.log(err)
         })
@@ -407,16 +402,25 @@
         console.log(index, row);
       },
       getPageCount:function(){
+
         let that = this
-        this.$axios({
-          url:"disease/getPageCount",
-          method:"post"
-        }).then(response=>{
-          console.log(response.data)
-          that.pageCount = response.data
-        }).catch(err=>{
-          console.log(err)
-        })
+        console.log('dede',that.pageType)
+          this.$axios({
+            url: "disease/getPageCount",
+            method: "post",
+            data: {
+              disType: that.pageType
+            }
+          }).then(response => {
+            console.log('123456', response.data)
+            that.pageCount = response.data
+          }).catch(err => {
+            console.log(err)
+          })
+
+      },
+      reSetPageCount:function(){
+        this.pageCount=0;
       },
       reSet:function () {
         this.disId = ""

@@ -14,72 +14,78 @@
         </div></el-col>
         <el-col :span="6"><div class="grid-content ">
           <el-button @click="onTapSearch">查询</el-button>
-          <el-button>发药</el-button>
+          <el-button @click="withdrawalMedicine">退药</el-button>
         </div></el-col>
 
       </el-row>
     </el-header>
     <el-main>
-      <el-table>
+      <el-table :data="searchResult">
+        <el-table-column
+          width="25px">
+          <template slot-scope="scope">
+            <el-checkbox v-model="checkList[scope.$index]"></el-checkbox>
+          </template>
+        </el-table-column>
         <el-table-column
           label="药品编码"
-          prop="">
+          prop="mCode">
 
         </el-table-column>
         <el-table-column
           label="药品名称"
-          prop="">
+          prop="mName">
 
         </el-table-column>
         <el-table-column
           label="药品拼音"
-          prop="">
+          prop="mSpell">
 
         </el-table-column>
         <el-table-column
           label="规格"
-          prop="">
+          prop="mSpecification">
 
         </el-table-column>
         <el-table-column
           label="单位"
-          prop="">
+          prop="mUnit">
 
         </el-table-column>
         <el-table-column
           label="产家"
-          prop="">
+          prop="mProducer">
 
         </el-table-column>
 
         <el-table-column
           label="类型"
-          prop="">
+          prop="mType">
 
         </el-table-column>
         <el-table-column
           label="单价"
-          prop="">
+          prop="mFee">
 
         </el-table-column>
         <el-table-column
           label="用法"
-          prop="">
+          prop="instruction">
 
         </el-table-column>
         <el-table-column
           label="用量"
-          prop="">
+          prop="dosage">
 
         </el-table-column>
         <el-table-column
           label="频次"
-          prop="">
+          prop="times">
 
         </el-table-column>
         <el-table-column
           label="数量"
-          prop="">
+          prop="mAmount">
 
         </el-table-column>
 
@@ -97,24 +103,77 @@
         searchrId:'',
         searchDate:'',
         searchResult:[],
+        checkList:[],
       }
     },
     methods:{
       onTapSearch:function(){
         let that = this;
         this.$axios({
-          url: "",
+          url: "account/getAlreadyDrawMedicineByRIdAndTime",
           method:"post",
           data:{
-            searchrId:that.searchrId,
-            searchDate:that.searchDate,
+           rId:that.searchrId,
+            Date:that.searchDate,
           }
         }).then(response => {
           that.searchResult = response.data;
+          console.log(response.data)
         }).catch(err=>{
           console.log(err)
         })
       },
+      withdrawalMedicine:function () {
+        // let that = this;
+        // console.log('cc',that.searchResult)
+        // let dia_M_Id_List =[]
+        // let feeList=[]
+        // for(let i = this.checkList.length - 1; i > -1; i--) {
+        //   if (this.checkList[i]) {
+        //     dia_M_Id_List.push(that.searchResult[i].dia_M_Id)
+        //     feeList.push(that.searchResult[i].mFee * that.searchResult[i].mAmount)
+        //   }
+        // }
+        // console.log(feeList)
+        // this.$axios({
+        //   url:'',
+        //   method:'post',
+        //   data:{
+        //     dia_M_Id:dia_M_Id_List,
+        //     Fee:feeList
+        //   }
+        // }).then(response=>{
+        //   console.log(response.data)
+        //   this.onTapSearch()
+        // }).catch(err=>{
+        //   console.log(err)
+        // })
+
+        let that = this;
+        console.log('cc',that.searchResult)
+        let dia_M_Id_List =[]
+        for(let i = this.checkList.length - 1; i > -1; i--) {
+          if (this.checkList[i]) {
+            dia_M_Id_List.push(that.searchResult[i].dia_M_Id)
+          }
+        }
+        this.$axios({
+          url:'diagnosis/updateMStateBydia_M_Id',
+          method:'post',
+          data:{
+            dia_M_Id:dia_M_Id_List,
+            mState:'已退药',
+          }
+        }).then(response=>{
+          console.log(response.data)
+          this.onTapSearch()
+        }).catch(err=>{
+          console.log(err)
+        })
+
+
+
+      }
     }
   }
 </script>

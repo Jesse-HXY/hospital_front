@@ -26,7 +26,7 @@ import drugManagement from '@/components/medicineWorkStation/drugManagement'
 import drugWithdrawal from '@/components/medicineWorkStation/drugWithdrawal'
 import financeOfUser from '@/components/financeManagement/financeOfUser'
 import dailySettlement from '@/components/financeManagement/dailySettlement'
-import reprintInvoice from '@/components/registration/reprintInvoice'
+import withdrawRegistration from '@/components/registration/withdrawRegistration'
 import index from '@/components/index'
 
 import axios from 'axios'
@@ -163,9 +163,9 @@ export default new Router({
       component:withdraw
     },
     {
-      path:'/registration/reprintInvoice',
-      name:'reprintInvoice',
-      component:reprintInvoice
+      path:'/registration/withdrawRegistration',
+      name:'withdrawRegistration',
+      component:withdrawRegistration
     }
   ]
 })

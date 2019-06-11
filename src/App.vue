@@ -29,7 +29,7 @@
           <el-submenu index="2" style="text-align: left">
             <template slot="title"><i class="el-icon-wallet"></i><span style="font-weight:bold;">门诊挂号收费</span></template>
             <router-link to="/registration/registration"><el-menu-item index="2-1">现场挂号</el-menu-item></router-link>
-            <router-link to="/registration/withdraw"><el-menu-item index="2-2">退号</el-menu-item></router-link>
+            <router-link to="/registration/withdrawRegistration"><el-menu-item index="2-2">退号</el-menu-item></router-link>
             <router-link to="/registration/charge"><el-menu-item index="2-3">收费</el-menu-item></router-link>
             <router-link to="/registration/withdraw"> <el-menu-item index="2-4">退费</el-menu-item></router-link>
             <el-menu-item index="2-5">发票补打</el-menu-item>

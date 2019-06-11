@@ -318,6 +318,7 @@
           rId: rId,
           cId: this.$cookie.get('uId'),
           postDId: this.dId
+
         }
         let accounts = []
         accounts.push(account)

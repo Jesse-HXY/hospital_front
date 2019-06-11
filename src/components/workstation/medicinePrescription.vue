@@ -631,7 +631,9 @@
             this.$axios({
               url:'diagnosis/selectByCondition',
               method:'post',
-              data:{}
+              data:{
+                rId:this.rId
+              }
             }).then(response=>{
               console.log(response.data)
               this.diagnosisList=response.data
@@ -962,7 +964,6 @@
           for(let i = this.checkList.length - 1; i > -1; i--) {
             if (this.checkList[i]) {
               // const tempCounter = i
-              console.log("cnm", this.diagnosisList[i].diaId)
               diaId = this.diagnosisList[i].diaId
             }
           }
@@ -1093,6 +1094,7 @@
               console.log(this.diseaseList)
             }
         })
+          this.showPrescription()
         }
 
       }

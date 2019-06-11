@@ -114,6 +114,7 @@
         <el-form-item label="输入项目名称">
           <el-autocomplete
             class="inline-input"
+            width="400"
             v-model="searchEIName"
             :fetch-suggestions="querySearch"
             placeholder="请输入内容"

@@ -133,6 +133,35 @@
           <el-button type="primary" @click="onTapConfirm" >确 定</el-button>
         </div>
       </el-dialog>
+      <!------------------------------------------------发票界面-------------------------------------------------------->
+      <el-dialog :visible.sync="invoiceDialogVisible" width="500px">
+        发票编号:{{iId}}
+          <el-table
+            :data="payList"
+            stripe
+            style="width: 500px">
+
+            <el-table-column
+              label="项目名称"
+              width="250"
+              prop="name">
+            </el-table-column>
+            <el-table-column
+              label="单价"
+              width="150"
+              prop="Fee">
+            </el-table-column>
+            <el-table-column
+              label="数量"
+              width="100"
+              prop="number">
+            </el-table-column>
+          </el-table>
+          <div slot="footer" class="dialog-footer">
+            合计:{{invoiceFee}}
+            <el-button type="primary" @click="invoiceDialogVisible = false" >确 定</el-button>
+          </div>
+      </el-dialog>
     </el-container>
 
   </el-container>
@@ -156,7 +185,12 @@
             payType:'',
             returnFee:'',
             postDId:'',
-            dId:''
+            dId:'',
+            accIdList:[],
+            invoiceDialogVisible:false,
+            payList:[],
+            iId:'',
+            invoiceFee:0.0,
           }
       },created:function(){
         let that = this
@@ -169,7 +203,6 @@
       },
       methods:{
         onTapSearch:function () {
-
           let that = this;
           that.itemList = []
           that.checkList = []
@@ -217,7 +250,6 @@
                   mState:'未收费'
                 }
               }).then(res=>{
-                console.log('123',res.data)
                 for(let i =0; i<res.data.length;i++){
                   let eTDate = new Date(res.data[i].useDate * 1000)
                   let medicine = res.data[i];
@@ -248,13 +280,14 @@
          */
         onTapCharge:function () {
           this.dialogFormVisible = true
-          this.chargeFee = 0
+          this.chargeFee = ''
           this.payType = ''
         },
         /**
          * 点击收费的确认
          */
         onTapConfirm:function () {
+          this.invoiceFee = this.totalFee
           if (this.chargeFee < this.totalFee) {
             alert("来医院坑钱你的良心不会痛吗")
             return
@@ -263,15 +296,17 @@
           let accounts = []
           let eAIdList = []
           let dia_M_idList = []
-
+          this.accIdList = []
+          this.payList = []
           for (let i = 0; i < this.checkList.length; i++) {
 
             if (this.checkList[i]) {
+              this.payList.push(this.itemList[i])
               let currentTime = new Date()
               let account = {
                 dId: this.itemList[i].dId,
                 payTime: currentTime.getTime() / 1000,
-                fee: this.itemList[i].Fee,
+                fee: this.itemList[i].Fee * this.itemList[i].number,
                 feeType: this.itemList[i].feeType,
                 payType: this.payType,
                 rId: this.rId,
@@ -299,43 +334,41 @@
             url: 'account/insertAccount',
             method: 'post',
             data: {
-              accounts: accounts
+              accounts: accounts,
+              iStatus:'生效'
             }
           }).then(response => {
+            this.iId = response.data
+            this.invoiceDialogVisible = true
           }).catch(err => {
             console.log(err)
           })
 
-              this.$axios({
-                url: 'diagnosis/updateStatus',
-                method: 'post',
-                data: {
-                  eAIdList: eAIdList,
-                  eAStatus: '已收费'
-                }
-              }).then(response => {
-                this.onTapSearch()
-                this.dialogFormVisible = false
-              })
-
-              this.axios({
-                url: 'diagnosis/updateMStateBydia_M_Id',
-                method: 'post',
-                data: {
-                  dia_M_Id: dia_M_idList,
-                  mState: '已收费'
-                }
-              }).then(response => {
-                this.onTapSearch()
-                this.dialogFormVisible = false
-              }).then(err => {
-                console.log(err)
-              })
-
-
-
-        }
-
+          this.$axios({
+            url: 'diagnosis/updateStatus',
+            method: 'post',
+            data: {
+              eAIdList: eAIdList,
+              eAStatus: '已收费'
+            }
+          }).then(response => {
+            this.onTapSearch()
+            this.dialogFormVisible = false
+          })
+          this.axios({
+            url: 'diagnosis/updateMStateBydia_M_Id',
+            method: 'post',
+            data: {
+              dia_M_Id: dia_M_idList,
+              mState: '已收费'
+            }
+          }).then(response => {
+            this.onTapSearch()
+            this.dialogFormVisible = false
+          }).then(err => {
+            console.log(err)
+          })
+        },
       },watch:{
           'searchrId':'onTapSearch',
         'checkList':function (checkList) {

@@ -33,7 +33,7 @@
             <router-link to="/registration/charge"><el-menu-item index="2-3">收费</el-menu-item></router-link>
             <router-link to="/registration/withdraw"> <el-menu-item index="2-4">退费</el-menu-item></router-link>
             <el-menu-item index="2-5">发票补打</el-menu-item>
-            <el-menu-item index="2-6">发票重打</el-menu-item>
+            <router-link to="/registration/reprintInvoice"><el-menu-item index="2-6">发票重打</el-menu-item></router-link>
             <el-menu-item index="2-7">患者费用查询</el-menu-item>
           </el-submenu>
           <el-submenu index="3" style="text-align: left;">

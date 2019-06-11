@@ -232,12 +232,8 @@
                   dId: medicine.dId,
                   feeType: medicine.mType,
                 }
-
                 that.itemList.push(medicineList)
-
-
                 that.checkList.push(false)
-
               }
             })
           })
@@ -257,7 +253,6 @@
         console.log('jyhj',that.itemList)
         for (let i = 0; i < this.checkList.length; i++) {
           if (this.checkList[i]) {
-            console.log('iii',that.itemList[i])
 
 
             if(that.itemList[i].feeType==='中药'||that.itemList[i].feeType==='西药'){
@@ -269,15 +264,9 @@
               eAFee.push(that.itemList[i].number * that.itemList[i].Fee)
               eAIdList.push(that.itemList[i].eAId)
             }
-
-
           }
 
         }
-        console.log('1', eAIdList)
-        console.log('2', mIdList)
-        console.log('3', eAFee)
-        console.log('4', medicineFee)
 
 
         this.$axios({
@@ -291,6 +280,7 @@
           }
         }).then(response=>{
           console.log(response)
+          this.onTapSearch()
         }).catch(err=>{
           console.log(err)
         })
@@ -306,7 +296,7 @@
               total = total + this.itemList[i].Fee * this.itemList[i].number
             }
           }
-          that.totalFee = total
+          that.totalFee = Math.round(total*100)/100
         },
 
 

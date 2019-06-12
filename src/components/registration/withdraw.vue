@@ -326,23 +326,37 @@
         }
 
 
-        this.$axios({
-          url:'account/returnMoney',
-          method:'post',
-          data:{
-            eAIds:eAIdList,
-            eAFee:eAFee,
-            dia_M_Ids:mIdList,
-            medicineFee:medicineFee
-          }
-        }).then(response=>{
-          this.invoiceDialogVisible = true
-          this.refundIId = response.data[0]
-          this.remainIId = response.data[1]
-          this.onTapSearch()
-        }).catch(err=>{
-          console.log(err)
-        })
+        if(eAIdList.length===0 && mIdList.length===0){
+          this.$message({
+            message:"请先选择你想要退费的项目或药物",
+            type:'warning'
+          })
+        }
+
+        else {
+          this.$axios({
+            url: 'account/returnMoney',
+            method: 'post',
+            data: {
+              eAIds: eAIdList,
+              eAFee: eAFee,
+              dia_M_Ids: mIdList,
+              medicineFee: medicineFee
+            }
+          }).then(response => {
+            this.invoiceDialogVisible = true
+            this.refundIId = response.data[0]
+            this.remainIId = response.data[1]
+            this.onTapSearch()
+          }).catch(err => {
+            console.log(err)
+          })
+          this.$message({
+            message:"退费成功",
+            type:'success'
+          })
+
+        }
       }
       }, watch: {
 

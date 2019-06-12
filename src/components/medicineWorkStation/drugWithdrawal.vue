@@ -10,7 +10,12 @@
           <el-input placeholder="请输入病历号" v-model="searchrId"></el-input>
         </div></el-col>
         <el-col :span="6"><div class="grid-content ">
-          <el-input placeholder="请输入时间" v-model="searchDate"></el-input>
+          <el-date-picker
+            v-model="searchDate"
+            type="date"
+            placeholder="选择日期"
+            :picker-options="pickerOptions"
+          ></el-date-picker>
         </div></el-col>
         <el-col :span="6"><div class="grid-content ">
           <el-button @click="onTapSearch">查询</el-button>
@@ -104,11 +109,37 @@
         searchDate:'',
         searchResult:[],
         checkList:[],
+        pickerOptions: {
+          disabledDate(time) {
+            return time.getTime() > Date.now();
+          },
+          shortcuts: [{
+            text: '今天',
+            onClick(picker) {
+              picker.$emit('pick', new Date());
+            }
+          }, {
+            text: '昨天',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24);
+              picker.$emit('pick', date);
+            }
+          }, {
+            text: '一周前',
+            onClick(picker) {
+              const date = new Date();
+              date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+              picker.$emit('pick', date);
+            }
+          }]
+        }
       }
     },
     methods:{
       onTapSearch:function(){
         let that = this;
+        this.searchDate = this.covertDate(this.searchDate)
         this.$axios({
           url: "account/getAlreadyDrawMedicineByRIdAndTime",
           method:"post",
@@ -122,6 +153,19 @@
         }).catch(err=>{
           console.log(err)
         })
+      },
+      covertDate:function(date){
+        let year =date.getFullYear();//获取完整的年份(4位,1970-????)
+        let month = date.getMonth() + 1;//获取当前月份(0-11,0代表1月)
+        let day = date.getDate();//获取当前日(1-31)
+        if (month < 10) {
+          month ="0" + month;
+        }
+        if (day < 10) {
+          day ="0" + day;
+        }
+        let dateString = year +"-" + month + "-" + day;
+        return dateString
       },
       withdrawalMedicine:function () {
         // let that = this;
@@ -155,6 +199,8 @@
         for (let i = this.checkList.length - 1; i > -1; i--) {
           if (this.checkList[i]) {
             dia_M_Id_List.push(that.searchResult[i].dia_M_Id)
+            this.searchResult.splice(i,1)
+            this.checkList.splice(i,1)
           }
         }
         if (dia_M_Id_List.length === 0) {
@@ -163,7 +209,6 @@
             type: 'warning'
           })
         } else {
-
         this.$axios({
           url: 'diagnosis/updateMStateBydia_M_Id',
           method: 'post',
@@ -173,7 +218,6 @@
           }
         }).then(response => {
           console.log(response.data)
-          this.onTapSearch()
         }).catch(err => {
           console.log(err)
         })
@@ -188,30 +232,4 @@
   }
 </script>
 <style>
-  .el-row {
-    margin-bottom: 20px;
-  &:last-child {
-     margin-bottom: 0;
-   }
-  }
-  .el-col {
-    border-radius: 4px;
-  }
-  .bg-purple-dark {
-    background: #99a9bf;
-  }
-  .bg-purple {
-    background: #d3dce6;
-  }
-  .bg-purple-light {
-    background: #e5e9f2;
-  }
-  .grid-content {
-    border-radius: 4px;
-    min-height: 36px;
-  }
-  .row-bg {
-    padding: 10px 0;
-    background-color: #f9fafc;
-  }
 </style>

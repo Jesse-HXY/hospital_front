@@ -189,6 +189,8 @@
           for(let i = this.checkList.length - 1; i > -1; i--) {
             if (this.checkList[i]) {
               dia_M_Id_List.push(that.searchResult[i].dia_M_Id)
+              this.searchResult.splice(i,1)
+              this.checkList.splice(i,1)
             }
           }
           if(dia_M_Id_List.length===0){
@@ -207,7 +209,6 @@
               }
             }).then(response => {
               console.log(response.data)
-              this.onTapSearch()
             }).catch(err => {
               console.log(err)
             })

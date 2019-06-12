@@ -548,6 +548,7 @@
 
                 for(let i =0;i<response.data.medicines.length;i++){
                   that.totalMoney += response.data.medicines[i].mFee * response.data.medicines[i].mAmount
+                  that.totalMoney = Math.round(that.totalMoney * 100) /100
                 }
               }).catch(err => {
                 console.log(err)

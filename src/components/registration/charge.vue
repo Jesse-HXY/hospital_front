@@ -135,6 +135,7 @@
       </el-dialog>
       <!------------------------------------------------发票界面-------------------------------------------------------->
       <el-dialog :visible.sync="invoiceDialogVisible" width="500px">
+        <div id="pdfDom">
         发票编号:{{iId}}
           <el-table
             :data="payList"
@@ -157,9 +158,11 @@
               prop="number">
             </el-table-column>
           </el-table>
+        </div>
           <div slot="footer" class="dialog-footer">
             合计:{{invoiceFee}}
-            <el-button type="primary" @click="invoiceDialogVisible = false" >确 定</el-button>
+            <el-button type="primary" @click="invoiceDialogVisible = false" >取消</el-button>
+            <el-button type="primary" @click="invoiceDialogVisible = false, getPdf()">打印</el-button>
           </div>
       </el-dialog>
     </el-container>
@@ -173,6 +176,7 @@
       data(){
           return{
             searchrId:'',
+            htmlTitle:'',
             patientList:[],
             pName:'',
             rId: '',
@@ -382,7 +386,9 @@
         },
         'chargeFee':function (chargeFee) {
           this.returnFee = (chargeFee>this.totalFee)?Math.round((chargeFee-this.totalFee) * 100) / 100:0
-
+        },
+        'iId':function (iId) {
+          this.htmlTitle = '发票' + iId
         }
       }
     }

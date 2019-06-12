@@ -28,6 +28,7 @@ import financeOfUser from '@/components/financeManagement/financeOfUser'
 import dailySettlement from '@/components/financeManagement/dailySettlement'
 import withdrawRegistration from '@/components/registration/withdrawRegistration'
 import index from '@/components/index'
+import reprintInvoice from '@/components/registration/reprintInvoice'
 
 import axios from 'axios'
 Vue.prototype.axios = axios
@@ -166,6 +167,11 @@ export default new Router({
       path:'/registration/withdrawRegistration',
       name:'withdrawRegistration',
       component:withdrawRegistration
+    },
+    {
+      path:'/registration/reprintInvoice',
+      name:'reprintInvoice',
+      component:reprintInvoice
     }
   ]
 })

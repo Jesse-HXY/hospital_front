@@ -7,6 +7,8 @@ import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import axios from 'axios';
 import VueCookie from 'vue-cookie'
+import htmlToPdf from '@/components/utils/htmlToPdf/htmlToPdf'
+Vue.use(htmlToPdf)
 Vue.use(VueCookie)
 // var axios = require('axios');
 

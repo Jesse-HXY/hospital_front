@@ -1,4 +1,3 @@
-<script src="../../js/pinyin.js"></script>
 <template>
 
   <el-container style="height: 100%; border: 1px solid #eee;">
@@ -131,6 +130,59 @@
 
 
         </el-main>
+        <el-dialog :visible.sync="invoiceDialogVisible" width="500px">
+          <div id="pdfDom">
+          冲红发票编号:{{refundIId}}
+          <el-table
+            :data="refundItemList"
+            stripe
+            style="width: 500px">
+
+            <el-table-column
+              label="项目名称"
+              width="250"
+              prop="name">
+            </el-table-column>
+            <el-table-column
+              label="单价"
+              width="150"
+              prop="Fee">
+            </el-table-column>
+            <el-table-column
+              label="数量"
+              width="100"
+              prop="number">
+            </el-table-column>
+          </el-table>
+          新发票编号:{{remainIId}}
+          <el-table
+            :data="remainItemList"
+            stripe
+            style="width: 500px">
+
+            <el-table-column
+              label="项目名称"
+              width="250"
+              prop="name">
+            </el-table-column>
+            <el-table-column
+              label="单价"
+              width="150"
+              prop="Fee">
+            </el-table-column>
+            <el-table-column
+              label="数量"
+              width="100"
+              prop="number">
+            </el-table-column>
+          </el-table>
+          <div slot="footer" class="dialog-footer">
+            合计:{{invoiceFee}}
+            <el-button type="primary" @click="invoiceDialogVisible = false" >确 定</el-button>
+            <el-button type="primary" @click="invoiceDialogVisible = false , getPdf()" >打印</el-button>
+          </div>
+          </div>
+        </el-dialog>
       </el-container>
 
   </el-container>
@@ -164,7 +216,13 @@
         payType:'',
         returnFee:'',
         postDId:'',
-        dId:''
+        dId:'',
+        refundItemList:[],
+        remainItemList:[],
+        refundIId:'',
+        remainIId:'',
+        invoiceDialogVisible:false,
+        htmlTitle:''
       }
     },
     methods: {
@@ -249,12 +307,10 @@
         let mIdList = [];
         let eAFee = [];
         let medicineFee=[];
-
-        console.log('jyhj',that.itemList)
+        this.refundItemList = []
+        this.remainItemList = []
         for (let i = 0; i < this.checkList.length; i++) {
           if (this.checkList[i]) {
-
-
             if(that.itemList[i].feeType==='中药'||that.itemList[i].feeType==='西药'){
               medicineFee.push(that.itemList[i].number * that.itemList[i].Fee)
               mIdList.push(that.itemList[i].dia_M_Id)
@@ -264,8 +320,10 @@
               eAFee.push(that.itemList[i].number * that.itemList[i].Fee)
               eAIdList.push(that.itemList[i].eAId)
             }
+            this.refundItemList.push(this.itemList[i])
+          }else{
+            this.remainItemList.push(this.itemList[i])
           }
-
         }
 
 
@@ -279,12 +337,13 @@
             medicineFee:medicineFee
           }
         }).then(response=>{
-          console.log(response)
+          this.invoiceDialogVisible = true
+          this.refundIId = response.data[0]
+          this.remainIId = response.data[1]
           this.onTapSearch()
         }).catch(err=>{
           console.log(err)
         })
-        this.onTapSearch()
       }
       }, watch: {
 
@@ -298,8 +357,9 @@
           }
           that.totalFee = Math.round(total*100)/100
         },
-
-
+      'refundIId':function (refundIid) {
+        this.htmlTitle = '发票编号' + refundIid
+      }
       }
 
 

@@ -155,18 +155,18 @@
         pushAccountIntoAccounts:function(tempDepartment,data){
           this.accounts.push({
             dName:tempDepartment.dName,
-            visits:data.visits,
-            diagnosticFee:data.diagnosticFee,
-            examinationFee:data.examinationFee,
+            visits:Math.round(data.visits * 100) / 100,
+            diagnosticFee:Math.round(data.diagnosticFee * 100) / 100,
+            examinationFee:Math.round(data.examinationFee * 100) / 100,
             invoiceNum:data.invoiceNum,
-            materialFee:data.materialFee,
-            otherFee:data.otherFee,
-            registrationFee:data.registrationFee,
-            surgeryFee:data.surgeryFee,
-            treatmentFee:data.treatmentFee,
-            xyFee:data.xyFee,
-            zyFee:data.zyFee,
-            testFee:data.testFee
+            materialFee:Math.round(data.materialFee * 100) / 100,
+            otherFee:Math.round(data.otherFee * 100) / 100,
+            registrationFee:Math.round(data.registrationFee * 100) / 100,
+            surgeryFee:Math.round(data.surgeryFee * 100) / 100,
+            treatmentFee:Math.round(data.treatmentFee * 100) / 100,
+            xyFee:Math.round(data.xyFee * 100) / 100,
+            zyFee:Math.round(data.zyFee * 100) / 100,
+            testFee:Math.round(data.testFee * 100) / 100
           })
         },
         /**

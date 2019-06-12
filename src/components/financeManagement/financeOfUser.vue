@@ -110,17 +110,17 @@
               this.accounts.push({
                 uName:tempUser.uName,
                 visits:response.data.visits,
-                diagnosticFee:response.data.diagnosticFee,
-                examinationFee:response.data.examinationFee,
+                diagnosticFee:Math.round(response.data.diagnosticFee * 100)/100,
+                examinationFee:Math.round(response.data.examinationFee * 100)/100,
                 invoiceNum:response.data.invoiceNum,
-                materialFee:response.data.materialFee,
-                otherFee:response.data.otherFee,
-                registrationFee:response.data.registrationFee,
-                surgeryFee:response.data.surgeryFee,
-                treatmentFee:response.data.treatmentFee,
-                xyFee:response.data.xyFee,
-                zyFee:response.data.zyFee,
-                testFee:response.data.testFee
+                materialFee:Math.round(response.data.materialFee * 100) /100,
+                otherFee:Math.round(response.data.otherFee * 100) / 100,
+                registrationFee:Math.round(response.data.registrationFee * 100) / 100,
+                surgeryFee:Math.round(response.data.surgeryFee * 100) / 100,
+                treatmentFee:Math.round(response.data.treatmentFee * 100) / 100,
+                xyFee:Math.round(response.data.xyFee * 100) / 100,
+                zyFee:Math.round(response.data.zyFee * 100) / 100,
+                testFee:Math.round(response.data.testFee * 100) / 100
               })
             })
           }

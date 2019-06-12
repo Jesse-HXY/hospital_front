@@ -148,16 +148,28 @@
           let that = this
           let beginDate = this.covertDate(this.dateRange[0])
           let endDate = this.covertDate(this.dateRange[1])
-          this.$axios({
-            url:'arrangement/insertArrangement',
-            method:'post',
-            data:{
-              dId:that.dId,
-              plan:that.generateList(),
-              beginDate:beginDate,
-              endDate:endDate
-            }
-          })
+
+          if(this.generateList()===0){
+            this.$message({
+              message:"请先选择规则",
+              type:'warning'
+            })
+          }else {
+            this.$axios({
+              url: 'arrangement/insertArrangement',
+              method: 'post',
+              data: {
+                dId: that.dId,
+                plan: that.generateList(),
+                beginDate: beginDate,
+                endDate: endDate
+              }
+            })
+            this.$message({
+              message:"新增排班规则生成成功",
+              type:'success'
+            })
+          }
         },
         /**
          * 生成uId与plan的列表

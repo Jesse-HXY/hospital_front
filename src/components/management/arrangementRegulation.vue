@@ -201,20 +201,33 @@
           console.log(that.dId)
           console.log(that.rLName)
           console.log(resultList)
-          this.$axios({
-            url: 'arrangementRegulation/insertArrangementRegulation',
-            method: 'post',
-            data:{
-              dId:that.dId,
-              rLName: that.rLName,
-              aRName:that.aRName,
-              resultList:resultList
-            }
-          }).then(response=>{
 
-          }).catch(err=>{
-            console.log(err)
-          })
+          if(resultList.length===0){
+            this.$message({
+              message:"请先选择需要参与排班的人",
+              type:'warning'
+            })
+          }else {
+            this.$axios({
+              url: 'arrangementRegulation/insertArrangementRegulation',
+              method: 'post',
+              data: {
+                dId: that.dId,
+                rLName: that.rLName,
+                aRName: that.aRName,
+                resultList: resultList
+              }
+            }).then(response => {
+
+            }).catch(err => {
+              console.log(err)
+            })
+            this.$message({
+              message:"保存成功",
+              type:'success'
+            })
+
+          }
         },
         /**
          * 计算排班plan的值

@@ -150,29 +150,39 @@
         // })
 
         let that = this;
-        console.log('cc',that.searchResult)
-        let dia_M_Id_List =[]
-        for(let i = this.checkList.length - 1; i > -1; i--) {
+        console.log('cc', that.searchResult)
+        let dia_M_Id_List = []
+        for (let i = this.checkList.length - 1; i > -1; i--) {
           if (this.checkList[i]) {
             dia_M_Id_List.push(that.searchResult[i].dia_M_Id)
           }
         }
+        if (dia_M_Id_List.length === 0) {
+          this.$message({
+            message: "请先选择你想要退回的药物",
+            type: 'warning'
+          })
+        } else {
+
         this.$axios({
-          url:'diagnosis/updateMStateBydia_M_Id',
-          method:'post',
-          data:{
-            dia_M_Id:dia_M_Id_List,
-            mState:'已退药',
+          url: 'diagnosis/updateMStateBydia_M_Id',
+          method: 'post',
+          data: {
+            dia_M_Id: dia_M_Id_List,
+            mState: '已退药',
           }
-        }).then(response=>{
+        }).then(response => {
           console.log(response.data)
           this.onTapSearch()
-        }).catch(err=>{
+        }).catch(err => {
           console.log(err)
         })
+          this.$message({
+            message:"退药成功",
+            type:'success'
+          })
 
-
-
+      }
       }
     }
   }

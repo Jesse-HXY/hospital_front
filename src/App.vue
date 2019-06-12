@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <el-container style="height: 1000px; border: 1px solid #eee; margin-top: -60px;">
+    <el-container style="height: 800px; border: 1px solid #eee; margin-top: -60px;">
       <el-aside style="height: 100%;width: auto;margin-top: 40px;">
         <div v-if="isCollapse"><el-button type="text" @click="isCollapse=false" size="mini">展开</el-button></div>
         <div v-else><el-button type="text" @click="isCollapse=true">收起</el-button></div>
@@ -13,7 +13,7 @@
               </el-menu-item>
             </router-link>
           </el-submenu>
-          <el-submenu index="1" style="text-align: left;">
+          <el-submenu v-if="uCategory === '医院管理员' || uCategory === '院长'" index="1" style="text-align: left;">
             <template slot="title"><i class="el-icon-setting"></i><span style="font-weight:bold;">基础信息维护</span></template>
             <router-link to="/management/department"><el-menu-item index="1-2">科室管理</el-menu-item></router-link>
             <router-link to="/management/user"><el-menu-item index="1-3">用户管理</el-menu-item></router-link>
@@ -26,34 +26,32 @@
               <router-link to="/management/arrangement"><el-menu-item index="1-8">生成排班计划</el-menu-item></router-link>
             </el-menu-item-group>
           </el-submenu>
-          <el-submenu index="2" style="text-align: left">
+          <el-submenu v-if="uCategory === '挂号收费员' || uCategory === '院长'" index="2" style="text-align: left">
             <template slot="title"><i class="el-icon-wallet"></i><span style="font-weight:bold;">门诊挂号收费</span></template>
             <router-link to="/registration/registration"><el-menu-item index="2-1">现场挂号</el-menu-item></router-link>
             <router-link to="/registration/withdrawRegistration"><el-menu-item index="2-2">退号</el-menu-item></router-link>
             <router-link to="/registration/charge"><el-menu-item index="2-3">收费</el-menu-item></router-link>
             <router-link to="/registration/withdraw"> <el-menu-item index="2-4">退费</el-menu-item></router-link>
-            <el-menu-item index="2-5">发票补打</el-menu-item>
             <router-link to="/registration/reprintInvoice"><el-menu-item index="2-6">发票重打</el-menu-item></router-link>
-            <el-menu-item index="2-7">患者费用查询</el-menu-item>
           </el-submenu>
-          <el-submenu index="3" style="text-align: left;">
+          <el-submenu v-if="uCategory === '门诊医生' || uCategory === '院长'" index="3" style="text-align: left;">
             <template slot="title"><i class="el-icon-first-aid-kit"></i><span style="font-weight:bold;">门诊医生工作站</span></template>
             <router-link to="/workstation/workstation"><el-menu-item index="3-1">门诊病历首页</el-menu-item></router-link>
             <router-link to="/workstation/medicalTemplateManagement"><el-menu-item index="3-10">医技模板管理</el-menu-item></router-link>
             <router-link to="/workstation/westernMedicine_template"><el-menu-item index="3-11">西药处方模板管理</el-menu-item></router-link>
             <router-link to="/workstation/chineseMedicine_template"><el-menu-item index="3-12">中药处方模板管理</el-menu-item></router-link>
           </el-submenu>
-          <el-submenu index="4" style="text-align: left;">
+          <el-submenu v-if="uCategory === '医技医生' || uCategory === '院长'" index="4" style="text-align: left;">
             <template slot="title"><i class="el-icon-suitcase"></i><span style="font-weight:bold;">门诊医技工作站</span></template>
             <router-link to="/medicalLaboratory/medicalLaboratoryMain"><el-menu-item index="4-1">门诊医技工作站</el-menu-item></router-link>
           </el-submenu>
-          <el-submenu index="5" style="text-align: left;">
+          <el-submenu v-if="uCategory === '药房操作员' || uCategory === '院长'" index="5" style="text-align: left;">
             <template slot="title"><i class="el-icon-help"></i><span style="font-weight:bold;">门诊药房工作站</span></template>
             <router-link to="/medicineWorkStation/deliverMedicine"><el-menu-item index="5-1">门诊发药</el-menu-item></router-link>
             <router-link to="/medicineWorkStation/drugWithdrawal"><el-menu-item index="5-2">门诊退药</el-menu-item></router-link>
            <router-link to="/medicineWorkStation/drugManagement"> <el-menu-item index="5-3">药品管理</el-menu-item></router-link>
           </el-submenu>
-          <el-submenu index="6" style="text-align: left;">
+          <el-submenu v-if="uCategory === '财务管理员' || uCategory === '院长'" index="6" style="text-align: left;">
             <template slot="title"><i class="el-icon-document"></i><span style="font-weight:bold;">门诊财务管理</span></template>
             <router-link to="/financeManagement/dailySettlement"><el-menu-item index="6-2">门诊日结核对</el-menu-item></router-link>
             <router-link to="/financeManagement/financeOfDepartment"><el-menu-item index="6-3">门诊科室工作量统计</el-menu-item></router-link>
@@ -106,7 +104,8 @@
         username:'',
         password:'',
         isCollapse: true,
-        centerDialogVisible:false
+        centerDialogVisible:false,
+        uCategory:''
       }
     },created:function(){
       console.log("1111")
@@ -114,22 +113,28 @@
       if(this.$cookie.get('uId') !== null){
         this.username = this.$cookie.get('username')
         this.uId = this.$cookie.get('uId')
+        this.uCategory = this.$cookie.get('uCategory')
         this.showLogin=false;
       }
     }, methods:{
       handleShow:function () {
         let that = this
+        let uId = Number(this.uId)
+        console.log(typeof uId)
+        console.log(typeof this.uId)
         this.$axios({
           url:'user/login',
           method:'post',
           data:{
-            uId:that.uId,
+            uId:Number(that.uId),
             uPassword:that.password
           }
         }).then(response=>{
           console.log(response.data)
           if(response.data!==null){
             that.username = response.data.uNickName
+            that.uCategory = response.data.uCategory
+            this.$cookie.set("uCategory", that.uCategory)
             this.showLogin=false;
             this.centerDialogVisible=false;
             this.$cookie.set('uId', response.data.uId);
@@ -148,6 +153,7 @@
         this.showLogin=true;
         this.$cookie.delete('uId')
         this.$cookie.delete('username')
+        this.$cookie.delete('uCategory')
       },
       /**
        * 登陆

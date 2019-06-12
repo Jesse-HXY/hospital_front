@@ -70,7 +70,7 @@
         <el-form-item label="应收金额：" :label-width="formLabelWidth" style="text-align:left">
           {{rFee}}元
         </el-form-item>
-        <el-button width="100" type="primary" @click="onTapSave">保存<i class="el-icon-success el-icon--right"></i>
+        <el-button width="100" type="primary" @click="onTapSave" :disabled="save">保存<i class="el-icon-success el-icon--right"></i>
         </el-button>
       </el-form>
     </el-main>
@@ -138,7 +138,8 @@
         userList: '',
         rFee: 0.0,
         rLFee: 0.0,
-        leftLimitation:0
+        leftLimitation:0,
+        save:true,
       }
     },
     created: function () {
@@ -202,14 +203,17 @@
             pId: that.pId
           }
         }).then(responese => {
-          if (responese.data.length == 0) {
+          if (responese.data.length === 0) {
             alert("无此患者")
           }
-          that.pSex = responese.data.pSex
-          that.pAddress = responese.data.pAddress
-          that.pBirth = responese.data.pBirth
-          that.pName = responese.data.pName
-          that.pAddress = responese.data.pAddress
+          else {
+            that.save=false;
+            that.pSex = responese.data.pSex
+            that.pAddress = responese.data.pAddress
+            that.pBirth = responese.data.pBirth
+            that.pName = responese.data.pName
+            that.pAddress = responese.data.pAddress
+          }
         })
         console.log(e.target.value)
       },
@@ -280,28 +284,44 @@
         if (this.hasMedicineRecord === 'true') {
           hasMedicineRecord = 1
         }
+
         let that = this
         let currentDate = new Date().getTime();
-        this.$axios({
-          url: 'registration/insertRegistration',
-          method: 'post',
-          data: {
-            pId: that.pId,
-            payType: that.payType,
-            rLName: that.rLName,
-            dId: that.dId,
-            uId: that.uId,
-            hasMedicalHistory: hasMedicineRecord,
-            rFee: that.rFee,
-            rDate: currentDate,
-            postDId: that.dId
-          }
-        }).then(response => {
-          console.log(response.data)
-          this.insertIntoAccount(response.data)
-        }).catch(err => {
-          console.log(err)
-        })
+        if(that.payType===''||that.rLName===''||that.dId==='')
+        {
+          this.$message({
+            message: '请先填写完整挂号信息',
+            type: 'warning'
+          })
+        }
+        else {
+          this.$axios({
+            url: 'registration/insertRegistration',
+            method: 'post',
+            data: {
+              pId: that.pId,
+              payType: that.payType,
+              rLName: that.rLName,
+              dId: that.dId,
+              uId: that.uId,
+              hasMedicalHistory: hasMedicineRecord,
+              rFee: that.rFee,
+              rDate: currentDate,
+              postDId: that.dId
+            }
+          }).then(response => {
+            console.log(response.data)
+
+            this.insertIntoAccount(response.data)
+          }).catch(err => {
+            console.log(err)
+          })
+          this.$message({
+            message: "挂号完成，请到门诊首页诊断疾病",
+            type: 'success'
+          });
+        }
+
       },
       /**
        * 将挂号插入account

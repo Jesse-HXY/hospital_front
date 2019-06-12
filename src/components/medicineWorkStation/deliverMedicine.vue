@@ -140,19 +140,31 @@
               dia_M_Id_List.push(that.searchResult[i].dia_M_Id)
             }
           }
-         this.$axios({
-           url:'diagnosis/updateMStateBydia_M_Id',
-           method:'post',
-           data:{
-                dia_M_Id:dia_M_Id_List,
-                mState:'已发药',
-           }
-         }).then(response=>{
-           console.log(response.data)
-           this.onTapSearch()
-         }).catch(err=>{
-           console.log(err)
-         })
+          if(dia_M_Id_List.length===0){
+            this.$message({
+              message:"请先选择你想要发的药",
+              type:'warning'
+            })
+          }
+          else {
+            this.$axios({
+              url: 'diagnosis/updateMStateBydia_M_Id',
+              method: 'post',
+              data: {
+                dia_M_Id: dia_M_Id_List,
+                mState: '已发药',
+              }
+            }).then(response => {
+              console.log(response.data)
+              this.onTapSearch()
+            }).catch(err => {
+              console.log(err)
+            })
+            this.$message({
+              message:"发药成功",
+              type:'success'
+            })
+          }
 
 
         }

@@ -818,7 +818,10 @@
             })
           this.controlAdd=true;
           this.controlDelete=true;
-
+          this.$message({
+            message: '开立成功，请到缴费界面缴费',
+            type: 'success'
+          });
         },
         updateTotalMoney:function(diaId,totalMoney){
           this.$axios({

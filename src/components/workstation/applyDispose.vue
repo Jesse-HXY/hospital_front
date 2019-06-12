@@ -495,6 +495,10 @@
             eAStatus: '开立'
           }
         })
+        this.$message({
+          message: '开立成功，请到缴费界面缴费',
+          type: 'success'
+        });
       },
       /**
        * 废除项目

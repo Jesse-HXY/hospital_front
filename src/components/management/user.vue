@@ -119,7 +119,7 @@
           label="真实姓名"
           width="100">
           <template slot-scope="scope">
-            <span v-if="scope.$index == editIndex" style="margin-left: 10px"><el-input
+            <span v-if="scope.$index == editIndex" style="margin-left: 10px"><el-input style="width: 100px;"
               v-model="uName"></el-input></span>
             <span v-else style="margin-left: 10px">{{scope.row.uName}}</span>
           </template>
@@ -221,11 +221,6 @@
         radio: '',
         radioArrange: '',
 
-        /** 筛选所用数据 */
-        // searchuId: 0,
-        // searchuNickName: '',
-        // searchuCategory: '',
-        // searchuName: '',
         searchdId:'',
 
         /** 更新添加所用数据 **/
@@ -322,6 +317,7 @@
        */
       onTapUpdate: function (index,row) {
         this.editIndex = index
+        console.log(row)
         this.resetUser()
       },
       /**

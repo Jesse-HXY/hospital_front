@@ -55,7 +55,7 @@
       <!------------------------------------------------发票对话框------------------------------------------------------>
       <el-dialog :visible.sync="invoiceDialogVisible" width="500px">
         <div id="pdfDom">
-        发票编号:{{newiId}}
+        发票编号:{{newiId}} &nbsp; &nbsp; 合计:{{totalFee}}
         <el-table
           :data="itemList"
           stripe
@@ -77,11 +77,10 @@
             prop="number">
           </el-table-column>
         </el-table>
+        </div>
         <div slot="footer" class="dialog-footer">
-          合计:{{totalFee}}
           <el-button type="primary" @click="invoiceDialogVisible = false" >确 定</el-button>
           <el-button type="primary" @click="getPdf() , invoiceDialogVisible = false">打印</el-button>
-        </div>
         </div>
       </el-dialog>
     </el-container>

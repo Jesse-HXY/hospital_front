@@ -109,12 +109,12 @@
           <el-button type="primary" icon="el-icon-goods" @click="onTapCharge">收费结算</el-button>
         </div>
       </el-main>
-      <el-dialog title="收费" :visible.sync="dialogFormVisible" width="350px" >
+      <el-dialog title="收费" :visible.sync="dialogFormVisible" width="300px" >
         <el-form>
           <el-form-item label="应收金额" :label-width="formLabelWidth">
             {{totalFee}}
           </el-form-item>
-          <el-form-item label="支付方式" :label-width="formLabelWidth" >
+          <el-form-item label="支付方式" :label-width="formLabelWidth" style="text-align: left;">
             <el-select v-model="payType"   placeholder="请选择支付方式">
               <el-option label="自费" value="自费"></el-option>
               <el-option label="医保" value="医保"></el-option>
@@ -136,7 +136,7 @@
       <!------------------------------------------------发票界面-------------------------------------------------------->
       <el-dialog :visible.sync="invoiceDialogVisible" width="500px">
         <div id="pdfDom">
-        发票编号:{{iId}}
+        发票编号:{{iId}}  &nbsp; &nbsp; 合计:{{invoiceFee}}
           <el-table
             :data="payList"
             stripe
@@ -160,7 +160,6 @@
           </el-table>
         </div>
           <div slot="footer" class="dialog-footer">
-            合计:{{invoiceFee}}
             <el-button type="primary" @click="invoiceDialogVisible = false" >取消</el-button>
             <el-button type="primary" @click="invoiceDialogVisible = false, getPdf()">打印</el-button>
           </div>
@@ -213,6 +212,7 @@
           /**
            * 搜索已经开立的非药品
            * **/
+          console.log(that.rId)
           this.$axios({
             url:'registration/getRegistrationInfoByrId',
             method:'post',

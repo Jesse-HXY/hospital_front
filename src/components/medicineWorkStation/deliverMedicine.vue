@@ -10,18 +10,28 @@
        <el-input placeholder="请输入病历号" v-model="searchrId"></el-input>
       </div></el-col>
       <el-col :span="6"><div class="grid-content ">
-        <el-input placeholder="请输入时间" v-model="searchDate"></el-input>
-        <!--<el-date-picker-->
-          <!--v-model="searchDate"-->
-          <!--type="date"-->
-          <!--placeholder="选择日期">-->
-        <!--</el-date-picker>-->
+        <!--<el-input placeholder="请输入时间" v-model="searchDate"></el-input>-->
+        <!--<div class="block">-->
+          <!--<el-date-picker-->
+            <!--v-model="searchDate"-->
+            <!--align="right"-->
+            <!--type="date"-->
+            <!--placeholder="选择日期"-->
+            <!--&gt;-->
+          <!--</el-date-picker>-->
+        <!--</div>-->
+        <el-date-picker
+          v-model="searchDate"
+          type="date"
+          placeholder="选择日期"
+          :picker-options="pickerOptions"
+        >
+        </el-date-picker>
       </div></el-col>
       <el-col :span="6"><div class="grid-content ">
         <el-button @click="onTapSearch">查询</el-button>
         <el-button @click="deliverMedicine">发药</el-button>
       </div></el-col>
-
     </el-row>
     </el-header>
     <el-main>
@@ -110,11 +120,38 @@
               searchResult:[],
               dia_M_Id:'',
               checkList:[],
+              pickerOptions: {
+                disabledDate(time) {
+                  return time.getTime() > Date.now();
+                },
+                shortcuts: [{
+                  text: '今天',
+                  onClick(picker) {
+                    picker.$emit('pick', new Date());
+                  }
+                }, {
+                  text: '昨天',
+                  onClick(picker) {
+                    const date = new Date();
+                    date.setTime(date.getTime() - 3600 * 1000 * 24);
+                    picker.$emit('pick', date);
+                  }
+                }, {
+                  text: '一周前',
+                  onClick(picker) {
+                    const date = new Date();
+                    date.setTime(date.getTime() - 3600 * 1000 * 24 * 7);
+                    picker.$emit('pick', date);
+                  }
+                }]
+              },
             }
         },
       methods:{
         onTapSearch:function(){
           let that = this;
+          this.searchDate = this.covertDate(this.searchDate)
+          console.log(this.searchDate)
           this.$axios({
             url: "account/getMedicineByRIdAndTime",
             method:"post",
@@ -129,6 +166,20 @@
           }).catch(err=>{
             console.log(err)
           })
+        },
+
+        covertDate:function(date){
+          let year =date.getFullYear();//获取完整的年份(4位,1970-????)
+          let month = date.getMonth() + 1;//获取当前月份(0-11,0代表1月)
+          let day = date.getDate();//获取当前日(1-31)
+          if (month < 10) {
+            month ="0" + month;
+          }
+          if (day < 10) {
+            day ="0" + day;
+          }
+          let dateString = year +"-" + month + "-" + day;
+          return dateString
         },
 
         deliverMedicine:function () {

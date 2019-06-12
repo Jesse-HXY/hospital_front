@@ -27,7 +27,7 @@
         </el-form-item>
       </el-form>
     </el-aside>
-    <el-main>
+    <el-main style="width: 500px;">
       <el-form style="margin-top: -20px;text-align:left; width: 460px;">
         <el-form-item label="结算类别：" :label-width="formLabelWidth" style="text-align:left">
           <el-select v-model="payType" placeholder="请选结算类别">
@@ -58,8 +58,7 @@
               <el-option :key="item.uId" :value="item.uId" :label="item.uName"></el-option>
             </div>
           </el-select>
-
-          该医生今日还可挂{{leftLimitation}}人
+          今日还可挂{{leftLimitation}}人
         </el-form-item>
         <el-form-item label="是否要病历本：" :label-width="formLabelWidth" style="text-align: left;">
           <el-radio-group v-model="hasMedicineRecord" @change="changeRecord">

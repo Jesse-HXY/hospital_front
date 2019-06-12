@@ -1,4 +1,3 @@
-<script src="../../js/pinyin.js"></script>
 <template>
 
   <el-container style="height: 100%; border: 1px solid #eee">
@@ -42,6 +41,8 @@
         &nbsp&nbsp&nbsp&nbsp
         <el-button width="100" @click="onTapSearch">查询</el-button>
         <el-button width="100"  @click="dialogFormVisible = true">增加</el-button>
+        <el-button width="100" v-if="canImport" @click="onTapImport">导入</el-button>
+        <el-button width="100" v-else disabled>导入</el-button>
 
       </el-header>
 
@@ -189,7 +190,8 @@
         /**页面总数*/
         pageCount:1,
         /**页面大小*/
-        pageSize:10
+        pageSize:10,
+        canImport:true
       }
 
     },
@@ -362,6 +364,16 @@
        */
       handleCurrentChange:function () {
         this.getDepartmentsByPage(this.currentPage)
+      },
+      onTapImport:function () {
+        this.$axios({
+          url:'department/importDepartment',
+          method:'post'
+        }).then(response=>{
+          this.getDepartmentsByPage(1)
+          this.getPageCount()
+          this.canImport = false
+        })
       }
     }
   }

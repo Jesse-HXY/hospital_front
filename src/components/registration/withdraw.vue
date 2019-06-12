@@ -154,7 +154,7 @@
               prop="number">
             </el-table-column>
           </el-table>
-          新发票编号:{{remainIId}}
+          新发票编号:{{remainIId}}  &nbsp; &nbsp;合计:{{invoiceFee}}
           <el-table
             :data="remainItemList"
             stripe
@@ -176,11 +176,10 @@
               prop="number">
             </el-table-column>
           </el-table>
+          </div>
           <div slot="footer" class="dialog-footer">
-            合计:{{invoiceFee}}
             <el-button type="primary" @click="invoiceDialogVisible = false" >确 定</el-button>
             <el-button type="primary" @click="invoiceDialogVisible = false , getPdf()" >打印</el-button>
-          </div>
           </div>
         </el-dialog>
       </el-container>

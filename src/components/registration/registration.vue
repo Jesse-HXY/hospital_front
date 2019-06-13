@@ -336,7 +336,8 @@
           payType: this.payType,
           rId: rId,
           cId: this.$cookie.get('uId'),
-          postDId: this.dId
+          postDId: this.dId,
+          uId:this.uId
 
         }
         let accounts = []

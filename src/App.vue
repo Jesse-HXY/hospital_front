@@ -151,6 +151,8 @@
        */
       logout:function () {
         this.showLogin=true;
+        this.uId = ''
+        this.password = ''
         this.$cookie.delete('uId')
         this.$cookie.delete('username')
         this.$cookie.delete('uCategory')

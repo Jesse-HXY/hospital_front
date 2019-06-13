@@ -194,6 +194,7 @@
             payList:[],
             iId:'',
             invoiceFee:0.0,
+            uId:''
           }
       },created:function(){
         let that = this
@@ -327,6 +328,7 @@
               if (typeof(this.itemList[i].dia_M_Id) !== "undefined") {
                 dia_M_idList.push(this.itemList[i].dia_M_Id)
                 account.dia_M_Id = this.itemList[i].dia_M_Id
+                account.uId = this.uId
               }
               else {
                 account.dia_M_Id = -1
@@ -389,6 +391,17 @@
         },
         'iId':function (iId) {
           this.htmlTitle = '发票' + iId
+        },
+        'rId':function(rId){
+            this.$axios({
+              url:'registration/getRegistrationInfoByrId',
+              method:'post',
+              data:{
+                rId:rId
+              }
+            }).then(response=>{
+              this.uId = response.data[0].uId
+            })
         }
       }
     }

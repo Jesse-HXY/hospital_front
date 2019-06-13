@@ -149,6 +149,8 @@
           let beginDate = this.covertDate(this.dateRange[0])
           let endDate = this.covertDate(this.dateRange[1])
 
+          console.log(that.generateList())
+
           if(this.generateList()===0){
             this.$message({
               message:"请先选择规则",
@@ -185,7 +187,7 @@
               /** user的序号 */
               let index = userList.indexOf(that.doctorList[i].uId)
               //判断是否已经存储了这个user
-              if(index == -1){
+              if(index === -1){
                 userList.push(that.doctorList[i].uId)
                 let plan = that.doctorList[i].arPlanList
                 planList.push(plan)
@@ -221,7 +223,7 @@
         calculatePlan:function (planList) {
           let result = 0
           for(let i = 0; i < planList.length; i++){
-            if(planList[i] != 0){
+            if(planList[i] !== 0){
               result = result + Math.pow(2,13-i)
             }
           }

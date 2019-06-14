@@ -268,11 +268,10 @@
             }
             console.log(that.itemList)
             this.axios({
-              url: 'diagnosis/getDetailByrId',
+              url: 'diagnosis/getCanReturnDetailByrId',
               method: 'post',
               data: {
-                rId: that.rId,
-                mState: '已退药'
+                rId: that.rId
               }
             }).then(res => {
               console.log('123', res.data)
@@ -284,7 +283,7 @@
                   name: medicine.mName,
                   Fee: medicine.mFee,
                   number: medicine.mAmount,
-                  status: '已退药',
+                  status: medicine.mState,
                   displayTime: eTDate.toLocaleDateString().replace(/\//g, "-") + " " + eTDate.toTimeString().substr(0, 8),
                   dId: medicine.dId,
                   feeType: medicine.mType,

@@ -181,7 +181,6 @@
       let disName='';
       let disCode='';
       let disType='';
-      let navData=[];
       let diseaseList=[];
       let editIndex = -1;
       let type=[];
@@ -310,6 +309,7 @@
       getDiseasesByPage: function (pageNum,type) {
         let that = this;
 
+        this.pageType = type
         this.getPageCount()
 
         pageNum = pageNum - 1
@@ -326,6 +326,7 @@
           }
         }).then(response => {
           console.log(response.data);
+          console.log(this.pageCount)
           console.log(type);
           that.diseaseList = response.data
           that.pageType = type
@@ -413,6 +414,7 @@
             }
           }).then(response => {
             console.log('123456', response.data)
+            console.log(response.data)
             that.pageCount = response.data
           }).catch(err => {
             console.log(err)

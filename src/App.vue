@@ -81,7 +81,7 @@
           <span>密码<el-input type="password" v-model="password" placeholder="请输入密码"></el-input></span>
 
           <span slot="footer" class="dialog-footer">
-            <el-button @click.native="handleShow">取 消</el-button>
+            <el-button @click.native="centerDialogVisible=false">取 消</el-button>
             <el-button type="primary" @click.native="handleShow" >确 定</el-button>
           </span>
         </el-dialog>
@@ -119,9 +119,6 @@
     }, methods:{
       handleShow:function () {
         let that = this
-        let uId = Number(this.uId)
-        console.log(typeof uId)
-        console.log(typeof this.uId)
         this.$axios({
           url:'user/login',
           method:'post',
@@ -131,7 +128,7 @@
           }
         }).then(response=>{
           console.log(response.data)
-          if(response.data!==null){
+          if(response.data!==''){
             that.username = response.data.uNickName
             that.uCategory = response.data.uCategory
             this.$cookie.set("uCategory", that.uCategory)
@@ -156,6 +153,8 @@
         this.$cookie.delete('uId')
         this.$cookie.delete('username')
         this.$cookie.delete('uCategory')
+        this.$router.push({ path: '/' })
+        this.$router.go(0)
       },
       /**
        * 登陆

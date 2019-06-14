@@ -51,7 +51,7 @@
              placeholder="请输入内容"
              :trigger-on-focus="false"
              @select="handleSelectBymCode"
-             style="margin-left: 40px;"
+             style="margin-left: 25px;"
            ></el-autocomplete>
          </el-form-item>
          <el-form-item label="输入药品拼音">
@@ -62,12 +62,12 @@
              placeholder="请输入内容"
              :trigger-on-focus="false"
              @select="handleSelectBymSpell"
-             style="margin-left: 40px;"
+             style="margin-left: 25px;"
            ></el-autocomplete>
          </el-form-item>
 
          <el-form-item label="选择执行科室">
-           <el-select v-model="dId" filterable placeholder="请选择" style="margin-left: -10px;">
+           <el-select v-model="dId" filterable placeholder="请选择" style="margin-left: 40px;">
              <div v-for="item in departmentList">
                <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
              </div>

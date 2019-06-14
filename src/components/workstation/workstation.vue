@@ -85,7 +85,7 @@
             <el-tab-pane label="门诊确诊"><confirmed v-bind:rId="rId"></confirmed></el-tab-pane>
             <el-tab-pane label="处置申请"><applyDispose v-bind:dId="dId" v-bind:rId="rId"></applyDispose></el-tab-pane>
             <el-tab-pane label="成药处方"><medicinePrescription v-bind:dId="dId" v-bind:rId="rId"></medicinePrescription></el-tab-pane>
-            <el-tab-pane label="草药处方"><herbalPrescription></herbalPrescription></el-tab-pane>
+            <el-tab-pane label="草药处方"><herbalPrescription  v-bind:dId="dId" v-bind:rId="rId"></herbalPrescription></el-tab-pane>
             <el-tab-pane label="费用查询"><feeInquiry></feeInquiry></el-tab-pane>
           </el-tabs>
       </el-main>

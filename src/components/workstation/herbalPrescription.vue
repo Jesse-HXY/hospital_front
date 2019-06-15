@@ -14,7 +14,7 @@
             <el-button type="text" icon="el-icon-delete" @click="onTapDelete">删方</el-button>
             <el-button type="text" icon="el-icon-circle-check" @click="onTapBegin">开立</el-button>
             <el-button type="text" icon="el-icon-delete" @click="onTapAbandon">作废</el-button>
-            <el-button type="text" icon="el-icon-plus" @click="onTapUpdate">刷新</el-button>
+
           </div>
 
 
@@ -546,6 +546,7 @@
               }
               else{
                 that.controlAdd = false;
+                that.controlDelete = false;
               }
 
               for(let i =0;i<response.data.medicines.length;i++){
@@ -555,6 +556,10 @@
             }).catch(err => {
               console.log(err)
             })
+          }
+          else{
+            this.controlAdd = true;
+            this.controlDelete = true;
           }
 
         }
@@ -917,14 +922,10 @@
           that.dosage = response.data.dosage
           that.times = response.data.times
           that.datId = response.data.datId
-          // let datTime = new Date()
-          // that.createTime = response.data.datTime * 1000
-          // that.displayTime = datTime.toLocaleDateString().replace(/\//g, "-") + " " + datTime.toTimeString().substr(0, 8)
+
           that.medicineList = response.data.medicines;
           console.log("denifn",that.medicineList);
-          // if(that.scope === '科室'){
-          //   that.dId = response.data.department.dId
-          // }
+
           this.showDetail = true
         })
       },
@@ -995,9 +996,6 @@
           }).then(response => {
             console.log(response.data)
             medicineAddList = response.data.medicines;
-
-            console.log('23213123', medicineAddList);
-            console.log('4343', diaId)
 
             this.insertTemplateMedicine(diaId, medicineAddList,dId)
           }).catch(err => {

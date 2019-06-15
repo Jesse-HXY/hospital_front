@@ -14,7 +14,7 @@
         <el-button type="text" icon="el-icon-delete" @click="onTapDelete">删方</el-button>
         <el-button type="text" icon="el-icon-circle-check" @click="onTapBegin">开立</el-button>
         <el-button type="text" icon="el-icon-delete" @click="onTapAbandon">作废</el-button>
-        <el-button type="text" icon="el-icon-plus" @click="onTapUpdate">刷新</el-button>
+
        </div>
 
 
@@ -546,6 +546,7 @@
                 }
                 else{
                   that.controlAdd = false;
+                  that.controlDelete = false;
                 }
 
                 for(let i =0;i<response.data.medicines.length;i++){
@@ -555,6 +556,9 @@
               }).catch(err => {
                 console.log(err)
               })
+            } else {
+              this.controlAdd = true;
+              this.controlDelete = true;
             }
 
           }
@@ -636,7 +640,8 @@
               url:'diagnosis/selectByCondition',
               method:'post',
               data:{
-                rId:this.rId
+                rId:this.rId,
+                diaType:'西药'
               }
             }).then(response=>{
               console.log(response.data)

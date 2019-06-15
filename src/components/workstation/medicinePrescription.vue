@@ -416,8 +416,8 @@
               inputTimes: '',
               inputmAmount: '',
               totalMoney:totalMoney,
-              controlDelete:false,
-              controlAdd:false,
+              controlDelete:true,
+              controlAdd:true,
               mFee:0,
               mSpecification:'',
               mAmount:mAmount,
@@ -513,6 +513,8 @@
 
         showPrescriptionDetail:function(){
           let diaId=0;
+          this.controlAdd = false;
+          this.controlDelete = false;
           this.reSetMoney()
           let that = this
           for(let i = this.checkList.length - 1; i > -1; i--) {
@@ -566,6 +568,7 @@
         // },
 
         addMedicine:function(){
+          this.reSet();
           let that = this
 
           for(let i = this.checkList.length - 1; i > -1; i--) {
@@ -654,6 +657,7 @@
             method: 'post',
             data:{
               mCode:that.searchmCode,
+
 
 
             }
@@ -770,6 +774,7 @@
                 this.diagnosisList.splice(i,1)
                 //同步删除checklist
                 this.checkList.splice(i,1)
+
               }
               }
 
@@ -780,7 +785,12 @@
             data:{
               diaIdList:diaIdList
             }
+          }).then(res=>{
+
+          }).catch(err=>{
+
           })
+
 
         },
         onTapAddItem:function () {
@@ -996,6 +1006,7 @@
               })
             }
 
+
         },
         //将模板药品放入到处方中
         insertTemplateMedicine:function(diaId, medicineAddList,dId){
@@ -1009,8 +1020,7 @@
 
             }
           }).then(response=>{
-            console.log(response.data)
-            console.log('fewfewfewfweef',medicineAddList)
+            this.showPrescriptionDetail();
           }).catch(err=>
           {
             console.log(err)
@@ -1067,6 +1077,7 @@
           this.inputTimes='';
           this.inputDosage='';
           this.inputInstruction='';
+          this.dId='';
 
         },
         reSetMoney:function () {
@@ -1101,6 +1112,7 @@
             }
         })
           this.showPrescription()
+
         }
 
       }

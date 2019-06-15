@@ -51,7 +51,7 @@
             placeholder="请输入内容"
             :trigger-on-focus="false"
             @select="handleSelectBymCode"
-            style="margin-left: 40px;"
+            style="margin-left: 25px;"
           ></el-autocomplete>
         </el-form-item>
         <el-form-item label="输入药品拼音">
@@ -62,12 +62,12 @@
             placeholder="请输入内容"
             :trigger-on-focus="false"
             @select="handleSelectBymSpell"
-            style="margin-left: 40px;"
+            style="margin-left: 25px;"
           ></el-autocomplete>
         </el-form-item>
 
         <el-form-item label="选择执行科室">
-          <el-select v-model="dId" filterable placeholder="请选择" style="margin-left: -10px;">
+          <el-select v-model="dId" filterable placeholder="请选择" style="margin-left: 40px;">
             <div v-for="item in departmentList">
               <el-option :key="item.dId" :value="item.dId" :label="item.dName"></el-option>
             </div>
@@ -416,8 +416,8 @@
         inputTimes: '',
         inputmAmount: '',
         totalMoney:totalMoney,
-        controlDelete:false,
-        controlAdd:false,
+        controlDelete:true,
+        controlAdd:true,
         mFee:0,
         mSpecification:'',
         mAmount:mAmount,
@@ -513,6 +513,8 @@
 
       showPrescriptionDetail:function(){
         let diaId=0;
+        this.controlAdd = false;
+        this.controlDelete = false;
         this.reSetMoney()
         let that = this
         for(let i = this.checkList.length - 1; i > -1; i--) {
@@ -548,6 +550,7 @@
 
               for(let i =0;i<response.data.medicines.length;i++){
                 that.totalMoney += response.data.medicines[i].mFee * response.data.medicines[i].mAmount
+                that.totalMoney = Math.round(that.totalMoney * 100) /100
               }
             }).catch(err => {
               console.log(err)
@@ -565,6 +568,7 @@
       // },
 
       addMedicine:function(){
+        this.reSet();
         let that = this
 
         for(let i = this.checkList.length - 1; i > -1; i--) {
@@ -654,6 +658,8 @@
           method: 'post',
           data:{
             mCode:that.searchmCode,
+            mType:'中药'
+
 
 
           }
@@ -766,9 +772,11 @@
             }
             else{
               diaIdList.push(this.diagnosisList[i].diaId);
+              this.medicinePrescriptionList = []
               this.diagnosisList.splice(i,1)
               //同步删除checklist
               this.checkList.splice(i,1)
+
             }
           }
 
@@ -779,7 +787,12 @@
           data:{
             diaIdList:diaIdList
           }
+        }).then(res=>{
+
+        }).catch(err=>{
+
         })
+
 
       },
       onTapAddItem:function () {
@@ -882,10 +895,7 @@
           data:data
         }).then(response=>{
           that.templateList = response.data;
-          // for(let i = 0; i < that.templateList.length; i++){
-          //   let datTime = new Date(that.templateList[i].datTime * 1000)
-          //   that.templateList[i].displayTime = datTime.toLocaleDateString().replace(/\//g, "-") + " " + datTime.toTimeString().substr(0, 8)
-          // }
+
         })
       },
       viewTemplate:function(index){
@@ -921,7 +931,6 @@
       deleteMedicine:function(){
         let that =this
         let diaId = 0;
-        let mId = 0;
         let mIdList=[]
         for(let i = this.checkList.length - 1; i > -1; i--) {
           if (this.checkList[i]) {
@@ -930,15 +939,16 @@
 
           }
         }
-
+        console.log(that.medicinePrescriptionList)
+        let length = this.checkMedicineList.length - 1
         for(let i = this.checkMedicineList.length - 1; i > -1; i--) {
           if (this.checkMedicineList[i]) {
-            mId = this.medicinePrescriptionList[i].mId
             console.log("123",this.medicinePrescriptionList[i].mId)
             mIdList.push(this.medicinePrescriptionList[i].mId)
-
+            this.checkMedicineList.splice(i,1)
           }
         }
+        console.log(that.medicinePrescriptionList)
         this.$axios({
           url:'diagnosis/deleteMedicineFromDiagnosis',
           method:'post',
@@ -947,12 +957,13 @@
             mIds:mIdList
           }
         }).then(response=>{
-          console.log(response.data)
-          for(let i = 0; i < that.medicinePrescriptionList.length; i++){
-            if(that.medicinePrescriptionList[i].mId === mId){
-              mIdList.splice(i,1);
+          console.log(mIdList)
+          console.log(that.medicinePrescriptionList)
+          for(let i = length; i > -1; i--){
+            console.log(that.medicinePrescriptionList[i].mId)
+            if(mIdList.indexOf(that.medicinePrescriptionList[i].mId) !== -1){
+              // mIdList.splice(i,1);
               that.medicinePrescriptionList.splice(i,1);
-              break
             }
           }
         }).catch(err=>{
@@ -994,6 +1005,7 @@
           })
         }
 
+
       },
       //将模板药品放入到处方中
       insertTemplateMedicine:function(diaId, medicineAddList,dId){
@@ -1007,8 +1019,7 @@
 
           }
         }).then(response=>{
-          console.log(response.data)
-          console.log('fewfewfewfweef',medicineAddList)
+          this.showPrescriptionDetail();
         }).catch(err=>
         {
           console.log(err)
@@ -1023,7 +1034,7 @@
           url:'diagnosis/selectHistoryDiagnosis',
           method:'post',
           data:{
-            uId:uId
+            uId:uId,
 
           }
         }).then(response=>{
@@ -1066,6 +1077,7 @@
         this.inputTimes='';
         this.inputDosage='';
         this.inputInstruction='';
+        this.dId='';
 
       },
       reSetMoney:function () {
@@ -1100,6 +1112,7 @@
           }
         })
         this.showPrescription()
+
       }
 
     }

@@ -406,6 +406,7 @@
         } else if (this.scope === '科室') {
           data.dId = this.dId
         }
+
         console.log(data)
         this.$axios({
           url: 'medicine/insertDiagnosisTemplate',

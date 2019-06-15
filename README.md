@@ -38,11 +38,12 @@
 
     1) JDK 1.8
     2) SpringBoot 框架
-    3) MySQL 数据库
-    4) jUnit 单元测试
-    5) Maven 开源项目管理工具
-    6) poi 包用于读取 Excel 文件
-    7) json-lib 用于封装 JSONObject 对象
+    3) MyBatis 持久层框架
+    4) MySQL 数据库
+    5) jUnit 单元测试
+    6) Maven 开源项目管理工具
+    7) poi 包用于读取 Excel 文件
+    8) json-lib 用于封装 JSONObject 对象
 
 
 #安装部署指南

@@ -766,6 +766,7 @@
                }
                else{
                 diaIdList.push(this.diagnosisList[i].diaId);
+                this.medicinePrescriptionList = []
                 this.diagnosisList.splice(i,1)
                 //同步删除checklist
                 this.checkList.splice(i,1)

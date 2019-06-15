@@ -921,7 +921,6 @@
         deleteMedicine:function(){
           let that =this
           let diaId = 0;
-          let mId = 0;
           let mIdList=[]
           for(let i = this.checkList.length - 1; i > -1; i--) {
             if (this.checkList[i]) {
@@ -930,15 +929,16 @@
 
             }
           }
-
+          console.log(that.medicinePrescriptionList)
+          let length = this.checkMedicineList.length - 1
           for(let i = this.checkMedicineList.length - 1; i > -1; i--) {
             if (this.checkMedicineList[i]) {
-              mId = this.medicinePrescriptionList[i].mId
               console.log("123",this.medicinePrescriptionList[i].mId)
               mIdList.push(this.medicinePrescriptionList[i].mId)
-
+              this.checkMedicineList.splice(i,1)
             }
           }
+          console.log(that.medicinePrescriptionList)
           this.$axios({
             url:'diagnosis/deleteMedicineFromDiagnosis',
             method:'post',
@@ -947,12 +947,13 @@
               mIds:mIdList
             }
           }).then(response=>{
-            console.log(response.data)
-            for(let i = 0; i < that.medicinePrescriptionList.length; i++){
-              if(that.medicinePrescriptionList[i].mId === mId){
-                mIdList.splice(i,1);
+            console.log(mIdList)
+            console.log(that.medicinePrescriptionList)
+            for(let i = length; i > -1; i--){
+              console.log(that.medicinePrescriptionList[i].mId)
+              if(mIdList.indexOf(that.medicinePrescriptionList[i].mId) !== -1){
+                // mIdList.splice(i,1);
                 that.medicinePrescriptionList.splice(i,1);
-                break
               }
             }
           }).catch(err=>{

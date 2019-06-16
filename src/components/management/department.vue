@@ -32,11 +32,10 @@
           </div>
           &nbsp&nbsp&nbsp&nbsp科室类型：
           <div style="width: 150px;display: inline-block">
-            <el-input
-              v-model="searchdCategory"
-              size="mini"
-              placeholder="输入科室类别"
-            /></div>
+            <el-select v-model="searchdCategory"   placeholder="请选择科室类别">
+              <el-option label="医技科室" value="医技科室"></el-option>
+              <el-option label="临床科室" value="临床科室"></el-option>
+            </el-select></div>
         </template>
         &nbsp&nbsp&nbsp&nbsp
         <el-button width="100" @click="onTapSearch">查询</el-button>
@@ -56,9 +55,9 @@
               <el-input v-model="dType" autocomplete="off"></el-input>
             </el-form-item>
             <el-form-item label="科室类型" :label-width="formLabelWidth" >
-              <el-select v-model="dCategory"   placeholder="请选择活动区域">
-                <el-option label="医技" value="医技"></el-option>
-                <el-option label="临床" value="临床"></el-option>
+              <el-select v-model="dCategory"   placeholder="请选择科室类别">
+                <el-option label="医技科室" value="医技科室"></el-option>
+                <el-option label="临床科室" value="临床科室"></el-option>
               </el-select>
             </el-form-item>
 
@@ -108,9 +107,9 @@
             label="科室类型"
             width="200">
             <template slot-scope="scope">
-                <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-select v-model="dCategory"  placeholder="请选择活动区域">
-              <el-option label="医技" value="医技"></el-option>
-              <el-option label="临床" value="临床"></el-option>
+                <span v-if="scope.$index == editIndex"  style="margin-left: 10px"><el-select v-model="dCategory"  placeholder="请选择科室类别">
+              <el-option label="医技科室" value="医技科室"></el-option>
+              <el-option label="临床科室" value="临床科室"></el-option>
             </el-select></span>
               <span  v-else style="margin-left: 10px">{{scope.row.dCategory}}</span>
             </template>
